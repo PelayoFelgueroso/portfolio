@@ -15,12 +15,41 @@
   }
 }
 
-.images_wrapper {
-  grid-column-start: 7;
-  grid-column-end: 15;
-}
+.image_wrapper {
+  .demo {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.5s, visibility 0.5s, transform 0.5s;
 
-.description_wrapper {
-  grid-column-start: 15;
-  grid-column-end: 19;
+    .arrow {
+      transition: transform 0.2s;
+    }
+    &:hover {
+      .arrow {
+        transform: translateX(3px) translateY(-3px);
+      }
+    }
+  }
+  .image {
+    display: block;
+  }
+  .video {
+    display: none;
+  }
+  &:hover {
+    .demo {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0px);
+    }
+
+    .image {
+      display: none;
+    }
+
+    .video {
+      display: block;
+    }
+  }
 }

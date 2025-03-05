@@ -33,6 +33,7 @@ const categories = [
 export const Resources = () => {
   const resources = useResources();
   const [filteredResources, setFilteredResources] = useState(resources);
+  const [allVisible, setAllVisible] = useState(false);
 
   const handleCategories = (id: number) => {
     setFilteredResources(
@@ -42,6 +43,10 @@ export const Resources = () => {
             resource.categories.some((cat) => cat.id === id)
           )
     );
+  };
+
+  const toggleSeeAll = () => {
+    setAllVisible((prev) => !prev);
   };
 
   return (
@@ -61,18 +66,33 @@ export const Resources = () => {
             ))}
           </div>
         </div>
-        <div className="grid md:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] w-full md:gap-4 sm:gap-5 gap-4 col-start-5 col-end-[19]">
-          {filteredResources.map((resource) => (
-            <Card
-              slug={resource.slug}
-              key={resource.id}
-              title={resource.title.rendered}
-              short_description={resource.meta.short_description}
-              featured_image={resource.meta.featured_image}
-              featured_video={resource.meta.featured_video}
-              categories={resource.categories}
-            />
-          ))}
+        <div className="col-start-5 col-end-[19] flex flex-col gap-8">
+          <div className="grid md:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] w-full md:gap-4 sm:gap-5 gap-4">
+            {(allVisible
+              ? filteredResources
+              : filteredResources.slice(0, 6)
+            ).map((resource) => (
+              <Card
+                slug={resource.slug}
+                key={resource.id}
+                title={resource.title.rendered}
+                short_description={resource.meta.short_description}
+                featured_image={resource.meta.featured_image}
+                featured_video={resource.meta.featured_video}
+                categories={resource.categories}
+              />
+            ))}
+          </div>
+          {filteredResources.length > 6 && (
+            <div className="w-full flex justify-center items-center">
+              <Button
+                onClick={toggleSeeAll}
+                className="bg-blue-500 hover:bg-blue-700"
+              >
+                {allVisible ? "See Less" : "See All"}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

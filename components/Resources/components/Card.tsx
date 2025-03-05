@@ -34,13 +34,15 @@ export const Card = ({
 
   return (
     <Link
-      onMouseEnter={() => handleHover()}
-      onMouseLeave={() => handleNoHover()}
+      onMouseEnter={handleHover}
+      onMouseLeave={handleNoHover}
       href={`/resources/${slug}`}
       className={`${styles.resource_wrapper}`}
     >
       <div className="flex flex-col justify-between w-full overflow-hidden rounded-lg bg-foreground text-background p-2">
-        <div className={`h-[250px] overflow-hidden relative ${styles.top_wrapper}`}>
+        <div
+          className={`h-[250px] overflow-hidden relative ${styles.top_wrapper}`}
+        >
           <Image
             src={featured_image}
             width={300}

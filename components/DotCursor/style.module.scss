@@ -1,0 +1,65 @@
+.cursor_wrapper {
+  pointer-events: none;
+  z-index: 10001;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: fixed;
+  inset: 0%;
+  mix-blend-mode: difference;
+
+  .dot_cursor {
+    position: absolute;
+    top: -500px;
+    left: -400px;
+    pointer-events: none;
+    border-radius: 100%;
+    width: 1020px;
+    height: 1020px;
+    transition: opacity 0.2s, background-color 0.5s, height 0.4s, width 0.4s,
+      opacity 0.2s;
+
+    .dot {
+      position: absolute;
+      border-radius: 1000000px;
+    }
+
+    .dot_1 {
+      width: 82%;
+      height: 90%;
+      background: radial-gradient(
+        #ff6b34 0%,
+        #ff001a 46%,
+        #ff0083 77%,
+        #c600c6 100%
+      );
+      backdrop-filter: blur(120px);
+    }
+    .dot_2 {
+      width: 64%;
+      height: 69%;
+      background: linear-gradient(
+        180deg,
+        #ff6b34 0%,
+        #ff001a 44%,
+        #ff0083 71%,
+        #c600c6 100%
+      );
+      backdrop-filter: blur(465px);
+    }
+    .dot_3 {
+      width: 73%;
+      height: 69%;
+      background: linear-gradient(180deg, #ca00c6 34%, #760095 100%);
+      backdrop-filter: blur(465px);
+    }
+  }
+
+  .dot_cursor.cursor_hover {
+    filter: blur(7px);
+    width: 70px;
+    height: 70px;
+  }
+}

@@ -1,0 +1,28 @@
+.introduction {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 5010;
+  background-color: #141516;
+
+  .logo_container {
+    position: relative;
+    z-index: 20;
+    width: 10vw;
+    height: 10vw;
+  }
+
+  .curve_svg {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: calc(100% + 300px);
+    path {
+      fill: #141516;
+    }
+  }
+}

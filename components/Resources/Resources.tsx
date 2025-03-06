@@ -2,30 +2,45 @@ import { useResources } from "@/contexts/Resources.context";
 import { Card } from "./components/Card";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import {
+  ArrowLeftRight,
+  Clock,
+  MarsStroke,
+  Menu,
+  Mouse,
+  Rotate3D,
+  SquareMousePointer,
+} from "lucide-react";
 
 const categories = [
   {
     id: 1,
+    icon: Mouse,
     name: "Scroll",
   },
   {
     id: 4,
+    icon: SquareMousePointer,
     name: "Mouse",
   },
   {
     id: 5,
+    icon: MarsStroke,
     name: "Mask",
   },
   {
     id: 6,
+    icon: Rotate3D,
     name: "3D",
   },
   {
     id: 7,
+    icon: Menu,
     name: "Menu",
   },
   {
     id: 8,
+    icon: ArrowLeftRight,
     name: "Transition",
   },
 ];
@@ -50,20 +65,34 @@ export const Resources = () => {
   };
 
   return (
-    <section id="resources" className="pb-[200px]">
-      <div className="grid-18 _1row max-w-[1600px] mx-auto p-3 bg-[#1a1a1a] border-gray border-[1px] rounded-2xl">
-        <div className="col-start-1 col-end-5 bg-black p-8 rounded-2xl">
-          <div className="h-full">
-            {categories.map((item) => (
-              <div key={item.id} className="w-full">
-                <Button
-                  onClick={() => handleCategories(item.id)}
-                  className="w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start bg-transparent"
-                >
-                  {item.name}
-                </Button>
-              </div>
-            ))}
+    <section id="resources" className="pb-[200px] px-4">
+      <div className="grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#1a1a1a] border-gray border-[1px] rounded-2xl gap-3 flex-col xs:flex-row">
+        <div className="col-start-1 col-end-5 bg-black p-3 md:p-6 lg:p-8 rounded-2xl">
+          <div className="h-full flex overflow-x-scroll xs:flex-col">
+            <div className="w-full">
+              <Button
+                onClick={() => handleCategories(0)}
+                className="w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent"
+              >
+                <Clock />
+                <div className="hidden md:block">Recent</div>
+              </Button>
+            </div>
+            {categories.map((item) => {
+              const IconComponent = item.icon;
+
+              return (
+                <div key={item.id} className="w-full">
+                  <Button
+                    onClick={() => handleCategories(item.id)}
+                    className="w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent"
+                  >
+                    <IconComponent />
+                    <div className="hidden md:inline">{item.name}</div>
+                  </Button>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="col-start-5 col-end-[19] flex flex-col gap-8">

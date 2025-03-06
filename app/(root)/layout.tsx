@@ -1,10 +1,10 @@
 import { Footer } from "@/components/Footer/Footer";
-import { Header } from "@/components/Header/Header";
 import { CursorHoverProvider } from "@/contexts/CursorHovert.context";
 import { ResourcesProvider } from "@/contexts/Resources.context";
 import { fetchResources } from "@/apis/resources.api";
 import { ProjectsProvider } from "@/contexts/Projects.context";
 import { fetchProjects } from "@/apis/projects.api";
+import { CurvedMenu } from "@/components/CurvedMenu/CurvedMenu";
 
 export default async function Layout({
   children,
@@ -17,7 +17,7 @@ export default async function Layout({
       <CursorHoverProvider>
         <ResourcesProvider resources={resources}>
           <ProjectsProvider projects={projects}>
-            <Header />
+            <CurvedMenu />
             {children}
             <Footer />
           </ProjectsProvider>

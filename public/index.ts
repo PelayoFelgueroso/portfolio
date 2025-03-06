@@ -12,6 +12,7 @@ import oldBuilding from "./old-building.jpg";
 import shortStreet from "./short-street.jpg";
 import shadowBench from "./shadow-bench.jpg";
 import shadowPerson from "./shadow-person.jpg";
+import profilePicture from "./foto-perfil-pelayo-felgueroso.jpg";
 
 export {
   background,
@@ -28,4 +29,5 @@ export {
   shortStreet,
   shadowBench,
   shadowPerson,
+  profilePicture
 };

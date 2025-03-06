@@ -77,10 +77,10 @@ export const ContactForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-6xl bg-background shadow-2xl rounded-3xl px-12 py-48">
+      <div className="w-full max-w-6xl bg-background shadow-2xl rounded-3xl px-12 py-24 md:py-48">
         {submitted === false ? (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row gap-4">
               <div className="space-y-4 flex-grow">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField
@@ -170,7 +170,7 @@ export const ContactForm = () => {
                   <Image
                     src={formBg}
                     alt=""
-                    className="absolute h-full w-full"
+                    className="hidden md:block absolute h-full w-full"
                   />
                   <div className="relative">
                     {isLoading ? (

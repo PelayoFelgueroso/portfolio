@@ -24,8 +24,8 @@ export const Works = () => {
   };
 
   return (
-    <section id="works" className="mt-[200px] h-screen">
-      <div className="grid-18 _1row items-center max-w-[1600px] mx-auto h-[80vh] p-3 bg-[#1a1a1a] shadow-2xl rounded-2xl border-gray border-[1px]">
+    <section id="works" className="mt-[200px] h-screen px-4 md:px-0">
+      <div className="grid-18 _1row items-center max-w-[1600px] md:mx-auto md:h-[80vh] p-3 bg-[#1a1a1a] shadow-2xl rounded-2xl border-gray border-[1px] flex-col gap-6">
         <div
           className={`col-start-1 col-end-5 rounded-3xl overflow-hidden w-full h-full bg-black text-white border-gray border-[1px]`}
         >
@@ -101,10 +101,10 @@ export const Works = () => {
         </div>
 
         <div
-          className={`${styles.description_wrapper} col-start-[15] col-end-[19] h-full rounded-3xl overflow-hidden bg-black text-white`}
+          className={`${styles.description_wrapper} col-start-[15] col-end-[19] w-full h-full rounded-xl lg:rounded-3xl overflow-hidden bg-black text-white`}
         >
-          <div className="">
-            <p className="">{currentWork.meta.description}</p>
+          <div className="p-3">
+            <p className="text-center md:text-start">{currentWork.meta.description}</p>
           </div>
         </div>
       </div>

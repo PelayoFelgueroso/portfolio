@@ -12,7 +12,7 @@ export const About = () => {
 
   return (
     <section id="about" className="-mt-[190px]">
-      <div ref={descriptionRef} className="grid-18">
+      <div ref={descriptionRef} className="grid-18 px-4 md:px-0">
         <motion.div
           variants={slideUp}
           initial="initial"

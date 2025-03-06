@@ -27,7 +27,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#works",
-          end: "top 10%",
+          end: "top 20%",
         },
         y: "-100%",
       }
@@ -44,7 +44,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#resources",
-          end: "top 10%",
+          end: "top 20%",
         },
         y: "-200%",
       }
@@ -61,7 +61,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#contact",
-          end: "top 10%",
+          end: "top 20%",
         },
         y: "-300%",
       }
@@ -94,7 +94,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#about",
-          end: "top 10%",
+          end: "top 20%",
         },
         y: "0%",
       }
@@ -111,7 +111,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#about",
-          end: "top 10%",
+          end: "top 20%",
         },
         opacity: "0",
       }
@@ -128,7 +128,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#works",
-          end: "top 10%",
+          end: "top 20%",
         },
         opacity: "0",
       }
@@ -145,7 +145,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#resources",
-          end: "top 10%",
+          end: "top 20%",
         },
         opacity: "0",
       }
@@ -162,7 +162,7 @@ export const HomeHero = () => {
           start: "top top",
           scrub: 0.25,
           endTrigger: "#contact",
-          end: "top 10%",
+          end: "top 20%",
         },
         opacity: "0",
       }
@@ -193,7 +193,7 @@ export const HomeHero = () => {
             variants={slideUp}
             initial="initial"
             animate="entry"
-            className="h-full flex flex-col overflow-hidden text-[10rem] leading-[8rem] font-semibold pt-[68vh]"
+            className="h-full flex flex-col overflow-hidden leading-[3.75rem] text-[4rem] lg:text-[10rem] lg:leading-[8rem] font-semibold pt-[68vh]"
           >
             <div
               ref={nameHero}

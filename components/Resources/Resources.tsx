@@ -49,6 +49,7 @@ export const Resources = () => {
   const resources = useResources();
   const [filteredResources, setFilteredResources] = useState(resources);
   const [allVisible, setAllVisible] = useState(false);
+  const [active, setActive] = useState(0);
 
   const handleCategories = (id: number) => {
     setFilteredResources(
@@ -58,6 +59,7 @@ export const Resources = () => {
             resource.categories.some((cat) => cat.id === id)
           )
     );
+    setActive(id);
   };
 
   const toggleSeeAll = () => {
@@ -66,13 +68,20 @@ export const Resources = () => {
 
   return (
     <section id="resources" className="pb-[200px] px-4">
-      <div className="grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#1a1a1a] border-gray border-[1px] rounded-2xl gap-3 flex-col xs:flex-row">
-        <div className="col-start-1 col-end-5 bg-black p-3 md:p-6 lg:p-8 rounded-2xl">
-          <div className="h-full flex overflow-x-scroll xs:flex-col">
+      <div className="grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#f4f4f4] rounded-lg gap-3 flex-col xs:flex-row">
+        <div className="col-start-1 col-end-5 bg-white text-black p-3 md:p-6 lg:p-8 rounded-lg">
+          <div
+            style={{ scrollbarWidth: "none" }}
+            className="h-full flex overflow-x-scroll scrollbar-none xs:flex-col xs:gap-2"
+          >
             <div className="w-full">
               <Button
                 onClick={() => handleCategories(0)}
-                className="w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent"
+                className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-blue-500 hover:text-white ${
+                  filteredResources === resources
+                    ? "bg-blue-500 text-white"
+                    : ""
+                }`}
               >
                 <Clock />
                 <div className="hidden md:block">Recent</div>
@@ -85,7 +94,9 @@ export const Resources = () => {
                 <div key={item.id} className="w-full">
                   <Button
                     onClick={() => handleCategories(item.id)}
-                    className="w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent"
+                    className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-blue-500 hover:text-white ${
+                      item.id === active ? "bg-blue-500 text-white" : ""
+                    }`}
                   >
                     <IconComponent />
                     <div className="hidden md:inline">{item.name}</div>

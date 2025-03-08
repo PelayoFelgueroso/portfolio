@@ -1,3 +1,31 @@
+.header_wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: fit-content;
+  mix-blend-mode: difference;
+  color: white;
+  margin-bottom: -106px;
+
+  .header_container {
+    padding: 2rem 40px;
+    display: flex;
+    justify-content: space-between;
+
+    .navbar_wrapper {
+      .link_list {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+
+        .link_item {
+          text-transform: lowercase;
+        }
+      }
+    }
+  }
+}
+
 .main {
   .header {
     padding: 30px;
@@ -132,7 +160,7 @@
     .body {
       padding: 75px;
       width: 100vw;
-      
+
       .footer {
         flex-wrap: wrap;
       }

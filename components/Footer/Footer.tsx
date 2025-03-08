@@ -58,7 +58,7 @@ export const Footer = () => {
         </div>
         <div className={styles.nav}>
           <Rounded>
-            <p>info@pelayofelguroso.es</p>
+            <p>info@pelayofelgueroso.es</p>
           </Rounded>
           <Rounded>
             <p>+34 684 35 35 95</p>

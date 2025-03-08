@@ -6,6 +6,7 @@ interface Meta {
   github_link?: string;
   live_demo: string;
   technologies: string;
+  niche: string;
 }
 
 export interface Project {
@@ -23,6 +24,7 @@ interface FormattedMeta {
   github_link?: string;
   live_demo: string;
   technologies: string[];
+  niche: string;
 }
 
 export interface FormattedProject {

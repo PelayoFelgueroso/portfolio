@@ -39,9 +39,9 @@ export const Card = ({
       href={`/resources/${slug}`}
       className={`${styles.resource_wrapper}`}
     >
-      <div className="flex flex-col justify-between w-full overflow-hidden rounded-lg bg-foreground text-background p-2">
+      <div className="flex flex-col justify-between w-full overflow-hidden rounded-lg bg-white text-black p-2">
         <div
-          className={`h-[250px] overflow-hidden relative ${styles.top_wrapper}`}
+          className={`h-[250px] rounded-lg overflow-hidden relative ${styles.top_wrapper}`}
         >
           <Image
             src={featured_image}
@@ -65,7 +65,7 @@ export const Card = ({
           <Link
             target="_blank"
             href={`/resources/demos/${slug}`}
-            className={`absolute bottom-2 right-2 rounded-full flex justify-center items-center gap-2 px-4 py-2 bg-blue-500 z-[1000] ${styles.demo}`}
+            className={`absolute bottom-2 right-2 rounded-full flex justify-center items-center gap-2 px-4 py-2 text-white bg-blue-500 z-[1000] ${styles.demo}`}
           >
             Demo
             <svg
@@ -89,7 +89,7 @@ export const Card = ({
             {categories.map((item) => (
               <span
                 key={item.id}
-                className="w-fit uppercase text-[.7rem] border px-2 py-1 rounded-full"
+                className="w-fit uppercase text-[.7rem] border border-black px-2 py-1 rounded-full"
               >
                 {item.name}
               </span>

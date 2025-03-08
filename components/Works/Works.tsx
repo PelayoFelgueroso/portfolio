@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useProjects } from "@/contexts/Projects.context";
+import { ChevronRight } from "lucide-react";
 
 export const Works = () => {
   const projects = useProjects();
@@ -25,29 +26,60 @@ export const Works = () => {
 
   return (
     <section id="works" className="mt-[200px] h-screen px-4 md:px-0">
-      <div className="grid-18 _1row items-center max-w-[1600px] md:mx-auto md:h-[80vh] p-3 bg-[#1a1a1a] shadow-2xl rounded-2xl border-gray border-[1px] flex-col gap-6">
+      <div className="grid-18 _1row items-center max-w-[1600px] md:mx-auto p-3 bg-[#f4f4f4] shadow-2xl rounded-xl flex-col gap-6">
         <div
-          className={`col-start-1 col-end-5 rounded-3xl overflow-hidden w-full h-full bg-black text-white border-gray border-[1px]`}
+          className={`col-start-1 col-end-4 rounded-3xl overflow-hidden w-full h-full bg-[#f4f4f4] text-black`}
         >
-          <div className="flex flex-col h-full items-center justify-center">
+          <div className="flex flex-col h-full items-start justify-center gap-6 pl-6">
             {projects.slice(0, 4).map((project, index) => (
               <div
                 key={project.id}
+                className="group cursor-pointer"
                 onMouseEnter={() => setCurrentWork(projects[index])}
-                className={`${styles.title_item} ${
-                  project === currentWork ? styles.active : ""
-                }`}
               >
-                <h3 className="uppercase text-[30px] font-black">
+                <div className="flex items-center space-x-2 mb-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                  <div
+                    className={`h-[1px] w-6 bg-black ${
+                      currentWork.id === project.id
+                        ? "w-12 bg-gray-800"
+                        : "group-hover:w-12 group-hover:bg-gray-600"
+                    } transition-all duration-300`}
+                  ></div>
+                  <ChevronRight
+                    className={`h-4 w-4 text-gray-400 transform ${
+                      currentWork.id === project.id
+                        ? "translate-x-1 text-gray-800"
+                        : "translate-x-0"
+                    } group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300`}
+                  />
+                </div>
+                <h2
+                  className={`text-xl font-light uppercase ${
+                    currentWork.id === project.id
+                      ? "text-gray-900"
+                      : "text-gray-500"
+                  } group-hover:text-gray-900 transition-colors duration-300`}
+                >
                   {project.title.rendered}
-                </h3>
+                </h2>
+                <div
+                  className={`mt-3 overflow-hidden transition-all duration-500 ${
+                    currentWork.id === project.id
+                      ? "max-h-20 opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <span className="inline-block py-1.5 px-3 bg-gray text-gray-800 text-sm font-medium rounded-md">
+                    {project.meta.niche}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         <div
-          className={`${styles.image_wrapper} relative col-start-5 col-end-[15] w-full max-h-full h-fit rounded-3xl overflow-hidden bg-black text-white`}
+          className={`${styles.image_wrapper} relative col-start-5 col-end-[15] w-full max-h-full h-fit rounded-3xl overflow-hidden shadow-2xl`}
         >
           <Link
             onMouseEnter={handleHover}
@@ -79,7 +111,7 @@ export const Works = () => {
               <Link
                 target="_blank"
                 href={currentWork.meta.live_demo}
-                className={`absolute bottom-4 right-4 rounded-full flex justify-center items-center gap-2 px-4 py-2 bg-blue-500 z-[1000] ${styles.demo}`}
+                className={`absolute bottom-4 right-4 rounded-full flex justify-center items-center gap-2 px-4 py-2 bg-blue-500 z-[1000] text-white ${styles.demo}`}
               >
                 View Online
                 <svg
@@ -100,11 +132,23 @@ export const Works = () => {
           </Link>
         </div>
 
-        <div
-          className={`${styles.description_wrapper} col-start-[15] col-end-[19] w-full h-full rounded-xl lg:rounded-3xl overflow-hidden bg-black text-white`}
-        >
-          <div className="p-3">
-            <p className="text-center md:text-start">{currentWork.meta.description}</p>
+        <div className="col-start-[15] col-end-[19] w-full p-8 flex flex-col justify-center">
+          <div className="space-y-6">
+            <div className="h-[1px] w-12 bg-black"></div>
+            <h3 className="text-xl font-light uppercase">
+              {currentWork.title.rendered}
+            </h3>
+            <div className="relative overflow-hidden">
+              <p className="text-black leading-relaxed">
+                {currentWork.meta.description}
+              </p>
+              <div className="mt-8">
+                <button className="group flex items-center space-x-2 text-sm text-[#333333] hover:text-[#1a1a1a] transition-colors duration-300">
+                  <span>Explorar más</span>
+                  <span className="inline-block w-5 h-[1px] bg-[#333333] group-hover:w-8 group-hover:bg-gray-800 transition-all duration-300"></span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

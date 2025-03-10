@@ -186,14 +186,14 @@ export const HomeHero = () => {
   }, []);
 
   return (
-    <section id="hero" className="h-screen sticky top-0 z-[-1]">
+    <section id="hero" className={`h-screen sticky top-0 z-0 mix-blend-difference`}>
       <div className="h-full grid-18 padding-18 _1row">
         <div className="col-start-1 col-end-10 flex justify-start pb-2 items-end gap-52">
           <motion.div
             variants={slideUp}
             initial="initial"
             animate="entry"
-            className="h-full flex flex-col overflow-hidden leading-[3.75rem] text-[4rem] lg:text-[10rem] lg:leading-[8rem] font-semibold pt-[68vh]"
+            className={`h-full flex flex-col overflow-hidden leading-[3.75rem] text-[4rem] lg:text-[10rem] lg:leading-[8rem] font-semibold pt-[68vh] text-white`}
           >
             <div
               ref={nameHero}

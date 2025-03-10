@@ -67,9 +67,13 @@ export const Resources = () => {
   };
 
   return (
-    <section id="resources" className="pb-[200px] px-4">
-      <div className="grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#f4f4f4] rounded-lg gap-3 flex-col xs:flex-row">
-        <div className="col-start-1 col-end-5 bg-white text-black p-3 md:p-6 lg:p-8 rounded-lg">
+    <section id="resources" className="relative pb-[200px] px-4">
+      <div
+        className={`grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#f4f4f4] rounded-lg shadow-2xl gap-3 flex-col xs:flex-row %¿${
+          allVisible ? "" : "max-h-[75vh]"
+        }`}
+      >
+        <div className="col-start-1 col-end-5 h-fit text-black p-0 rounded-lg">
           <div
             style={{ scrollbarWidth: "none" }}
             className="h-full flex overflow-x-scroll scrollbar-none xs:flex-col xs:gap-2"
@@ -77,7 +81,7 @@ export const Resources = () => {
             <div className="w-full">
               <Button
                 onClick={() => handleCategories(0)}
-                className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-blue-500 hover:text-white ${
+                className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-white hover:text-black ${
                   filteredResources === resources
                     ? "bg-blue-500 text-white"
                     : ""
@@ -94,7 +98,7 @@ export const Resources = () => {
                 <div key={item.id} className="w-full">
                   <Button
                     onClick={() => handleCategories(item.id)}
-                    className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-blue-500 hover:text-white ${
+                    className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-white hover:text-black ${
                       item.id === active ? "bg-blue-500 text-white" : ""
                     }`}
                   >

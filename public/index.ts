@@ -4,7 +4,7 @@ import externalArrow from "./externalArrow.svg";
 import logo from "./logo.svg";
 import logoTransparent from "./logoTransparent.svg";
 import cursor from "./cursor.svg";
-import cursorPng from "./cursor.png";
+import cursorPng from "./cursor-custom.png";
 import formBg from "./form-bg.png";
 import darkMountain from "./dark-mountain.jpg";
 import darkCave from "./dark-cave.jpg";
@@ -13,6 +13,7 @@ import shortStreet from "./short-street.jpg";
 import shadowBench from "./shadow-bench.jpg";
 import shadowPerson from "./shadow-person.jpg";
 import profilePicture from "./foto-perfil-pelayo-felgueroso.jpg";
+import transparentName from "./nombre-transparente.png"
 
 export {
   background,
@@ -29,5 +30,6 @@ export {
   shortStreet,
   shadowBench,
   shadowPerson,
-  profilePicture
+  profilePicture,
+  transparentName
 };

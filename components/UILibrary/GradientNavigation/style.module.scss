@@ -9,10 +9,15 @@
     inset: 1rem auto auto 1rem;
 
     max-width: 100%;
-    display: inline-block;
+    display: flex;
+    justify-content: start;
 
     .nav_logo {
-      width: 290px;
+      height: 100%;
+      .logo {
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 
@@ -79,7 +84,7 @@
       width: 100vw;
       min-height: 100vh;
       color: #fff;
-      background-color: #1a1a1a;
+      background-color: #131313;
 
       .nav_body {
         grid-template-rows: auto;

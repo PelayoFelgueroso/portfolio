@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Nav } from "./components/Nav";
 import { navLinks } from "@/content";
 import Link from "next/link";
-import { slideDown } from "../Header/anim";
+import { slideDown } from "./anim";
 
 export const CurvedMenu = () => {
   const [isActive, setIsActive] = useState(false);
@@ -15,7 +15,7 @@ export const CurvedMenu = () => {
 
   useEffect(() => {
     if (isActive) setIsActive(false);
-  }, [pathname]);
+  }, [pathname, isActive]);
 
   return (
     <motion.header

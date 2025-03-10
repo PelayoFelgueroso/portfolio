@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import useMousePosition from "@/lib/utils";
 import { useCursorHover } from "@/contexts/CursorHovert.context";
 import Image from "next/image";
-import { cursor } from "@/public";
+import { cursorPng } from "@/public";
 
-const DotCursor = () => {
+export const DotCursor = () => {
   const { x, y } = useMousePosition();
   const { cursorHover } = useCursorHover();
 
@@ -24,10 +24,9 @@ const DotCursor = () => {
         }}
         transition={{ type: "tween", ease: "backOut", duration: 0.25 }}
       >
-        <Image src={cursor} alt="" />
+        <Image src={cursorPng} alt="" />
       </motion.div>
     </div>
   );
 };
 
-export default DotCursor;

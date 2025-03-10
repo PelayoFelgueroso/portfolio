@@ -2,6 +2,7 @@
 
 import { About } from "@/components/About/About";
 import { Contact } from "@/components/Contact/Contact";
+import { DotCursor } from "@/components/DotCursor/DotCursor";
 import { HomeHero } from "@/components/HomeHero/HomeHero";
 import { LogoPreoloader } from "@/components/LogoPreloader/LogoPreloader";
 import { Resources } from "@/components/Resources/Resources";
@@ -26,6 +27,7 @@ export default function Home() {
         {isLoading && <LogoPreoloader />}
       </AnimatePresence>
 
+      <DotCursor />
       <HomeHero />
       <About />
       <Works />

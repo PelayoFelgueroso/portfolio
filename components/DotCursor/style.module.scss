@@ -1,6 +1,6 @@
 .cursor_wrapper {
   pointer-events: none;
-  z-index: 10001;
+  z-index: 0;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -8,16 +8,15 @@
   display: flex;
   position: fixed;
   inset: 0%;
-  mix-blend-mode: difference;
 
   .dot_cursor {
     position: absolute;
-    top: -500px;
-    left: -400px;
+    top: -10vw;
+    left: -10vw;
     pointer-events: none;
     border-radius: 100%;
-    width: 1020px;
-    height: 1020px;
+    width: 400px;
+    height: 400px;
     transition: opacity 0.2s, background-color 0.5s, height 0.4s, width 0.4s,
       opacity 0.2s;
 

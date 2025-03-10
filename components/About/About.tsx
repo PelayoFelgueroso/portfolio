@@ -11,7 +11,7 @@ export const About = () => {
   const descriptionRef = useRef(null);
 
   return (
-    <section id="about" className="-mt-[190px]">
+    <section id="about" className="relative -mt-[190px]">
       <div ref={descriptionRef} className="grid-18 px-4 md:px-0">
         <motion.div
           variants={slideUp}

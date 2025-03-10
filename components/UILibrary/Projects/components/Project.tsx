@@ -18,25 +18,22 @@ const anim = {
 interface Props {
   slug: string;
   title: string;
-  description: string;
   featured_image: string;
-  featured_video: string;
-  live_demo: string;
-  github_link?: string;
-  technologies: string[];
 }
 
-export const Project = ({
-  slug,
-  title,
-  description,
-  featured_image,
-  featured_video,
-  live_demo,
-  github_link,
-  technologies,
-}: Props) => {
+export const Project = ({ slug, title, featured_image }: Props) => {
   const [isActive, setIsActive] = useState(false);
+
+  const splitCamelCase = (str: string) => {
+    return str.replace(/([a-z])([A-Z])/g, "$1 $2");
+  };
+
+  const parts = title.includes(" ")
+    ? title.split(" ")
+    : splitCamelCase(title).split(" ");
+
+  const title1 = parts[0];
+  const title2 = parts.length > 1 ? parts.slice(1).join(" ") : "";
 
   return (
     <Link
@@ -47,7 +44,7 @@ export const Project = ({
       onMouseLeave={() => setIsActive(false)}
       className={styles.project}
     >
-      <p>{title}</p>
+      <p>{title1}</p>
       <motion.div
         variants={anim}
         animate={isActive ? "open" : "closed"}
@@ -55,7 +52,7 @@ export const Project = ({
       >
         <Image src={featured_image} width={1000} height={1000} alt={title} />
       </motion.div>
-      <p>{description}</p>
+      <p>{title2}</p>
     </Link>
   );
 };

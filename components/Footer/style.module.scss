@@ -3,10 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   background-color: #141516;
   position: relative;
   padding-top: 115px;
+  height: 100vh;
 }
 
 .contact .body {

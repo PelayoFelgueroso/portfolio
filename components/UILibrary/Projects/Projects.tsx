@@ -1,3 +1,5 @@
+'use client';
+
 import styles from "./style.module.scss";
 import { Rounded } from "@/common/RoundedButton/RoundedButton";
 import { Project } from "./components/Project";
@@ -20,11 +22,7 @@ export const Projects = () => {
               key={project.id}
               slug={project.slug}
               title={project.title.rendered}
-              description={project.meta.description}
               featured_image={project.meta.featured_image}
-              featured_video={project.meta.featured_video}
-              live_demo={project.meta.live_demo}
-              technologies={project.meta.technologies}
             />
           );
         })}

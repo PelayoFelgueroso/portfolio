@@ -12,6 +12,7 @@ export const HomeHero = () => {
   const worksHero = useRef(null);
   const resourcesHero = useRef(null);
   const contactHero = useRef(null);
+  const descriptionHero = useRef(null);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -29,14 +30,14 @@ export const HomeHero = () => {
           endTrigger: "#works",
           end: "top 20%",
         },
-        y: "-100%",
+        y: "-120%",
       }
     );
 
     gsap.fromTo(
       ".hero-title-wrapper",
       {
-        y: "-100%",
+        y: "-120%",
       },
       {
         scrollTrigger: {
@@ -46,14 +47,14 @@ export const HomeHero = () => {
           endTrigger: "#resources",
           end: "top 20%",
         },
-        y: "-200%",
+        y: "-240%",
       }
     );
 
     gsap.fromTo(
       ".hero-title-wrapper",
       {
-        y: "-200%",
+        y: "-240%",
       },
       {
         scrollTrigger: {
@@ -63,14 +64,14 @@ export const HomeHero = () => {
           endTrigger: "#contact",
           end: "top 20%",
         },
-        y: "-300%",
+        y: "-360%",
       }
     );
 
     gsap.fromTo(
       ".hero-title-wrapper",
       {
-        y: "-300%",
+        y: "-360%",
       },
       {
         scrollTrigger: {
@@ -79,7 +80,7 @@ export const HomeHero = () => {
           scrub: 0.25,
           end: "bottom top",
         },
-        y: "-400%",
+        y: "-480%",
       }
     );
 
@@ -97,6 +98,23 @@ export const HomeHero = () => {
           end: "top 20%",
         },
         y: "0%",
+      }
+    );
+
+    gsap.fromTo(
+      descriptionHero.current,
+      {
+        opacity: "1",
+      },
+      {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          start: "top top",
+          scrub: 0.25,
+          endTrigger: "#about",
+          end: "top 20%",
+        },
+        opacity: "0",
       }
     );
 
@@ -186,14 +204,17 @@ export const HomeHero = () => {
   }, []);
 
   return (
-    <section id="hero" className={`h-screen sticky top-0 z-0 mix-blend-difference`}>
-      <div className="h-full grid-18 padding-18 _1row">
-        <div className="col-start-1 col-end-10 flex justify-start pb-2 items-end gap-52">
+    <section
+      id="hero"
+      className={`h-screen sticky top-0 z-0 mix-blend-difference`}
+    >
+      <div className="h-full grid-18 padding-18 _1row items-end">
+        <div className="col-start-1 xl:col-end-10 h-full flex flex-col justify-end">
           <motion.div
-            variants={slideUp}
+            variants={slideUp(1)}
             initial="initial"
             animate="entry"
-            className={`h-full flex flex-col overflow-hidden leading-[3.75rem] text-[4rem] lg:text-[10rem] lg:leading-[8rem] font-semibold pt-[68vh] text-white`}
+            className={`justify-start items-start flex flex-col leading-[3.75rem] text-[4rem] lg:text-[8.5vw] lg:leading-[10rem] font-semibold h-[20rem] pb-4 text-white`}
           >
             <div
               ref={nameHero}
@@ -205,33 +226,46 @@ export const HomeHero = () => {
             <div
               ref={aboutHero}
               style={{ willChange: "opacity, transform" }}
-              className={`min-h-[10rem] flex flex-col justify-end py-2 hero-title-wrapper`}
+              className={`min-h-[10rem] my-4 flex flex-col justify-end py-2 hero-title-wrapper`}
             >
               <h1 className="pb-7">about me</h1>
             </div>
             <div
               ref={worksHero}
               style={{ willChange: "opacity, transform" }}
-              className={`min-h-[10rem] flex flex-col justify-end py-2 hero-title-wrapper`}
+              className={`min-h-[10rem] my-4 flex flex-col justify-end py-2 hero-title-wrapper`}
             >
-              <h1 className="pb-7">my works</h1>
+              <h1 className="pb-12">my works</h1>
             </div>
             <div
               ref={resourcesHero}
               style={{ willChange: "opacity, transform" }}
-              className={`min-h-[10rem] flex flex-col justify-end py-2 hero-title-wrapper`}
+              className={`min-h-[10rem] my-4 flex flex-col justify-end py-2 hero-title-wrapper`}
             >
               <h1 className="pb-7">resources</h1>
             </div>
             <div
               ref={contactHero}
               style={{ willChange: "opacity, transform" }}
-              className={`min-h-[10rem] flex flex-col justify-end py-2 hero-title-wrapper`}
+              className={`min-h-[10rem] my-4 flex flex-col justify-end py-2 hero-title-wrapper`}
             >
               <h1 className="pb-7">contact me</h1>
             </div>
           </motion.div>
         </div>
+
+        <motion.div
+          ref={descriptionHero}
+          variants={slideUp(1.05)}
+          initial="initial"
+          animate="entry"
+          className="col-start-11 col-end-[16] pb-6 text-white h-fit"
+        >
+          <p className="max-w-[450px] text-[1.75rem]">
+            Desarrollador Frontend centrado en crear páginas web atractivas,
+            animadas e innovadoras.
+          </p>
+        </motion.div>
       </div>
     </section>
   );

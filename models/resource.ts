@@ -5,7 +5,7 @@ interface Meta {
   description: string;
   difficulty: string;
   github_link: string;
-  technologies: string;
+  techs: string;
 }
 
 export interface Category {
@@ -19,7 +19,7 @@ interface FormattedMeta {
   short_description: string;
   description: string;
   github_link?: string;
-  technologies: string[];
+  techs: string[];
 }
 
 export interface Resource {

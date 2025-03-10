@@ -13,8 +13,8 @@ export async function fetchProjects(): Promise<FormattedProject[]> {
 
   const formattedProjects = projects.map((project: Project) => ({
     ...project,
-    technologies: project.meta.technologies
-      ? project.meta.technologies.split(",").map((tech: string) => tech.trim())
+    technologies: project.meta.techs
+      ? project.meta.techs.split(",").map((tech: string) => tech.trim())
       : [],
   }));
 

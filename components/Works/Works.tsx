@@ -25,7 +25,7 @@ export const Works = () => {
   };
 
   return (
-    <section id="works" className="relative mt-[200px] h-screen px-4 md:px-0">
+    <section id="works" className="relative mt-[200px] h-screen px-4">
       <div className="grid-18 _1row items-center max-w-[1600px] md:mx-auto p-3 bg-[#f4f4f4] shadow-2xl rounded-xl flex-col gap-6">
         <div
           className={`col-start-1 col-end-4 rounded-3xl overflow-hidden w-full h-full bg-[#f4f4f4] text-black`}

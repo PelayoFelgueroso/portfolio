@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@/models/Resource";
+import { Category } from "@/models/resource";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
@@ -14,6 +14,10 @@ interface Props {
   categories: Category[];
   slug: string;
 }
+
+const truncateText = (text: string, maxLength: number) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
 
 export const Card = ({
   title,
@@ -98,7 +102,7 @@ export const Card = ({
         </div>
 
         <h3 className="mt-[.8rem] mb-[.3rem] text-[1.2rem]">{title}</h3>
-        <p className="text-[.9rem] font-thin">{short_description}</p>
+        <p className="text-[.9rem] font-thin">{truncateText(short_description, 100)}</p>
       </Link>
     </div>
   );

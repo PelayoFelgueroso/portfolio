@@ -1,14 +1,15 @@
 .header_element {
+  padding-top: 1rem;
+
   .nav_logo_wrapper {
     z-index: 5001;
     mix-blend-mode: difference;
     align-items: center;
     height: 40px;
     transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-    position: fixed;
-    inset: 1rem auto auto 1rem;
+    position: sticky;
 
-    max-width: 100%;
+    max-width: fit-content;
     display: flex;
     justify-content: start;
 
@@ -31,8 +32,7 @@
     width: 130px;
     height: 40px;
     display: flex;
-    position: fixed;
-    inset: 1rem 1rem auto auto;
+    position: sticky;
     overflow: hidden;
     max-width: 100%;
 

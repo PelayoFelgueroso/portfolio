@@ -11,7 +11,7 @@ export const About = () => {
   const descriptionRef = useRef(null);
 
   return (
-    <section id="about" className="relative -mt-[190px]">
+    <section id="about" className="relative">
       <div ref={descriptionRef} className="grid-18 px-4 md:px-0">
         <motion.div
           variants={slideUp}
@@ -19,13 +19,6 @@ export const About = () => {
           animate="entry"
           className={`${styles.grid_area} flex flex-col gap-8`}
         >
-          <div className="pb-[70px]">
-            <p className="max-w-[450px] text-[1.75rem]">
-              Desarrollador Frontend centrado en crear páginas web atractivas,
-              animadas e innovadoras.
-            </p>
-          </div>
-
           <div className="rounded-2xl overflow-hidden">
             <Image src={background} alt="" className="" />
           </div>

@@ -1,4 +1,4 @@
-import { Category, Resource, UnformattedResource } from "@/models/Resource";
+import { Category, Resource, UnformattedResource } from "@/models/resource";
 
 export async function fetchResources(): Promise<Resource[]> {
   const resResources = await fetch(
@@ -35,8 +35,8 @@ export async function fetchResources(): Promise<Resource[]> {
 
   const formattedResources = resources.map((resource: UnformattedResource) => ({
     ...resource,
-    technologies: resource.meta.technologies
-      ? resource.meta.technologies.split(",").map((tech: string) => tech.trim())
+    techs: resource.meta.techs
+      ? resource.meta.techs.split(",").map((tech: string) => tech.trim())
       : [],
 
     categories: resource.categories.map(

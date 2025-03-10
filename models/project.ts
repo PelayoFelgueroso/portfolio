@@ -5,7 +5,7 @@ interface Meta {
   description: string;
   github_link?: string;
   live_demo: string;
-  technologies: string;
+  techs: string;
   niche: string;
 }
 
@@ -23,7 +23,7 @@ interface FormattedMeta {
   description: string;
   github_link?: string;
   live_demo: string;
-  technologies: string[];
+  techs: string[];
   niche: string;
 }
 

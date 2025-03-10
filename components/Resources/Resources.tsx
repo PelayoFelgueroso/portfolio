@@ -2,48 +2,8 @@ import { useResources } from "@/contexts/Resources.context";
 import { Card } from "./components/Card";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import {
-  ArrowLeftRight,
-  Clock,
-  MarsStroke,
-  Menu,
-  Mouse,
-  Rotate3D,
-  SquareMousePointer,
-} from "lucide-react";
-
-const categories = [
-  {
-    id: 1,
-    icon: Mouse,
-    name: "Scroll",
-  },
-  {
-    id: 4,
-    icon: SquareMousePointer,
-    name: "Mouse",
-  },
-  {
-    id: 5,
-    icon: MarsStroke,
-    name: "Mask",
-  },
-  {
-    id: 6,
-    icon: Rotate3D,
-    name: "3D",
-  },
-  {
-    id: 7,
-    icon: Menu,
-    name: "Menu",
-  },
-  {
-    id: 8,
-    icon: ArrowLeftRight,
-    name: "Transition",
-  },
-];
+import { Clock } from "lucide-react";
+import { categories } from "@/apis/categories";
 
 export const Resources = () => {
   const resources = useResources();
@@ -82,7 +42,7 @@ export const Resources = () => {
               <Button
                 onClick={() => handleCategories(0)}
                 className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-white hover:text-black ${
-                  filteredResources === resources
+                  active === 0
                     ? "bg-blue-500 text-white"
                     : ""
                 }`}

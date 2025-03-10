@@ -2,7 +2,6 @@ import background from "./blacks.jpg";
 import menuGradient from "./menu_gradient.jpg";
 import externalArrow from "./externalArrow.svg";
 import logo from "./logo.svg";
-import logoTransparent from "./logoTransparent.svg";
 import cursor from "./cursor.svg";
 import cursorPng from "./cursor-custom.png";
 import formBg from "./form-bg.png";
@@ -20,7 +19,6 @@ export {
   menuGradient,
   externalArrow,
   logo,
-  logoTransparent,
   cursor,
   cursorPng,
   formBg,

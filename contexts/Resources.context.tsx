@@ -1,6 +1,6 @@
 "use client";
 
-import { Resource } from "@/models/Resource";
+import { Resource } from "@/models/resource";
 import { createContext, useContext } from "react";
 
 const ResourcesContext = createContext<Resource[] | null>(null);

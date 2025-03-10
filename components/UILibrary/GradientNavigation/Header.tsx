@@ -5,7 +5,7 @@ import styles from "./style.module.scss";
 import { externalLinks, headerInfo, navLinks } from "@/content";
 import Image from "next/image";
 import { menuGradient, transparentName } from "@/public";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "./components/NavLink";
 import { ExternalLink } from "./components/ExternalLink";
 import useMousePosition from "@/lib/utils";
@@ -16,9 +16,15 @@ import { slideIn, slideUpLogo } from "./anim";
 export const ArtHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { x, y } = useMousePosition();
+  const [windowHeight, setWindowHeight] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
 
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowHeight(window.innerHeight);
+      setWindowWidth(window.innerWidth);
+    }
+  }, []);
 
   const centerX = windowWidth / 2;
   const centerY = windowHeight;
@@ -36,7 +42,9 @@ export const ArtHeader = () => {
         <div className="">
           <Link href="/" className={styles.nav_logo_wrapper}>
             <div className={styles.nav_logo}>
-              <h1 className="text-white text-[2vw] md:text-[1.5vw] lg:text-[1vw]">Your Logo Here</h1>
+              <h1 className="text-white text-[2vw] md:text-[1.5vw] lg:text-[1vw]">
+                Your Logo Here
+              </h1>
             </div>
           </Link>
         </div>

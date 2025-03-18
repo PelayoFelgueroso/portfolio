@@ -208,7 +208,7 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            Let's work together
+            Let&apos;s work together
           </motion.h2>
           <motion.p
             className="text-xl mb-10 text-white/90"
@@ -217,7 +217,7 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            Have a project in mind? I'm available for freelance work and collaborations.
+            Have a project in mind? I&apos;m available for freelance work and collaborations.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

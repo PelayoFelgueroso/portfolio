@@ -226,7 +226,7 @@ export const HomeHero = () => {
             <div
               ref={aboutHero}
               style={{ willChange: "opacity, transform" }}
-              className={`min-h-[10rem] my-4 flex flex-col justify-end py-2 hero-title-wrapper`}
+              className={`min-h-[10rem] my-4 flex flex-col justify-end mt-5 py-2 hero-title-wrapper`}
             >
               <h1 className="pb-7">about me</h1>
             </div>

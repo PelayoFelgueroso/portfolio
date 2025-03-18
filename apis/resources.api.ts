@@ -10,7 +10,7 @@ export async function fetchResources(): Promise<Resource[]> {
   }
 
   const resources = await resResources.json();
-
+  
   const resCategories = await fetch(
     "https://cms.pelayofelgueroso.es/wp-json/wp/v2/categories"
   );

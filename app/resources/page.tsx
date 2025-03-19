@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <ResourcesProvider resources={resources}>
       <CurvedMenu />
-      <main className="relative min-h-screen pt-[100px] z-10 bg-background text-foreground">
+      <main className="relative bg-[#F4F4F4] min-h-screen pt-[100px] z-10 bg-background text-foreground">
         <div className="">
           <ResourcesGrid />
         </div>

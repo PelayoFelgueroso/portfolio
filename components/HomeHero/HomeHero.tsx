@@ -208,7 +208,7 @@ export const HomeHero = () => {
       id="hero"
       className={`h-screen sticky top-0 z-0 mix-blend-difference`}
     >
-      <div className="h-full grid-18 padding-18 _1row items-end">
+      <div className="relative h-full grid-18 padding-18 _1row items-end">
         <div className="col-start-1 xl:col-end-10 h-full flex flex-col justify-end">
           <motion.div
             variants={slideUp(1)}
@@ -259,7 +259,7 @@ export const HomeHero = () => {
           variants={slideUp(1.05)}
           initial="initial"
           animate="entry"
-          className="col-start-11 col-end-[16] pb-6 text-white h-fit"
+          className="absolute top-[60%] md:static col-start-11 col-end-[16] pb-6 text-white h-fit"
         >
           <p className="max-w-[450px] text-[1.75rem]">
             Desarrollador Frontend centrado en crear páginas web atractivas,

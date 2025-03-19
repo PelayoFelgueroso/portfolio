@@ -3,7 +3,6 @@
   top: 0;
   z-index: 100;
   height: fit-content;
-  mix-blend-mode: difference;
   color: white;
   margin-bottom: -106px;
 
@@ -26,57 +25,53 @@
   }
 }
 
-.main {
-  .header {
-    padding: 30px;
-    position: fixed;
-    right: 0;
-    z-index: 1000;
+.header {
+  position: relative;
+  z-index: 1000;
 
-    .button {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: #455ce9;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  .button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #455ce9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .burger {
+    width: 100%;
+    &::after,
+    &::before {
+      content: "";
+      display: block;
+      height: 1px;
+      width: 40%;
+      margin: auto;
+      background-color: white;
+      position: relative;
+      transition: transform 0.3s;
     }
 
-    .burger {
-      width: 100%;
-      &::after,
-      &::before {
-        content: "";
-        display: block;
-        height: 1px;
-        width: 40%;
-        margin: auto;
-        background-color: white;
-        position: relative;
-        transition: transform 0.3s;
-      }
-
-      &::after {
-        top: -5px;
-      }
-
-      &::before {
-        top: 5px;
-      }
+    &::after {
+      top: -5px;
     }
 
-    .burgerActive {
-      &::after {
-        transform: rotate(45deg);
-        top: -1px;
-      }
+    &::before {
+      top: 5px;
+    }
+  }
 
-      &::before {
-        transform: rotate(-45deg);
-        top: 0px;
-      }
+  .burgerActive {
+    &::after {
+      transform: rotate(45deg);
+      top: -1px;
+    }
+
+    &::before {
+      transform: rotate(-45deg);
+      top: 0px;
     }
   }
 }
@@ -156,6 +151,13 @@
 }
 
 @media (max-width: 768px) {
+  .header_wrapper {
+    .header_container {
+      padding: 1rem 1rem;
+      align-items: center;
+    }
+  }
+
   .menu {
     .body {
       padding: 75px;

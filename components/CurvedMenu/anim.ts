@@ -33,3 +33,8 @@ export const scale = {
   open: { scale: 1, transition: { duration: 0.3 } },
   closed: { scale: 0, transition: { duration: 0.4 } },
 };
+
+export const logoColor = {
+  open: { fill: "white", transition: { duration: 0.8 } },
+  closed: { fill: "black", transition: { duration: 0.8 } },
+};

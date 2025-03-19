@@ -5,7 +5,7 @@ import {
   mujerChina,
   mujerGafas,
   mujerGafasBlancas,
-} from "@/public/conquer-tareas";
+} from "@/public/conquer-tareas/gathsession";
 import Image from "next/image";
 
 export default function GathSession() {

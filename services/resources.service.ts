@@ -4,7 +4,7 @@ import { fetchCategories } from "./categories.service";
 
 const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
 
-const fetchResources = async (): Promise<Resource[]> => {
+export const fetchResources = async (): Promise<Resource[]> => {
   const res = await fetch(`${API_BASE_URL}/recurso`, {
     cache: "force-cache",
     next: { revalidate: 3600 },

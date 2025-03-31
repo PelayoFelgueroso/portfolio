@@ -3,7 +3,7 @@ import { FormattedProject, Project } from "@/models/project";
 
 const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
 
-const fetchProjects = async (): Promise<Project[]> => {
+export const fetchProjects = async (): Promise<Project[]> => {
   const res = await fetch(`${API_BASE_URL}/proyecto`, {
     cache: "force-cache",
     next: { revalidate: 3600 },

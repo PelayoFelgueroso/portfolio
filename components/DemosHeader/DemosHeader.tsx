@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 
 export const DemosHeader = () => {
-  const resources = useResources();
+  const {resources} = useResources();
   const route = usePathname();
   const slug = useMemo(() => route.split("/").filter(Boolean).pop(), [route]);
 

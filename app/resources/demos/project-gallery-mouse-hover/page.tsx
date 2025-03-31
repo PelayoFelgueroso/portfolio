@@ -1,4 +1,4 @@
-import { fetchProjects } from "@/apis/projects.api";
+import { fetchProjects } from "@/services/projects.service";
 import { Projects } from "@/components/UILibrary/Projects/Projects";
 import { ProjectsProvider } from "@/contexts/Projects.context";
 

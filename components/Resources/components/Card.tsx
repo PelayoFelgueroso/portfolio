@@ -1,23 +1,19 @@
 "use client";
 
-import { Category } from "@/models/resource";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import styles from "./style.module.scss";
+import { truncateText } from "@/lib/utils";
 
 interface Props {
   title: string;
   short_description: string;
   featured_image: string;
   featured_video: string;
-  categories: Category[];
+  categories: string[];
   slug: string;
 }
-
-const truncateText = (text: string, maxLength: number) => {
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
-};
 
 export const Card = ({
   title,
@@ -40,7 +36,7 @@ export const Card = ({
     <div
       onMouseEnter={handleHover}
       onMouseLeave={handleNoHover}
-      className={`${styles.resource_wrapper} flex flex-col justify-between w-full overflow-hidden rounded-lg bg-white text-black p-2`}
+      className={`${styles.resource_wrapper} flex flex-col justify-between w-full overflow-hidden rounded-lg bg-white text-black p-2 max-w-[400px]`}
     >
       <div
         className={`h-[200px] rounded-lg overflow-hidden relative ${styles.top_wrapper}`}
@@ -91,18 +87,18 @@ export const Card = ({
         className="flex flex-col justify-end h-1/2  z-20 px-5 py-[18px] lg:p-[14px]"
       >
         <div className="flex gap-2">
-          {categories.map((item) => (
+          {categories.map((category, index) => (
             <span
-              key={item.id}
+              key={index}
               className="w-fit uppercase text-[.7rem] border border-black px-2 py-1 rounded-full"
             >
-              {item.name}
+              {category}
             </span>
           ))}
         </div>
 
         <h3 className="mt-[.8rem] mb-[.3rem] text-[1.2rem]">{title}</h3>
-        <p className="text-[.9rem] font-thin">{truncateText(short_description, 100)}</p>
+        <p className="text-[.9rem] font-thin">{truncateText(short_description, 95)}</p>
       </Link>
     </div>
   );

@@ -1,19 +1,42 @@
 "use client";
 
 import { FormattedProject } from "@/models/project";
-import { createContext, useContext } from "react";
+import { getFormattedProjects } from "@/services/projects.service";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const ProjectsContext = createContext<FormattedProject[] | null>(null);
-
-export function ProjectsProvider({
-  projects,
-  children,
-}: {
+interface ProjectsContextType {
   projects: FormattedProject[];
-  children: React.ReactNode;
-}) {
+  loadingProjects: boolean;
+}
+
+const ProjectsContext = createContext<ProjectsContextType | undefined>(
+  undefined
+);
+
+export function ProjectsProvider({ children }: { children: React.ReactNode }) {
+  const [projects, setProjects] = useState<FormattedProject[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const storedProjects = sessionStorage.getItem("cachedProjects");
+
+      if (storedProjects) {
+        setProjects(JSON.parse(storedProjects));
+        setLoadingProjects(false);
+      } else {
+        const data = await getFormattedProjects();
+        sessionStorage.setItem("cachedProjects", JSON.stringify(data));
+        setProjects(data);
+        setLoadingProjects(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   return (
-    <ProjectsContext.Provider value={projects}>
+    <ProjectsContext.Provider value={{ projects, loadingProjects }}>
       {children}
     </ProjectsContext.Provider>
   );

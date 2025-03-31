@@ -76,6 +76,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  .h1{
+    @apply leading-[3.75rem] text-[4rem] lg:text-[8.5vw] lg:leading-[10rem]  font-semibold;
+  }
 }
 
 .grid-18 {

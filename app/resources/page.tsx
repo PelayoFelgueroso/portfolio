@@ -1,19 +1,21 @@
-import { fetchResources } from "@/apis/resources.api";
+"use client";
+
 import { CurvedMenu } from "@/components/CurvedMenu/CurvedMenu";
 import { Footer } from "@/components/Footer/Footer";
 import { ResourcesGrid } from "@/components/Resources/ResourcesGrid";
-import { ResourcesProvider } from "@/contexts/Resources.context";
+import { ResourcesProvider, useResources } from "@/contexts/Resources.context";
+import { AnimatePresence } from "framer-motion";
 
-export default async function Home() {
-  const resources = await fetchResources();
+export default function Home() {
+  const { resources, loadingResources } = useResources();
 
   return (
-    <ResourcesProvider resources={resources}>
+    <ResourcesProvider>
       <CurvedMenu />
       <main className="relative bg-[#F4F4F4] min-h-screen pt-[100px] z-10 bg-background text-foreground">
-        <div className="">
-          <ResourcesGrid />
-        </div>
+        <AnimatePresence mode="wait">
+         {!loadingResources && <ResourcesGrid resources={resources} />}
+        </AnimatePresence>
       </main>
       <Footer />
     </ResourcesProvider>

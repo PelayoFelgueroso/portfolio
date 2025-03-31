@@ -1,19 +1,42 @@
 "use client";
 
-import { Resource } from "@/models/resource";
-import { createContext, useContext } from "react";
+import { FormattedResource } from "@/models/resource";
+import { getFormattedResources } from "@/services/resources.service";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const ResourcesContext = createContext<Resource[] | null>(null);
+interface ResourcesContextType {
+  resources: FormattedResource[];
+  loadingResources: boolean;
+}
 
-export function ResourcesProvider({
-  resources,
-  children,
-}: {
-  resources: Resource[];
-  children: React.ReactNode;
-}) {
+const ResourcesContext = createContext<ResourcesContextType | undefined>(
+  undefined
+);
+
+export function ResourcesProvider({ children }: { children: React.ReactNode }) {
+  const [resources, setResources] = useState<FormattedResource[]>([]);
+  const [loadingResources, setLoadingResources] = useState(true);
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      const storedResources = sessionStorage.getItem("cachedResources");
+
+      if (storedResources) {
+        setResources(JSON.parse(storedResources));
+        setLoadingResources(false);
+      } else {
+        const data = await getFormattedResources();
+        sessionStorage.setItem("cachedResources", JSON.stringify(data));
+        setResources(data);
+        setLoadingResources(false);
+      }
+    };
+
+    fetchResources();
+  }, []);
+
   return (
-    <ResourcesContext.Provider value={resources}>
+    <ResourcesContext.Provider value={{ resources, loadingResources }}>
       {children}
     </ResourcesContext.Provider>
   );

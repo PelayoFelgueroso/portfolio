@@ -7,11 +7,15 @@ import { HomeHero } from "@/components/HomeHero/HomeHero";
 import { LogoPreoloader } from "@/components/LogoPreloader/LogoPreloader";
 import { Resources } from "@/components/Resources/Resources";
 import { Works } from "@/components/Works/Works";
+import { useProjects } from "@/contexts/Projects.context";
+import { useResources } from "@/contexts/Resources.context";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const { projects, loadingProjects } = useProjects();
+  const { resources, loadingResources } = useResources();
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,10 +32,19 @@ export default function Home() {
       </AnimatePresence>
 
       <DotCursor />
-      <HomeHero />
+      <AnimatePresence mode="wait">
+        {!loadingProjects && !loadingResources && <HomeHero />}
+      </AnimatePresence>
+
       <About />
-      <Works />
-      <Resources />
+      <AnimatePresence mode="wait">
+        {!loadingProjects && <Works projects={projects} />}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {!loadingResources && <Resources resources={resources} />}
+      </AnimatePresence>
+
       <Contact />
     </main>
   );

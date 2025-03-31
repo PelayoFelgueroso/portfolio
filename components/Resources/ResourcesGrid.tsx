@@ -1,15 +1,18 @@
 "use client";
 
-import { useResources } from "@/contexts/Resources.context";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Clock } from "lucide-react";
-import { categories } from "@/apis/categories";
+import { categories } from "@/services/categories.service";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "./components/Card";
+import { FormattedResource } from "@/models/resource";
 
-export const ResourcesGrid = () => {
-  const resources = useResources();
+interface Props {
+  resources: FormattedResource[];
+}
+
+export const ResourcesGrid = ({ resources }: Props) => {
   const [filteredResources, setFilteredResources] = useState(resources);
   const [active, setActive] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -23,7 +26,7 @@ export const ResourcesGrid = () => {
       id === 0
         ? resources
         : resources.filter((resource) =>
-            resource.categories.some((cat) => cat.id === id)
+            resource.categories.some((cat) => cat === id)
           )
     );
     setActive(id);
@@ -113,7 +116,7 @@ export const ResourcesGrid = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-6"
+              className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] w-full gap-6"
             >
               {filteredResources.map((resource, index) => (
                 <motion.div
@@ -128,10 +131,10 @@ export const ResourcesGrid = () => {
                   <Card
                     slug={resource.slug}
                     title={resource.title.rendered}
-                    short_description={resource.meta.short_description}
-                    featured_image={resource.meta.featured_image}
-                    featured_video={resource.meta.featured_video}
-                    categories={resource.categories}
+                    short_description={resource.acf.short_description}
+                    featured_image={resource.featured_image}
+                    featured_video={resource.featured_video}
+                    categories={resource.category_name}
                   />
                 </motion.div>
               ))}

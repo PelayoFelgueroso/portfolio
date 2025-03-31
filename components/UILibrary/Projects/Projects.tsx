@@ -6,7 +6,7 @@ import { Project } from "./components/Project";
 import { useProjects } from "@/contexts/Projects.context";
 
 export const Projects = () => {
-  const projects = useProjects();
+  const {projects} = useProjects();
 
   return (
     <section className={styles.projects}>
@@ -22,7 +22,7 @@ export const Projects = () => {
               key={project.id}
               slug={project.slug}
               title={project.title.rendered}
-              featured_image={project.meta.featured_image}
+              featured_image={project.featured_image}
             />
           );
         })}

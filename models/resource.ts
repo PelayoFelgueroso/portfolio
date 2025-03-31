@@ -1,24 +1,10 @@
-interface Meta {
-  featured_video: string;
-  featured_image: string;
+interface ACF {
+  featured_video: number;
+  featured_image: number;
   short_description: string;
   description: string;
   difficulty: string;
   github_link: string;
-  techs: string;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-}
-
-interface FormattedMeta {
-  featured_video: string;
-  featured_image: string;
-  short_description: string;
-  description: string;
-  github_link?: string;
   techs: string[];
 }
 
@@ -26,14 +12,18 @@ export interface Resource {
   id: number;
   slug: string;
   title: { rendered: string };
-  meta: FormattedMeta;
-  categories: Category[];
+  acf: ACF;
+  categories: number[];
 }
 
-export interface UnformattedResource {
+
+export interface FormattedResource {
   id: number;
   slug: string;
   title: { rendered: string };
-  meta: Meta;
+  acf: ACF;
   categories: number[];
+  featured_image: string;
+  featured_video: string;
+  category_name: string[];
 }

@@ -1,19 +1,18 @@
 "use client";
 
 import styles from "./style.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useProjects } from "@/contexts/Projects.context";
 import { ChevronRight } from "lucide-react";
+import { FormattedProject } from "@/models/project";
 
-export const Works = () => {
-  const projects = useProjects();
+interface Props {
+  projects: FormattedProject[];
+}
+
+export const Works = ({ projects }: Props) => {
   const [currentWork, setCurrentWork] = useState(projects[0]);
-
-  useEffect(() => {
-    console.log(currentWork);
-  }, [currentWork]);
 
   const video = useRef<HTMLVideoElement | null>(null);
 
@@ -70,7 +69,7 @@ export const Works = () => {
                   }`}
                 >
                   <span className="inline-block py-1.5 px-3 bg-gray text-gray-800 text-sm font-medium rounded-md">
-                    {project.meta.niche}
+                    {project.acf.niche}
                   </span>
                 </div>
               </div>
@@ -87,26 +86,26 @@ export const Works = () => {
             className=""
           >
             <Image
-              src={currentWork.meta.featured_image}
+              src={currentWork.featured_image}
               width={1920}
               height={1080}
               alt={currentWork.title.rendered}
               className={`object-contain ${styles.image}`}
             />
             <video
-              key={currentWork?.meta?.featured_video}
+              key={currentWork.featured_video}
               ref={video}
               className={`w-full object-contain ${styles.video}`}
               loop
               muted
               playsInline
             >
-              <source src={currentWork.meta.featured_video} type="video/mp4" />
+              <source src={currentWork.featured_video} type="video/mp4" />
               Tu navegador no soporta videos.
             </video>
             <Link
               target="_blank"
-              href={currentWork.meta.live_demo}
+              href={currentWork.acf.live_demo}
               className={`absolute bottom-4 right-4 rounded-full flex justify-center items-center gap-2 px-4 py-2 bg-blue-500 z-[1000] text-white ${styles.demo}`}
             >
               View Online
@@ -135,7 +134,7 @@ export const Works = () => {
             </h3>
             <div className="relative overflow-hidden">
               <p className="text-black leading-relaxed">
-                {currentWork.meta.description}
+                {currentWork.acf.description}
               </p>
               <div className="mt-8">
                 <Link

@@ -1,4 +1,4 @@
-import { fetchResources } from "@/apis/resources.api";
+import { fetchResources } from "@/services/resources.service";
 import { DemosHeader } from "@/components/DemosHeader/DemosHeader";
 import { ResourcesProvider } from "@/contexts/Resources.context";
 

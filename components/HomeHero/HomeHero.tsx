@@ -214,7 +214,7 @@ export const HomeHero = () => {
             variants={slideUp(1)}
             initial="initial"
             animate="entry"
-            className={`justify-start items-start flex flex-col leading-[3.75rem] text-[4rem] lg:text-[8.5vw] lg:leading-[10rem] font-semibold h-[20rem] pb-4 text-white`}
+            className={`h1 justify-start items-start flex flex-col h-[20rem] pb-4 text-white`}
           >
             <div
               ref={nameHero}

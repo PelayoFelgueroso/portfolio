@@ -1,6 +1,5 @@
 "use client";
 
-import type { Category } from "@/models/resource";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -12,7 +11,7 @@ interface Props {
   short_description: string;
   featured_image: string;
   featured_video: string;
-  categories: Category[];
+  categories: number[];
   slug: string;
 }
 
@@ -97,12 +96,12 @@ export const PageCard = ({
       <div className="flex flex-col justify-between flex-grow p-5">
         <div>
           <div className="flex flex-wrap gap-2 mb-3">
-            {categories.map((item) => (
+            {categories.map((category, index) => (
               <span
-                key={item.id}
+                key={index}
                 className="w-fit uppercase text-[0.65rem] font-medium border border-gray-200 px-2 py-1 rounded-full bg-gray-50 text-gray-700"
               >
-                {item.name}
+                {category}
               </span>
             ))}
           </div>

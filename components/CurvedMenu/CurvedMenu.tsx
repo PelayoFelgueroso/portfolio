@@ -3,7 +3,6 @@
 import styles from "./style.module.scss";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { Nav } from "./components/Nav";
 import { navLinks } from "@/content";
 import Link from "next/link";
@@ -11,16 +10,13 @@ import { logoColor, slideDown } from "./anim";
 
 export const CurvedMenu = () => {
   const [isActive, setIsActive] = useState(false);
-  const pathname = usePathname();
 
   return (
     <motion.header
       variants={slideDown}
       initial="initial"
       animate="entry"
-      className={`${styles.header_wrapper} ${
-        pathname === "/resources" ? "bg-[#F4F4F4]" : "bg-transparent"
-      }`}
+      className={`${styles.header_wrapper}`}
     >
       <div className={styles.header_container}>
         <div className="relative z-[1000]">

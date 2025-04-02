@@ -6,25 +6,7 @@ import { menuSlide } from "../anim";
 import { NavLink } from "./components/NavLink";
 import { HeaderFooter } from "./components/HeaderFooter";
 import { Curve } from "./components/Curve";
-
-const navItems = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Work",
-    href: "/work",
-  },
-  {
-    title: "About",
-    href: "/about",
-  },
-  {
-    title: "Contact",
-    href: "/contact",
-  },
-];
+import { navLinks } from "@/content";
 
 export const Nav = () => {
   const pathname = usePathname();
@@ -48,7 +30,7 @@ export const Nav = () => {
           <div className={styles.header}>
             <p>Navigation</p>
           </div>
-          {navItems.map((data, index) => {
+          {navLinks.map((data, index) => {
             return (
               <NavLink
                 key={index}

@@ -1,8 +1,17 @@
-import { Resource, FormattedResource } from "@/models/resource";
+import { Resource, FormattedResource, FormattedDate } from "@/models/resource";
 import { fetchMediaUrls } from "./media.service";
-import { fetchCategories } from "./categories.service";
+import { getCategories } from "./categories.service";
 
 const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
+
+const formatDate = (wpDate: string): FormattedDate => {
+  const date = new Date(wpDate);
+  return {
+    day: date.getUTCDate(),
+    month: date.toLocaleString("en-US", { month: "long" }),
+    year: date.getUTCFullYear(),
+  };
+};
 
 export const fetchResources = async (): Promise<Resource[]> => {
   const res = await fetch(`${API_BASE_URL}/recurso`, {
@@ -18,7 +27,7 @@ export const fetchResources = async (): Promise<Resource[]> => {
 
 export async function getFormattedResources(): Promise<FormattedResource[]> {
   const resources = await fetchResources();
-  const categoryMap = await fetchCategories(API_BASE_URL);
+  const categoryMap = await getCategories();
 
   const imageIds: number[] = [
     ...new Set(
@@ -41,7 +50,7 @@ export async function getFormattedResources(): Promise<FormattedResource[]> {
   return resources.map((resource: Resource) => {
     const categoryNames = Array.isArray(resource.categories)
       ? resource.categories.map(
-          (categoryId) => categoryMap[categoryId] || "Uncategorized"
+          (categoryId) => categoryMap[categoryId]?.name || "Uncategorized"
         )
       : ["Uncategorized"];
 
@@ -50,6 +59,7 @@ export async function getFormattedResources(): Promise<FormattedResource[]> {
       featured_image: imageUrls[resource.acf.featured_image],
       featured_video: videoUrls[resource.acf.featured_video],
       category_name: categoryNames,
+      formatted_date: formatDate(resource.date),
     };
   });
 }

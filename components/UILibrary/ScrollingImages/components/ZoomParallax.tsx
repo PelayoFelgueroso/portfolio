@@ -1,7 +1,7 @@
 "use client";
 
 import { background, darkCave, darkMountain, shadowBench, shadowPerson, shortStreet } from "@/public";
-import styles from "./style.module.scss";
+import styles from "../style.module.scss";
 import { useScroll, useTransform, motion } from "framer-motion";
 import React, { ReactNode, useRef } from "react";
 import Image from "next/image";

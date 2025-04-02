@@ -8,14 +8,21 @@ interface ACF {
   techs: string[];
 }
 
+export interface FormattedDate {
+  day: number;
+  month: string;
+  year: number;
+}
+
 export interface Resource {
   id: number;
   slug: string;
   title: { rendered: string };
   acf: ACF;
   categories: number[];
+  date: string;
+  content: { protected: boolean; rendered: string };
 }
-
 
 export interface FormattedResource {
   id: number;
@@ -26,4 +33,7 @@ export interface FormattedResource {
   featured_image: string;
   featured_video: string;
   category_name: string[];
+  date: string;
+  formatted_date: FormattedDate;
+  content: { protected: boolean; rendered: string };
 }

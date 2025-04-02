@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { ImagesScrolling } from "./components/ImagesScrolling";
 import { TextOnScroll } from "./components/TextOnScroll";
 import styles from "./style.module.scss";
-import { ZoomParallax } from "./ZoomParallax/ZoomParallax";
+import { ZoomParallax } from "./components/ZoomParallax";
 import { useScroll } from "framer-motion";
 
 export const ScrollingImages = () => {

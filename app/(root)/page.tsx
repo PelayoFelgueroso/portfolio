@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { projects, loadingProjects } = useProjects();
-  const { resources, loadingResources } = useResources();
+  const { resources, loadingResources, categories, loadingCategories } = useResources();
 
   useEffect(() => {
     setTimeout(() => {
@@ -42,7 +42,7 @@ export default function Home() {
       </AnimatePresence>
 
       <AnimatePresence mode="wait">
-        {!loadingResources && <Resources resources={resources} />}
+        {!loadingResources && !loadingCategories && <Resources categories={categories} resources={resources} />}
       </AnimatePresence>
 
       <Contact />

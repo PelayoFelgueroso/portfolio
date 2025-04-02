@@ -2,14 +2,16 @@ import { Card } from "./components/Card";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Clock } from "lucide-react";
-import { categories } from "@/services/categories.service";
 import { FormattedResource } from "@/models/resource";
+import { Category } from "@/services/categories.service";
+import Image from "next/image";
 
 interface Props {
   resources: FormattedResource[];
+  categories: Category[];
 }
 
-export const Resources = ({ resources }: Props) => {
+export const Resources = ({ resources, categories }: Props) => {
   const [filteredResources, setFilteredResources] = useState(resources);
   const [allVisible, setAllVisible] = useState(false);
   const [active, setActive] = useState(0);
@@ -51,8 +53,6 @@ export const Resources = ({ resources }: Props) => {
               </Button>
             </div>
             {categories.map((item) => {
-              const IconComponent = item.icon;
-
               return (
                 <div key={item.id} className="w-full">
                   <Button
@@ -61,7 +61,13 @@ export const Resources = ({ resources }: Props) => {
                       item.id === active ? "bg-blue-500 text-white" : ""
                     }`}
                   >
-                    <IconComponent />
+                    <Image
+                      src={item.acf.icon.value}
+                      width={20}
+                      height={20}
+                      alt=""
+                      className=""
+                    />
                     <div className="hidden md:inline">{item.name}</div>
                   </Button>
                 </div>

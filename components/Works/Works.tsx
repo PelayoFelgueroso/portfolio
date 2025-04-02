@@ -24,7 +24,7 @@ export const Works = ({ projects }: Props) => {
   };
 
   return (
-    <section id="works" className="relative mt-[200px] h-screen px-4">
+    <section id="works" className="relative mt-[200px] pb-[200px] lg:h-screen px-4">
       <div className="grid-18 _1row items-center max-w-[1600px] md:mx-auto p-3 bg-[#f4f4f4] shadow-2xl rounded-xl flex-col gap-6">
         <div
           className={`col-start-1 col-end-4 rounded-3xl overflow-hidden w-full h-full bg-[#f4f4f4] text-black`}
@@ -126,7 +126,7 @@ export const Works = ({ projects }: Props) => {
           </div>
         </div>
 
-        <div className="col-start-[15] col-end-[19] w-full p-8 flex flex-col justify-center">
+        <div className="col-start-[15] col-end-[19] w-full p-8 flex flex-col justify-center ">
           <div className="space-y-6">
             <div className="h-[1px] w-12 bg-black"></div>
             <h3 className="text-xl font-light uppercase">

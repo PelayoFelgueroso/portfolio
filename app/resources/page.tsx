@@ -3,21 +3,24 @@
 import { CurvedMenu } from "@/components/CurvedMenu/CurvedMenu";
 import { Footer } from "@/components/Footer/Footer";
 import { ResourcesGrid } from "@/components/Resources/ResourcesGrid";
-import { ResourcesProvider, useResources } from "@/contexts/Resources.context";
+import { useResources } from "@/contexts/Resources.context";
 import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
-  const { resources, loadingResources } = useResources();
+  const { resources, loadingResources, categories, loadingCategories } =
+    useResources();
 
   return (
-    <ResourcesProvider>
+    <>
       <CurvedMenu />
-      <main className="relative bg-[#F4F4F4] min-h-screen pt-[100px] z-10 bg-background text-foreground">
+      <main className="relative min-h-screen pt-[100px] z-10 bg-[#F4F4F4] text-foreground">
         <AnimatePresence mode="wait">
-         {!loadingResources && <ResourcesGrid resources={resources} />}
+          {!loadingResources && !loadingCategories && (
+            <ResourcesGrid categories={categories} resources={resources} />
+          )}
         </AnimatePresence>
       </main>
       <Footer />
-    </ResourcesProvider>
+    </>
   );
 }

@@ -3,16 +3,18 @@
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Clock } from "lucide-react";
-import { categories } from "@/services/categories.service";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "./components/Card";
 import { FormattedResource } from "@/models/resource";
+import { Category } from "@/services/categories.service";
+import Image from "next/image";
 
 interface Props {
   resources: FormattedResource[];
+  categories: Category[];
 }
 
-export const ResourcesGrid = ({ resources }: Props) => {
+export const ResourcesGrid = ({ resources, categories }: Props) => {
   const [filteredResources, setFilteredResources] = useState(resources);
   const [active, setActive] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -36,7 +38,7 @@ export const ResourcesGrid = ({ resources }: Props) => {
 
   return (
     <div className="relative max-w-[1800px] mx-auto w-full px-4 md:px-8 pb-[100px] md:pb-[200px]">
-      <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] lg:grid-cols-[280px_1fr] gap-8">
+      <div className="md:grid grid-cols-1 md:grid-cols-[250px_1fr] lg:grid-cols-[280px_1fr] gap-8">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -81,8 +83,6 @@ export const ResourcesGrid = ({ resources }: Props) => {
               </motion.div>
 
               {categories.map((item) => {
-                const IconComponent = item.icon;
-
                 return (
                   <motion.div
                     key={item.id}
@@ -98,7 +98,13 @@ export const ResourcesGrid = ({ resources }: Props) => {
                           : "text-gray-700"
                       }`}
                     >
-                      <IconComponent className="h-5 w-5" />
+                      <Image
+                        src={item.acf.icon.value}
+                        width={20}
+                        height={20}
+                        alt=""
+                        className=""
+                      />
                       <div className="hidden md:block">{item.name}</div>
                     </Button>
                   </motion.div>

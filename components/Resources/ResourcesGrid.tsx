@@ -92,7 +92,7 @@ export const ResourcesGrid = ({ resources, categories }: Props) => {
                   >
                     <Button
                       onClick={() => handleCategories(item.id)}
-                      className={`w-fit sm:w-full pl-4 py-3 text-[1.1rem] h-fit flex justify-start gap-4 bg-transparent shadow-none hover:bg-[#EAEAEA] hover:text-black transition-all duration-300 rounded-xl ${
+                      className={`w-fit sm:w-full pl-4 py-3 text-[1.1rem] h-fit flex justify-start gap-4 bg-transparent shadow-none hover:bg-grayCustom hover:text-blackCustom transition-all duration-300 rounded-xl ${
                         item.id === active
                           ? "bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
                           : "text-gray-700"

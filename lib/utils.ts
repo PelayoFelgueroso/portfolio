@@ -24,7 +24,32 @@ export default function useMousePosition() {
   return mousePosition;
 }
 
-
 export const truncateText = (text: string, maxLength: number) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+
+export const useOutsideClick = (
+  callback: (event: MouseEvent | TouchEvent) => void,
+  ref: React.RefObject<HTMLDivElement | null>,
+  ref2?: React.RefObject<HTMLDivElement | null>
+) => {
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (
+        (ref.current && ref.current.contains(event.target as Node)) ||
+        (ref2?.current && ref2.current.contains(event.target as Node))
+      ) {
+        return;
+      }
+      callback(event);
+    };
+
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, [ref, ref2, callback]);
 };

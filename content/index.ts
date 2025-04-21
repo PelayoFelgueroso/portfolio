@@ -1,4 +1,25 @@
+import { Folder, Github, Linkedin } from "lucide-react";
+
 export const navLinks = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  {
+    title: "Works",
+    href: "#works",
+  },
+  {
+    title: "Resources",
+    href: "#resources",
+  },
+  {
+    title: "Contact",
+    href: "#contact",
+  },
+];
+
+export const navLinksResources = [
   {
     title: "Home",
     href: "/",
@@ -12,23 +33,30 @@ export const navLinks = [
     href: "/resources",
   },
   {
+    title: "Demos",
+    href: "/resources/demos",
+  },
+  {
     title: "Contact",
     href: "Contact",
   },
 ];
 
-export const externalLinks = [
+export const footerLinks = [
   {
     title: "LinkedIn",
-    href: "linkedIn",
-  },
-  {
-    title: "Instagram",
-    href: "instagram",
+    href: "https://www.linkedin.com/in/pfelgueroso/",
+    icon: Linkedin,
   },
   {
     title: "Github",
-    href: "github",
+    href: "https://github.com/PelayoFelgueroso",
+    icon: Github,
+  },
+  {
+    title: "Dowload-CV",
+    href: "/CV-Pelayo_Felgueroso.pdf",
+    icon: Folder
   },
 ];
 

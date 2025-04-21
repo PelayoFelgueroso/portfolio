@@ -19,17 +19,9 @@ export function ProjectsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const storedProjects = sessionStorage.getItem("cachedProjects");
-
-      if (storedProjects) {
-        setProjects(JSON.parse(storedProjects));
-        setLoadingProjects(false);
-      } else {
-        const data = await getFormattedProjects();
-        sessionStorage.setItem("cachedProjects", JSON.stringify(data));
-        setProjects(data);
-        setLoadingProjects(false);
-      }
+      const data = await getFormattedProjects();
+      setProjects(data);
+      setLoadingProjects(false);
     };
 
     fetchProjects();

@@ -24,12 +24,12 @@ export function DropdownLinks({ resources, buttonText }: DropdownLinksProps) {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant="outline" className="flex items-center gap-2 bg-whiteCustom border-0">
           {buttonText}
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-[200px]">
+      <DropdownMenuContent align="start" className="w-[200px] border-0 bg-whiteCustom">
         {resources.map((item) => (
           <DropdownMenuItem key={item.slug} asChild>
             <Link

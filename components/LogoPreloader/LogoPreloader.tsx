@@ -36,7 +36,7 @@ export const LogoPreoloader = () => {
       variants={slideUp}
       initial="initial"
       exit="exit"
-      className={styles.introduction}
+      className={`${styles.introduction} cursor-light`}
     >
       {dimension.width > 0 && (
         <>

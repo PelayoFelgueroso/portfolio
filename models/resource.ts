@@ -6,6 +6,7 @@ interface ACF {
   difficulty: string;
   github_link: string;
   techs: string[];
+  index: string;
 }
 
 export interface FormattedDate {

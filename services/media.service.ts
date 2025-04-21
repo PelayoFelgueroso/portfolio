@@ -1,5 +1,3 @@
-const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
-
 export const fetchMediaUrls = async (
   mediaIds: number[]
 ): Promise<Record<number, string>> => {
@@ -7,10 +5,13 @@ export const fetchMediaUrls = async (
 
   const mediaRequests = mediaIds.map(async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/media/${id}`, {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}media/${id}`,
+        {
+          cache: "force-cache",
+          next: { revalidate: 3600 },
+        }
+      );
       if (!res.ok) return { id, url: "" };
       const data = await res.json();
       return { id, url: data.source_url || "" };

@@ -7,6 +7,7 @@ import { Nav } from "./components/Nav";
 import { navLinks } from "@/content";
 import Link from "next/link";
 import { logoColor, slideDown } from "./anim";
+import { DesktopNavLink } from "./components/DesktopNavLink";
 
 export const CurvedMenu = () => {
   const [isActive, setIsActive] = useState(false);
@@ -56,14 +57,12 @@ export const CurvedMenu = () => {
           <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
         </div>
 
-        <nav className={`${styles.navbar_wrapper} text-black hidden md:block`}>
-          <ul className={styles.link_list}>
+        <nav
+          className={`${styles.navbar_wrapper} text-blackCustom hidden md:block`}
+        >
+          <ul className={styles.link_list}> 
             {navLinks.map((item, index) => (
-              <li key={index}>
-                <Link href={item.href} className={styles.link_item}>
-                  {item.title}
-                </Link>
-              </li>
+              <DesktopNavLink key={index} href={item.href} title={item.title} />
             ))}
           </ul>
         </nav>

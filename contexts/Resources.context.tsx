@@ -24,31 +24,15 @@ export function ResourcesProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchResources = async () => {
-      const storedResources = sessionStorage.getItem("cachedResources");
-
-      if (storedResources) {
-        setResources(JSON.parse(storedResources));
-        setLoadingResources(false);
-      } else {
-        const data = await getFormattedResources();
-        sessionStorage.setItem("cachedResources", JSON.stringify(data));
-        setResources(data);
-        setLoadingResources(false);
-      }
+      const data = await getFormattedResources();
+      setResources(data);
+      setLoadingResources(false);
     };
 
     const fetchCategories = async () => {
-      const storedCategories = sessionStorage.getItem("cachedCategories");
-
-      if (storedCategories) {
-        setCategories(JSON.parse(storedCategories));
-        setLoadingCategories(false);
-      } else {
-        const data = await getCategories();
-        sessionStorage.setItem("cachedCategories", JSON.stringify(data));
-        setCategories(data);
-        setLoadingCategories(false);
-      }
+      const data = await getCategories();
+      setCategories(data);
+      setLoadingCategories(false);
     };
 
     fetchResources();

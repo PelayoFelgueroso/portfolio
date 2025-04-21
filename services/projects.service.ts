@@ -1,13 +1,14 @@
 import { fetchMediaUrls } from "./media.service";
 import { FormattedProject, Project } from "@/models/project";
 
-const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
-
 export const fetchProjects = async (): Promise<Project[]> => {
-  const res = await fetch(`${API_BASE_URL}/proyecto`, {
-    cache: "force-cache",
-    next: { revalidate: 3600 },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}proyecto`,
+    {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    }
+  );
   if (!res.ok) {
     console.error("Error obtaining projects");
     return [];
@@ -25,6 +26,11 @@ export async function getFormattedProjects(): Promise<FormattedProject[]> {
           project.acf.featured_image,
           project.acf.featured_image_mobile,
           project.acf.featured_video,
+          project.acf.images_collection.image_1,
+          project.acf.images_collection.image_2,
+          project.acf.images_collection.image_3,
+          project.acf.images_collection.image_4,
+          project.acf.images_collection.image_5,
         ])
         .filter(Boolean)
     ),
@@ -37,6 +43,9 @@ export async function getFormattedProjects(): Promise<FormattedProject[]> {
       featured_image: mediaUrls[project.acf.featured_image],
       featured_image_mobile: mediaUrls[project.acf.featured_image_mobile],
       featured_video: mediaUrls[project.acf.featured_video],
+      images_collection: Object.values(project.acf.images_collection).map(
+        (imageId) => mediaUrls[imageId]
+      ),
     };
   });
 }

@@ -20,6 +20,10 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { formBg } from "@/public";
 
+interface Props {
+  ref: React.RefObject<HTMLDivElement | null>;
+}
+
 const formSchema = z.object({
   nombre: z.string().min(2, {
     message: "El nombre debe tener al menos 2 caracteres.",
@@ -35,9 +39,9 @@ const formSchema = z.object({
   }),
 });
 
-export type FormValues = z.infer<typeof formSchema>;
+export type FormValuesOld = z.infer<typeof formSchema>;
 
-export const ContactForm = () => {
+export const ContactForm = ({ ref }: Props) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -77,10 +81,13 @@ export const ContactForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-6xl bg-background shadow-2xl rounded-3xl px-12 py-24 md:py-48">
-        {submitted === false ? (
+      <div ref={ref} className="w-full max-w-6xl bg-background shadow-2xl bg-whiteCustom rounded-lg px-12 py-24 md:py-48">
+        {!submitted ? (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col md:flex-row gap-4">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col md:flex-row gap-4"
+            >
               <div className="space-y-4 flex-grow">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField

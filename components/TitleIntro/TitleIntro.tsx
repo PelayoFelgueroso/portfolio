@@ -6,7 +6,7 @@ import { useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { slideUp } from "./anim";
 
-export const HomeHero = () => {
+export const TitleIntro = () => {
   const nameHero = useRef(null);
   const aboutHero = useRef(null);
   const worksHero = useRef(null);
@@ -206,7 +206,7 @@ export const HomeHero = () => {
   return (
     <section
       id="hero"
-      className={`h-screen sticky top-0 z-0 mix-blend-difference`}
+      className={`h-screen sticky top-0 z-0`}
     >
       <div className="relative h-full grid-18 padding-18 _1row items-end">
         <div className="col-start-1 xl:col-end-10 h-full flex flex-col justify-end">
@@ -214,7 +214,7 @@ export const HomeHero = () => {
             variants={slideUp(1)}
             initial="initial"
             animate="entry"
-            className={`h1 justify-start items-start flex flex-col h-[20rem] pb-4 text-white`}
+            className={`h1 justify-start items-start flex flex-col h-[20rem] pb-4`}
           >
             <div
               ref={nameHero}
@@ -259,7 +259,7 @@ export const HomeHero = () => {
           variants={slideUp(1.05)}
           initial="initial"
           animate="entry"
-          className="absolute top-[60%] md:static col-start-11 col-end-[16] pb-6 text-white h-fit"
+          className="absolute top-[60%] md:static col-start-11 col-end-[16] pb-6 h-fit"
         >
           <p className="max-w-[450px] text-[1.75rem]">
             Desarrollador Frontend centrado en crear páginas web atractivas,

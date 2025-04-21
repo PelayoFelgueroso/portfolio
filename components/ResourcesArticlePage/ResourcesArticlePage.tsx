@@ -13,8 +13,6 @@ export const ResourcesArticlePage = ({ slug }: Props) => {
   const { resources, loadingResources, categories, loadingCategories } =
     useResources();
 
-    console.log(resources)
-
   const resource = resources.find((resource) => resource.slug === slug);
 
   if (!resource) {

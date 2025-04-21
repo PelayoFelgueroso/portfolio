@@ -2,15 +2,17 @@
 
 import { ResourceHeader } from "./components/ResourceHeader";
 import Image from "next/image";
-import styles from "./styles.module.scss";
-import "./style.css";
 import { FormattedResource } from "@/models/resource";
+import { ResourceTableContents } from "./components/ResourceTableContents/ResourceTableContents";
+import { ResourceContent } from "./components/ResourceContent/ResourceContent";
 
 interface Props {
   resource: FormattedResource;
 }
 
 export const ResourceArticle = ({ resource }: Props) => {
+  const sections = null;
+
   return (
     <div className="relative flex justify-between min-[1400px]:gap-[50px]">
       <article className="relative px-4 pb-[100px] mt-[80px] max-w-[800px] min-[1400px]:w-[900px] min-[1400px]:max-w-none">
@@ -24,7 +26,7 @@ export const ResourceArticle = ({ resource }: Props) => {
           slug={resource?.slug}
         />
 
-        <div className="relative h-[70vw] min-h-[300px] mt-[30px] rounded-xl overflow-hidden md:h-[575px]">
+        <div className="relative w-full aspect-[16/9] mt-[30px] rounded-xl overflow-hidden">
           <Image
             src={resource?.featured_image}
             width={1000}
@@ -49,26 +51,11 @@ export const ResourceArticle = ({ resource }: Props) => {
           </div>
         </div>
         {!resource.content.protected && (
-          <div
-            className={styles.content}
-            dangerouslySetInnerHTML={{ __html: resource.content.rendered }}
-          ></div>
+          <ResourceContent content={resource.content.rendered} />
         )}
       </article>
-      
-      {/*sections && (
-        <aside className="hidden min-[1400px]:block sticky top-[75px] mt-[80px] self-start">
-          <p className="text-[#4f576c] text-[12px]">Table of Contents</p>
-          {sections.map((item, index) => (
-            <p
-              key={index}
-              className="text-[#070b28] text-[14px] cursor-pointer"
-            >
-              {item.title}
-            </p>
-          ))}
-        </aside>
-      )*/}
+
+      {sections && <ResourceTableContents sections={sections} />}
     </div>
   );
 };

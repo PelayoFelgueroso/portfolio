@@ -17,8 +17,8 @@ export const DemosHeader = () => {
   );
 
   return (
-    <header className="relative grid grid-cols-3 items-center h-[70px] bg-[#333333] px-8">
-      <div className="text-white">
+    <header className="relative z-10 grid grid-cols-3 items-center h-[70px] bg-darkGrayCustom px-8">
+      <div className="text-whiteCustom">
         <Link href="/" className="">
           Pelayo Felgueroso
         </Link>

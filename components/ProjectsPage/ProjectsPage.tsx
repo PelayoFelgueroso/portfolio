@@ -21,7 +21,7 @@ export const ProjectsPageGrid = () => {
   };
 
   return (
-    <main className="relative z-10 bg-[#F4F4F4]">
+    <main className="relative z-10 bg-customWhite">
       <section className="h-screen w-full">
         <div className="h-full w-full px-4 flex items-center justify-center">
           <h1 className="h1">Projects</h1>

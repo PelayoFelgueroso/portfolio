@@ -1,109 +1,81 @@
-import { Card } from "./components/Card";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { Clock } from "lucide-react";
-import { FormattedResource } from "@/models/resource";
-import { Category } from "@/services/categories.service";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import {
+  AnimatePresence,
+  useInView,
+  useScroll,
+  motion,
+  useTransform,
+} from "framer-motion";
+import { useResources } from "@/contexts/Resources.context";
+import { ResourcesContainer } from "./components/ResourcesContainer";
+import { FilterWrapper } from "./components/FilterWrapper/FilterWrapper";
 
 interface Props {
-  resources: FormattedResource[];
-  categories: Category[];
+  onInViewChange: (visible: boolean) => void;
+  resourcesRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export const Resources = ({ resources, categories }: Props) => {
+export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
+  const { loadingResources, loadingCategories, resources } = useResources();
   const [filteredResources, setFilteredResources] = useState(resources);
-  const [allVisible, setAllVisible] = useState(false);
-  const [active, setActive] = useState(0);
 
-  const handleCategories = (id: number) => {
-    setFilteredResources(
-      id === 0
-        ? resources
-        : resources.filter((resource) =>
-            resource.categories.some((cat) => cat === id)
-          )
-    );
-    setActive(id);
-  };
+  useEffect(() => {
+    setFilteredResources(resources);
+  }, [resources]);
 
-  const toggleSeeAll = () => {
-    setAllVisible((prev) => !prev);
-  };
+  const inView = useInView(resourcesRef, { once: false });
+
+  useEffect(() => {
+    onInViewChange(inView);
+  }, [inView, onInViewChange]);
+
+  const inViewFilters = useInView(resourcesRef, {
+    once: false,
+    margin: "-750px 0px -500px 0px",
+  });
+
+  const { scrollYProgress } = useScroll({
+    target: resourcesRef,
+    offset: ["start 100%", "start 40%"],
+  });
+
+  const z = useTransform(scrollYProgress, [0, 1], ["-20rem", "0rem"]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], ["30deg", "0deg"]);
 
   return (
-    <section id="resources" className="relative pb-[200px] px-4">
-      <div
-        className={`grid-18 _1row w-full xl:max-w-[1600px] mx-auto p-3 bg-[#f4f4f4] rounded-lg shadow-2xl gap-3 flex-col xs:flex-row`}
-      >
-        <div className="col-start-1 col-end-5 h-fit text-black p-0 rounded-lg">
-          <div
-            style={{ scrollbarWidth: "none" }}
-            className="h-full flex overflow-x-scroll scrollbar-none xs:flex-col xs:gap-2"
+    <>
+      <section id="resources" className="relative pb-[200px] px-4">
+        <div
+          ref={resourcesRef}
+          className="perspective-distant w-full xl:max-w-[1600px] mx-auto min-h-[75vh]"
+        >
+          <motion.div
+            className={`perspective-distant relative grid-18 _1row p-3 rounded-lg gap-3 flex-col md:flex-row`}
+            style={{
+              willChange: "transform",
+              z,
+              rotateX,
+            }}
           >
-            <div className="w-full">
-              <Button
-                onClick={() => handleCategories(0)}
-                className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-white hover:text-black ${
-                  active === 0 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <Clock />
-                <div className="hidden md:block">Recent</div>
-              </Button>
-            </div>
-            {categories.map((item) => {
-              return (
-                <div key={item.id} className="w-full">
-                  <Button
-                    onClick={() => handleCategories(item.id)}
-                    className={`w-full pl-4 py-4 text-[1.5rem] h-fit flex justify-start gap-4 bg-transparent text-black shadow-none hover:bg-white hover:text-black ${
-                      item.id === active ? "bg-blue-500 text-white" : ""
-                    }`}
-                  >
-                    <Image
-                      src={item.acf.icon.value}
-                      width={20}
-                      height={20}
-                      alt=""
-                      className=""
-                    />
-                    <div className="hidden md:inline">{item.name}</div>
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+            <div className="absolute inset-0 shadow-2xl border-[1px] border-grayCustom rounded-lg bg-white" />
+            <AnimatePresence mode="wait">
+              {!loadingCategories && !loadingResources && (
+                <ResourcesContainer
+                  resources={resources}
+                  filteredResources={filteredResources}
+                  scrollProgress={scrollYProgress}
+                  onFilterChange={setFilteredResources}
+                />
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
-        <div className="col-start-5 col-end-[19] flex flex-col gap-8">
-          <div className="grid md:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] w-full md:gap-4 sm:gap-5 gap-4">
-            {(allVisible
-              ? filteredResources
-              : filteredResources.slice(0, 6)
-            ).map((resource) => (
-              <Card
-                slug={resource.slug}
-                key={resource.id}
-                title={resource.title.rendered}
-                short_description={resource.acf.short_description}
-                featured_image={resource.featured_image}
-                featured_video={resource.featured_video}
-                categories={resource.category_name}
-              />
-            ))}
-          </div>
-          {filteredResources.length > 6 && (
-            <div className="w-full flex justify-center items-center">
-              <Button
-                onClick={toggleSeeAll}
-                className="bg-blue-500 hover:bg-blue-700"
-              >
-                {allVisible ? "See Less" : "See All"}
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+      </section>
+
+      <FilterWrapper
+        onFilterChange={setFilteredResources}
+        inViewResources={inViewFilters}
+      />
+    </>
   );
 };

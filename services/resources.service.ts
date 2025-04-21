@@ -2,8 +2,6 @@ import { Resource, FormattedResource, FormattedDate } from "@/models/resource";
 import { fetchMediaUrls } from "./media.service";
 import { getCategories } from "./categories.service";
 
-const API_BASE_URL = "https://cms.pelayofelgueroso.es/wp-json/wp/v2";
-
 const formatDate = (wpDate: string): FormattedDate => {
   const date = new Date(wpDate);
   return {
@@ -14,10 +12,13 @@ const formatDate = (wpDate: string): FormattedDate => {
 };
 
 export const fetchResources = async (): Promise<Resource[]> => {
-  const res = await fetch(`${API_BASE_URL}/recurso`, {
-    cache: "force-cache",
-    next: { revalidate: 3600 },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}recurso`,
+    {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    }
+  );
   if (!res.ok) {
     console.error("Error obtaining resources");
     return [];
@@ -48,9 +49,13 @@ export async function getFormattedResources(): Promise<FormattedResource[]> {
   const videoUrls = await fetchMediaUrls(videoIds);
 
   return resources.map((resource: Resource) => {
+    const categoryLookup = Object.fromEntries(
+      Object.values(categoryMap).map((category) => [category.id, category])
+    );
+
     const categoryNames = Array.isArray(resource.categories)
       ? resource.categories.map(
-          (categoryId) => categoryMap[categoryId]?.name || "Uncategorized"
+          (categoryId) => categoryLookup[categoryId]?.name || "Uncategorized"
         )
       : ["Uncategorized"];
 

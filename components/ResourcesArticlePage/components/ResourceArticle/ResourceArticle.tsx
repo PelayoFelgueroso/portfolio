@@ -1,10 +1,8 @@
-"use client";
-
 import { ResourceHeader } from "./components/ResourceHeader";
 import Image from "next/image";
 import { FormattedResource } from "@/models/resource";
 import { ResourceTableContents } from "./components/ResourceTableContents/ResourceTableContents";
-import { ResourceContent } from "./components/ResourceContent/ResourceContent";
+import ResourceContent from "./components/ResourceContent/ResourceContent";
 
 interface Props {
   resource: FormattedResource;
@@ -14,7 +12,7 @@ export const ResourceArticle = ({ resource }: Props) => {
   const sections = null;
 
   return (
-    <div className="relative flex justify-between min-[1400px]:gap-[50px]">
+    <div className="relative center flex justify-between min-[1400px]:gap-[50px]">
       <article className="relative px-4 pb-[100px] mt-[80px] max-w-[800px] min-[1400px]:w-[900px] min-[1400px]:max-w-none">
         <ResourceHeader
           date={resource.formatted_date}
@@ -50,9 +48,7 @@ export const ResourceArticle = ({ resource }: Props) => {
             </video>
           </div>
         </div>
-        {!resource.content.protected && (
-          <ResourceContent content={resource.content.rendered} />
-        )}
+        <ResourceContent slug={resource.slug} />
       </article>
 
       {sections && <ResourceTableContents sections={sections} />}

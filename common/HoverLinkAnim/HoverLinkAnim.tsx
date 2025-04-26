@@ -19,7 +19,7 @@ export const HoverLinkAnim = ({
         <span className="overflow-hidden block">
           {chars.map((char, i) => (
             <CharUp key={i} isHovered={isHovered} delay={i * 0.05}>
-              {char}
+              {char === " " ? "\u00A0" : char}
             </CharUp>
           ))}
         </span>
@@ -30,7 +30,7 @@ export const HoverLinkAnim = ({
             <span className="overflow-hidden block">
               {chars.map((char, i) => (
                 <CharDown key={i} isHovered={isHovered} delay={i * 0.05}>
-                  {char}
+                  {char === " " ? "\u00A0" : char}
                 </CharDown>
               ))}
             </span>
@@ -41,7 +41,7 @@ export const HoverLinkAnim = ({
           <span className="overflow-hidden block">
             {chars.map((char, i) => (
               <CharDown key={i} isHovered={isHovered} delay={i * 0.05}>
-                {char}
+                {char === " " ? "\u00A0" : char}
               </CharDown>
             ))}
           </span>

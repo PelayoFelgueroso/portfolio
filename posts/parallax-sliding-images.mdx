@@ -1,0 +1,333 @@
+## Creating a Parallel Sliding Images Effect on Scroll with Framer Motion
+
+In this tutorial, we'll create an engaging UI component that slides images in opposite directions as the user scrolls down the page. This effect adds depth and visual interest to your web page, giving it a modern and dynamic feel.
+
+## Creating the Project:
+
+Let's start by setting up our Next.js application. Run the following command in your terminal:
+
+<CodeBlock language="bash">
+```
+npx create-next-app@latest sliding-images-app
+```
+</CodeBlock>
+
+## We'll be using Framer Motion for the animations, so let's install it:
+
+<CodeBlock language="bash">
+```
+npm install framer-motion
+```
+</CodeBlock>
+
+## Project Structure
+
+For our sliding images component, we'll need:
+
+1. The main component file (`SlidingImages.tsx`)
+2. A CSS module for styling (`style.module.scss`)
+3. Some images for our sliders (import your own or use a placeholder service)
+
+## Basic Sliding Images Component
+
+The basic principle behind our sliding images effect is:
+
+1. Create two rows of images  
+2. Use Framer Motion to translate them horizontally in opposite directions based on scroll position  
+3. Style them appropriately with CSS  
+
+Let's build the component step by step:
+
+## Step 1: Create the SlidingImages Component
+
+Create a new file in your components directory called `SlidingImages.tsx`:
+
+<CodeBlock heading="SlidingImages.tsx" language="tsx">
+```
+'use client';
+
+import { useRef } from 'react';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import styles from './style.module.scss';
+import Image from 'next/image';
+
+import image1 from '@/public/image1.jpg';
+import image2 from '@/public/image2.jpg';
+import image3 from '@/public/image3.jpg';
+import image4 from '@/public/image4.jpg';
+import image5 from '@/public/image5.jpg';
+import image6 from '@/public/image6.jpg';
+
+const slider1 = [
+  { src: image1 },
+  { src: image2 },
+  { src: image3 },
+  { src: image4 },
+];
+
+const slider2 = [
+  { src: image5 },
+  { src: image6 },
+  { src: image1 },
+  { src: image2 },
+];
+
+export const SlidingImages = () => {
+  const container = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ['start end', 'end start'],
+  });
+
+  const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  return (
+    <div ref={container} className={styles.slidingImages}>
+      <motion.div style={{ x: x1 }} className={styles.slider}>
+        {slider1.map((item, index) => (
+          <div key={index} className={styles.project}>
+            <div className={styles.imageContainer}>
+              <Image fill={true} alt={'image'} src={item.src} />
+            </div>
+          </div>
+        ))}
+      </motion.div>
+      <motion.div style={{ x: x2 }} className={styles.slider}>
+        {slider2.map((item, index) => (
+          <div key={index} className={styles.project}>
+            <div className={styles.imageContainer}>
+              <Image fill={true} alt={'image'} src={item.src} />
+            </div>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+```
+</CodeBlock>
+
+## Step 2: Create the Styling
+
+Create a file called <LanguageJsx>style.module.scss</LanguageJsx> in the same directory:
+
+<CodeBlock heading="style.module.scss" language="scss">
+```
+.slidingImages {
+  display: flex;
+  flex-direction: column;
+  gap: 3vw;
+  position: relative;
+  padding-top: 300px;
+  padding-bottom: 300px;
+  z-index: 1;
+
+  .slider {
+    display: flex;
+    position: relative;
+    gap: 1vw;
+    width: 120vw;
+    left: -10vw;
+
+    .project {
+      width: 25%;
+      height: 20vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .imageContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        img {
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}
+```
+</CodeBlock>
+
+## Step 3: Add the Component to Your Page
+
+Now, let's add our component to a page:
+
+<CodeBlock heading="SlidingImages.tsx" language="tsx">
+```
+import { SlidingImages } from '@/components/SlidingImages';
+
+export default function Home() {
+  return (
+    <main className='bg-gray min-h-screen'>
+      <SlidingImages />
+    </main>
+  );
+}
+```
+</CodeBlock>
+
+## How It Works
+
+Let's break down the key elements of our sliding images component:
+
+1. ### Scroll Progress Tracking:
+
+<CodeBlock language="ts">
+```
+const { scrollYProgress } = useScroll({
+  target: container,
+  offset: ['start end', 'end start'],
+});
+```
+</CodeBlock>
+
+This tracks the scroll position relative to our component. The offset <LanguageJsx>['start end', 'end start']</LanguageJsx> means it starts tracking when the top of our component reaches the bottom of the viewport, and stops tracking when the bottom of our component reaches the top of the viewport.
+
+2. ### Horizontal Movement Mapping:
+
+<CodeBlock language="ts">
+```
+const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+```
+</CodeBlock>
+
+These lines transform the scroll progress (a value between 0 and 1) into horizontal pixel movements. The first row moves 150px to the right, while the second row moves 150px to the left.
+
+3. ### Motion Components
+
+<CodeBlock language="tsx">
+```
+<motion.div style={{ x: x1 }} className={styles.slider}>
+```
+</CodeBlock>
+
+Framer Motion's <LanguageJsx>motion.div</LanguageJsx> components apply the horizontal movement we calculated based on scroll position.
+
+## Advanced Customization
+
+Let's enhance our sliding images component with some additional features:
+
+### Adding a Shadow Curve
+
+We can add a curved shadow below our sliders for a more polished look:
+
+<CodeBlock heading="SlidingImages.tsx" language="tsx">
+```
+export const SlidingImages = () => {
+  // ... previous code
+  
+  return (
+    <div ref={container} className={styles.slidingImages}>
+      {/* Sliders as before */}
+      
+      <div className={styles.circleContainer}>
+        <div className={styles.circle}/>
+      </div>
+    </div>
+  );
+};
+```
+</CodeBlock>
+
+### And update our CSS:
+
+<CodeBlock heading="style.module.scss" language="scss">
+```
+.slidingImages {
+  // ... previous styles
+  
+  .circleContainer {
+    position: relative;
+    margin-top: 100px;
+    
+    .circle {
+      height: 1550%;
+      width: 120%;
+      left: -10%;
+      border-radius: 0 0 50% 50%;
+      z-index: 1;
+      position: absolute;
+      box-shadow: 0px 60px 50px rgba(0, 0, 0, 0.748);
+    }
+  }
+}
+```
+</CodeBlock>
+
+### Adjusting Animation Intensity
+
+You can adjust how far the images move by changing the values in <LanguageJsx>useTransform</LanguageJsx>:
+
+<CodeBlock language="ts">
+```
+  // For subtle movement
+  const x1 = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  // For more dramatic movement
+  const x1 = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [0, -300]);
+```
+</CodeBlock>
+
+### Adding Image Hover Effects
+
+You can enhance the experience by adding hover effects to the images:
+
+<CodeBlock language="scss">
+```
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  img {
+    object-fit: cover;
+  }
+}
+```
+</CodeBlock>
+
+### Responsive Adjustments
+
+For better mobile experience, we can adjust the layout:
+
+<CodeBlock language="scss">
+```
+  .slidingImages {
+  // ... previous styles
+  
+  @media (max-width: 768px) {
+    gap: 5vw;
+    
+    .slider {
+      .project {
+        width: 40%;
+        height: 30vw;
+      }
+    }
+  }
+}
+```
+</CodeBlock>
+
+## Wrapping Up
+
+That's it! You've now created a beautiful sliding images component that reacts to scroll position. This effect adds depth and movement to your website, making for a more engaging user experience.
+
+The beauty of this component is its simplicity and effectiveness. With just a few lines of code, we've created a visually impressive effect that works well across devices and brings your images to life as users scroll through your content.
+
+Feel free to experiment with different speeds, directions, and image configurations to make this component uniquely yours.
+
+Happy Coding!

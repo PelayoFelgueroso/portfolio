@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import styles from "./style.module.scss";
-import { externalLinks, headerInfo, navLinks } from "@/content";
+import { footerLinks, headerInfo, navLinks } from "@/content";
 import Image from "next/image";
 import { menuGradient, transparentName } from "@/public";
 import { useEffect, useState } from "react";
@@ -79,7 +79,7 @@ export const ArtHeader = () => {
 
             <div className={styles.external_links}>
               <ul className={styles.externalLinks}>
-                {externalLinks.map((link, i) => (
+                {footerLinks.map((link, i) => (
                   <li className="overflow-hidden" key={i}>
                     <ExternalLink
                       isOpen={isOpen}

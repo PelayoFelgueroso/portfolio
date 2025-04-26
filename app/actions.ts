@@ -1,6 +1,6 @@
 "use server";
 
-import { FormValues } from "@/components/FooterNew/components/FooterForm";
+import { FormValues } from "@/common/Footer/components/FooterForm";
 import { verifyCaptchaToken } from "@/lib/captcha";
 
 export async function formSubmitAction(

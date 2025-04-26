@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactLenis } from "../lib/lenis";
-import DotCursor from "@/components/DotCursor/DotCursor";
+import DotCursor from "@/common/DotCursor/DotCursor";
 import Script from "next/script";
 
 export const metadata: Metadata = {

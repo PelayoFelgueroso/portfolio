@@ -1,14 +1,11 @@
 "use client";
 
-import { ResourcesGrid } from "@/components/Resources/ResourcesGrid";
+import { ResourcesGrid } from "@/components/HomePage/Resources/ResourcesGrid/ResourcesGrid";
 import { filterSlideIn } from "@/components/ResourcesMenu/anim";
-import { useResources } from "@/contexts/Resources.context";
 import { useResourcesMenu } from "@/contexts/ResourcesMenu.context";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function Home() {
-  const { resources, loadingResources, categories, loadingCategories } =
-    useResources();
+export default function ResourcesPage() {
   const { isOpenMenu } = useResourcesMenu();
 
   return (
@@ -25,11 +22,7 @@ export default function Home() {
             ></motion.div>
           )}
         </AnimatePresence>
-        <AnimatePresence mode="wait">
-          {!loadingResources && !loadingCategories && (
-            <ResourcesGrid categories={categories} resources={resources} />
-          )}
-        </AnimatePresence>
+        <ResourcesGrid />
       </main>
     </>
   );

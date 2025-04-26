@@ -38,3 +38,20 @@ export interface FormattedResource {
   formatted_date: FormattedDate;
   content: { protected: boolean; rendered: string };
 }
+
+export interface NewResource {
+  id: number;
+  slug: string;
+  title: string;
+  categories: number[];
+  short_description: string;
+  description: string;
+  difficulty: string;
+  github_link: string;
+  techs: string[];
+  index: string;
+  category_name: string[];
+  date: string;
+  formatted_date: FormattedDate;
+  content: string;
+}

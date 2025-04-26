@@ -2,18 +2,18 @@ import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import React, { useRef } from "react";
 
 interface Props {
-  text: string;
+  children: string;
   className?: string;
 }
 
-export const BlurryScrollText = ({ text, className }: Props) => {
+export const BlurryScrollText = ({ children, className }: Props) => {
   const container = useRef(null);
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start 1", "start 0.85"],
   });
 
-  const words = text.split(" ");
+  const words = children.split(" ");
 
   const clamp = (val: number, min: number, max: number) =>
     Math.min(Math.max(val, min), max);

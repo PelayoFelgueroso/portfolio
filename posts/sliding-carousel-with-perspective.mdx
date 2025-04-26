@@ -1,0 +1,370 @@
+## Creating an Interactive Image Carousel with SVG Borders in React
+
+Creating an Interactive Image Carousel with SVG Borders in React
+
+## Creating the Project
+
+Let's start by setting up a Next.js application. We can do that by running the following command in the terminal:
+
+<CodeBlock language="bash">
+  ```
+  npx create-next-app@latest my-project cd my-project
+  ```
+</CodeBlock>
+
+For this project, we'll use:
+
+- Next.js for the framework
+- Tailwind CSS for styling (should be included in the create-next-app setup)
+- Lucide React for the navigation icons
+
+Let's install our dependencies:
+
+<CodeBlock language="bash">
+```
+npm install lucide-react
+```
+</CodeBlock>
+
+## Project Structure
+
+First, let's ensure we have our images ready. We'll need to place them in the <code>public</code> folder and create an exports file to easily import them into our component.
+
+Create a file at <LanguageJsx>public/index.js</LanguageJsx> with the following content
+
+<CodeBlock heading="public/index.ts" language="ts">
+```
+export { default as darkCave } from './dark-cave.jpg';
+export { default as darkMountain } from './dark-mountain.jpg';
+export { default as oldBuilding } from './old-building.jpg';
+```
+</CodeBlock>
+
+Make sure to add your actual images to the public folder.
+
+## Basic Carousel Component
+
+Now, let's create our carousel component. We'll build a full-screen section with SVG borders that frame our sliding images.
+
+Create a file at <LanguageJsx>components/SlidingCarousel.tsx</LanguageJsx>
+
+<CodeBlock heading="components/SlidingCarousel.tsx" language="tsx">
+```
+"use client";
+import { darkCave, darkMountain, oldBuilding } from "@/public";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export const SlidingCarousel = () => {
+  const [card, setCard] = useState(1);
+  
+  // Logging the current card state whenever it changes
+  useEffect(() => {
+    console.log(card);
+  }, [card]);
+  
+  // Function to navigate to the next image
+  const handleNext = () => {
+    setCard((prev) => (prev >= 3 ? 1 : prev + 1));
+  };
+  
+  // Function to navigate to the previous image
+  const handlePrevious = () => {
+    setCard((prev) => (prev <= 1 ? 3 : prev - 1));
+  };
+  
+  return (
+    <section className="h-screen overflow-hidden">
+      <div className="relative w-full h-full flex justify-center items-center">
+        {/* Top curved SVG border */}
+        <svg
+          width="2500"
+          height="400"
+          viewBox="0 0 2500 400"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute z-[5] top-[-200px] w-[200vw]"
+        >
+          <ellipse cx="1250" cy="200" rx="1250" ry="200" fill="#eaeaea" />
+        </svg>
+        
+        {/* Carousel container */}
+        <div className="relative h-[80vh] w-screen flex justify-center items-center overflow-hidden">
+          {/* Next button */}
+          <div className="absolute z-10 right-8">
+            <button
+              className="bg-red-500 p-2 rounded-full"
+              onClick={handleNext}
+            >
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+          
+          {/* Image slider container */}
+          <div
+            className="flex items-center gap-[50px] px-[50px] h-full w-fit transition-all duration-1000 translate-x-[-1550px]"
+            style={
+              card === 1
+                ? { transform: "translateX(1550px)" }
+                : card === 2
+                ? { transform: "translateX(0px)" }
+                : card === 3
+                ? { transform: "translateX(-1550px)" }
+                : { transform: "translateX(0px)" }
+            }
+          >
+            {/* Images */}
+            <div className="min-w-[1600px]">
+              <Image src={darkCave} alt="Dark cave" className="" />
+            </div>
+            <div className="min-w-[1600px]">
+              <Image src={darkMountain} alt="Dark mountain" className="" />
+            </div>
+            <div className="min-w-[1600px]">
+              <Image src={oldBuilding} alt="Old building" className="" />
+            </div>
+          </div>
+          
+          {/* Previous button */}
+          <div className="absolute z-10 left-8">
+            <button
+              className="bg-red-500 p-2 rounded-full"
+              onClick={handlePrevious}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        
+        {/* Bottom curved SVG border */}
+        <svg
+          width="2500"
+          height="400"
+          viewBox="0 0 2500 400"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute z-[5] bottom-[-200px] w-[200vw]"
+        >
+          <ellipse cx="1250" cy="200" rx="1250" ry="200" fill="#eaeaea" />
+        </svg>
+      </div>
+    </section>
+  );
+};
+```
+</CodeBlock>
+
+## How the Carousel Works
+
+Let's break down the key elements of our carousel:
+
+### 1. State Management
+
+We use React's <LanguageJsx>useState</LanguageJsx> hook to keep track of which image is currently displayed:
+
+<CodeBlock language="ts">
+```
+const [card, setCard] = useState(1);
+```
+</CodeBlock>
+
+This state will determine the horizontal position of our image container.
+
+### 2. Navigation Functions
+
+We've created two functions to handle the carousel navigation:
+
+<CodeBlock language="ts">
+```
+const handleNext = () => {
+  setCard((prev) => (prev >= 3 ? 1 : prev + 1));
+};
+
+const handlePrevious = () => {
+  setCard((prev) => (prev <= 1 ? 3 : prev - 1));
+};
+```
+</CodeBlock>
+
+These functions ensure the carousel loops back to the beginning or end when reaching the limits.
+
+### 3. SVG Border Elements
+
+A distinctive feature of our carousel is the curved SVG borders at the top and bottom:
+
+<CodeBlock language="tsx">
+```
+<svg
+  width="2500"
+  height="400"
+  viewBox="0 0 2500 400"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  className="absolute z-[5] top-[-200px] w-[200vw]"
+>
+  <ellipse cx="1250" cy="200" rx="1250" ry="200" fill="#eaeaea" />
+</svg>
+```
+</CodeBlock>
+
+These SVG elements create a smooth curved frame for our carousel, adding a sophisticated touch to the design.
+
+### 4. Sliding Animation
+
+The magic happens in the CSS transform property that we're updating based on the current card state:
+
+<CodeBlock language="tsx">
+```
+<div
+  className="flex items-center gap-[50px] px-[50px] h-full w-fit transition-all duration-1000 translate-x-[-1550px]"
+  style={
+    card === 1
+      ? { transform: "translateX(1550px)" }
+      : card === 2
+      ? { transform: "translateX(0px)" }
+      : card === 3
+      ? { transform: "translateX(-1550px)" }
+      : { transform: "translateX(0px)" }
+  }
+>
+```
+</CodeBlock>
+
+We're using a combination of:
+
+- Fixed positioning values based on our specific image sizes
+- CSS transitions (<LanguageJsx>transition-all duration-1000</LanguageJsx>) for smooth animation
+- Dynamic transform values based on the current card state
+
+## Using the Carousel in Your Page
+
+To use this carousel component in your page, simply import and add it to your layout:
+
+<CodeBlock heading="app/page.tsx" language="tsx">
+```
+"use client";
+
+import { SlidingCarousel} from "@/components/SlidingCarousel";
+
+export default function Home() {
+  return (
+    <main>
+      <SlidingCarousel/>
+      {/* Your other page content */}
+    </main>
+  );
+}
+```
+</CodeBlock>
+
+## Advanced Customization
+
+Let's enhance our carousel with some advanced features:
+
+### Adding Indicators
+
+To help users track which image they're viewing, we can add indicator dots:
+
+<CodeBlock language="tsx">
+```
+{/* Add this inside the carousel container */}
+<div className="absolute bottom-8 z-10 flex gap-2">
+  {[1, 2, 3].map((index) => (
+    <button
+      key={index}
+      className={`w-3 h-3 rounded-full ${
+        card === index ? "bg-red-500" : "bg-gray-300"
+      }`}
+      onClick={() => setCard(index)}
+    />
+  ))}
+</div>
+```
+</CodeBlock>
+
+### Adding Image Captions
+
+To provide context for each image, we can overlay captions:
+
+<CodeBlock language="tsx">
+```
+{/* Modify each image container to include captions */}
+<div className="min-w-[1600px] relative">
+  <Image src={darkCave} alt="Dark cave" className="" />
+  <div className="absolute bottom-10 left-10 bg-black bg-opacity-50 p-4 text-white">
+    <h3 className="text-2xl font-bold">Dark Cave Project</h3>
+    <p>Description of this amazing project</p>
+  </div>
+</div>
+```
+</CodeBlock>
+
+### Adding Keyboard Navigation
+
+For better accessibility, let's add keyboard navigation:
+
+<CodeBlock language="ts">
+```
+// Add this useEffect after your state declarations
+useEffect(() => {
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowRight') {
+      handleNext();
+    } else if (e.key === 'ArrowLeft') {
+      handlePrevious();
+    }
+  };
+  
+  window.addEventListener('keydown', handleKeyDown);
+  
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, []);
+```
+</CodeBlock>
+
+## Making the Carousel Responsive
+
+To ensure our carousel works well on different screen sizes, we need to adjust our approach. Instead of fixed pixel values, we can use percentages and viewport units:
+
+<CodeBlock Language="tsx">
+```
+// Replace the slider container styles with these more responsive values
+<div
+  className="flex items-center gap-[5vw] px-[5vw] h-full w-fit transition-all duration-1000"
+  style={{
+    transform: `translateX(${(2-card) * 100}vw)`
+  }}
+>
+  {/* And update image containers */}
+  <div className="min-w-[90vw] h-full relative flex items-center justify-center">
+    <Image src={darkCave} alt="Dark cave" className="object-contain" />
+  </div>
+  {/* Repeat for other images */}
+</div>
+```
+</CodeBlock>
+
+## Wrapping Up
+
+And there you have it! We've created a beautiful and interactive image carousel with smooth transitions and elegant SVG borders. This component is perfect for showcasing projects, products, or any visual content on your website.
+
+The combination of:
+
+- Full-screen display for maximum impact
+- SVG curved borders for a polished look
+- Smooth transitions for a professional feel
+- Intuitive navigation with both buttons and keyboard support
+
+All of these elements come together to create a memorable user experience that will make your website stand out.
+
+You can further customize this carousel by:
+
+- Changing the SVG border colors and shapes
+- Adding different transition effects
+- Implementing auto-play functionality
+- Adding touch/swipe support for mobile devices
+
+I hope you enjoyed building this component and learned something valuable about creating engaging UI elements with React!

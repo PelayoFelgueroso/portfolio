@@ -1,4 +1,4 @@
-import { FooterNew } from "@/components/FooterNew/FooterNew";
+import { Footer } from "@/common/Footer/Footer";
 import { ResourcesMenu } from "@/components/ResourcesMenu/ResourcesMenu";
 import { InViewContactProvider } from "@/contexts/inViewContact.context";
 import { ResourcesProvider } from "@/contexts/Resources.context";
@@ -16,7 +16,7 @@ export default function ResourcesLayout({
           <ResourcesMenu />
           {children}
         </ResourcesMenuProvider>
-        <FooterNew />
+        <Footer />
       </InViewContactProvider>
     </ResourcesProvider>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { FormattedResource } from "@/models/resource";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";

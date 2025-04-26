@@ -1,10 +1,10 @@
 "use client";
 
-import { About } from "@/components/About/About";
-import { LogoPreoloader } from "@/components/LogoPreloader/LogoPreloader";
-import { Resources } from "@/components/Resources/Resources";
-import { TitleNew } from "@/components/TitleIntro/TitleNew";
-import { Projects } from "@/components/Works/WorksNew";
+import { About } from "@/components/HomePage/About/About";
+import { LogoPreoloader } from "@/components/HomePage/LogoPreloader/LogoPreloader";
+import { Resources } from "@/components/HomePage/Resources/ResourcesSection/Resources";
+import { SectionTitle } from "@/components/HomePage/SectionTitle/SectionTitle";
+import { Projects } from "@/components/HomePage/Works/WorksNew";
 import {
   AnimatePresence,
   useInView,
@@ -15,8 +15,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
- 
-
   const [isLoading, setIsLoading] = useState(true);
   const [inViewWorks, setInViewWorks] = useState(false);
   const [inViewResources, setInViewResources] = useState(false);
@@ -75,7 +73,7 @@ export default function Home() {
         {isLoading && <LogoPreoloader />}
       </AnimatePresence>
 
-      <TitleNew
+      <SectionTitle
         inViewTitle={inViewTitle}
         inViewWorks={inViewWorks}
         inViewResources={inViewResources}

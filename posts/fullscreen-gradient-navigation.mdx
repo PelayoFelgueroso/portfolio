@@ -1,0 +1,953 @@
+## Creating the project
+
+Let's start by setting up our Next.js application:
+
+<CodeBlock language="bash">
+```
+npx create-next-app@latest my-project
+cd my-project
+```
+</CodeBlock>
+
+We'll need to install a few dependencies:
+
+<CodeBlock language="bash">
+```
+npm install framer-motion sass
+```
+</CodeBlock>
+
+## Project Structure
+
+We'll organize our navigation menu with the following structure
+
+<CodeBlock language="json">
+```
+components/
+  Header/
+    Header.tsx
+    anim.ts
+    style.module.scss
+    components/
+      NavLink.tsx
+      ExternalLink.tsx
+      ToggleButton.tsx
+```
+</CodeBlock>
+
+Let's build each component step by step.
+
+## Setting Up the Animations
+
+First, let's create our animation variants in the <code>anim.ts</code> file. These will control all the motion effects in our menu.
+
+<CodeBlock heading="Header/anim.ts" language="ts">
+```
+export const hoverLink = {
+  initial: { y: "0%" },
+  hovered: {
+    y: ["0%", "-100%", "100%", "0%"], 
+    transition: {
+      duration: 0.3,
+      times: [0, 0.5, 0.5, 1], 
+    },
+  },
+};
+
+export const slideIn = {
+  initial: {
+    display: "none",
+    x: "100%",
+  },
+  open: {
+    display: "flex",
+    x: "0%",
+    transition: {
+      duration: 0.75,
+    },
+  },
+  close: {
+    x: "100%",
+    transition: {
+      duration: 0.75,
+      delay: 0.75,
+    },
+    transitionEnd: {
+      display: "none",
+    },
+  },
+};
+
+export const slideUp = {
+  initial: {
+    y: "100%",
+  },
+  open: {
+    y: "0%",
+    transition: {
+      delay: 0.75,
+      duration: 0.75,
+    },
+  },
+  close: {
+    y: "100%",
+    transition: {
+      duration: 0.75,
+    },
+  },
+};
+
+export const slideUpLogo = {
+  initial: {
+    y: "100%",
+    opacity: 0,
+  },
+  open: {
+    y: "0%",
+    opacity: 1,
+    transition: {
+      duration: 1.25,
+      delay: 0.75,
+    },
+  },
+  close: {
+    y: "100%",
+    opacity: 0,
+    transition: {
+      duration: 1.25,
+    },
+  },
+};
+
+export const toggleMenu = {
+  initial: {
+    display: "block",
+    opacity: 1,
+  },
+  isOpen: {
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+    },
+    transitionEnd: {
+      display: "none",
+    },
+  },
+  isNotOpen: {
+    display: "block",
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      delay: 0.5,
+    },
+  },
+};
+
+export const totoggleClose = {
+  initial: {
+    display: "none",
+    opacity: 0,
+  },
+  isOpen: {
+    display: "block",
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      delay: 0.5,
+    },
+  },
+  isNotOpen: {
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+    },
+    transitionEnd: {
+      display: "none",
+    },
+  },
+};
+```
+</CodeBlock>
+
+These animation variants define different states and transitions for our menu elements:
+
+- <LanguageJsx>hoverLink</LanguageJsx>: Creates a slideUp animation with perspective when hovering over links
+- <LanguageJsx>slideIn</LanguageJsx>: Controls the main menu container sliding from the right
+- <LanguageJsx>SlideUp</LanguageJsx>: Animates menu items appearing from below
+- <LanguageJsx>slideUpLogo</LanguageJsx>: Handles the footer logo entrance animation
+- <LanguageJsx>toggleMenu</LanguageJsx>/<LanguageJsx>totoggleClose</LanguageJsx>: Manages the toggle button text transition between "Menu" and "Close"
+
+## Building the Navigation links
+
+Let's create the link components that will be used in our menu.
+
+<CodeBlock heading="Header/components/NavLink.tsx" language="tsx">
+```
+"use client";
+
+import { motion } from "framer-motion";
+import styles from "../style.module.scss";
+import { hoverLink, slideUp } from "../anim";
+import { useState } from "react";
+import { useCursorHover } from "@/contexts/CursorHovert.context";
+
+interface Props {
+  href: string;
+  title: string;
+  onClick: () => void;
+  isOpen: boolean;
+}
+
+export const NavLink = ({ href, title, onClick, isOpen }: Props) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { setCursorHover } = useCursorHover();
+
+  const handleHover = () => {
+    setIsHovered(true);
+    setTimeout(() => {
+      setIsHovered(false);
+    }, 300);
+  };
+
+  return (
+    <motion.a
+      onMouseOver={() => setCursorHover(true)}
+      onMouseLeave={() => setCursorHover(false)}
+      variants={slideUp}
+      initial="initial"
+      animate={isOpen ? "open" : "close"}
+      onClick={onClick}
+      href={href}
+      className={styles.menu_item}
+      onMouseEnter={handleHover}
+    >
+      <motion.div
+        variants={hoverLink}
+        initial="initial"
+        animate={isHovered ? ["hovered", "return"] : "initial"}
+        className={styles.menu_item_container}
+      >
+        <div className={styles.menu_item_text}>{title}</div>
+      </motion.div>
+    </motion.a>
+  );
+};
+```
+</CodeBlock>
+
+<CodeBlock heading="Header/components/ExternalLink.tsx" language="tsx">
+```
+"use client";
+
+import { motion } from "framer-motion";
+import styles from "../style.module.scss";
+import { hoverLink, slideUp } from "../anim";
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { externalArrow } from "@/public";
+import { useCursorHover } from "@/contexts/CursorHovert.context";
+
+interface Props {
+  href: string;
+  title: string;
+  isOpen: boolean;
+}
+
+export const ExternalLink = ({ isOpen, href, title }: Props) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { setCursorHover } = useCursorHover();
+
+  const handleHover = () => {
+    setIsHovered(true);
+    setTimeout(() => {
+      setIsHovered(false);
+    }, 300);
+  };
+
+  return (
+    <motion.div
+      onMouseOver={() => setCursorHover(true)}
+      onMouseLeave={() => setCursorHover(false)}
+      variants={slideUp}
+      initial="initial"
+      animate={isOpen ? "open" : "close"}
+    >
+      <Link
+        href={href}
+        target="_blank"
+        className={styles.menu_item}
+        onMouseEnter={handleHover}
+      >
+        <motion.div
+          variants={hoverLink}
+          initial="initial"
+          animate={isHovered ? ["hovered", "return"] : "initial"}
+          className={styles.menu_item_container}
+        >
+          <div className={styles.menu_item_text}>{title}</div>
+          <div className={styles.external_arrow}>
+            <Image src={externalArrow} alt="" className={styles.arrow} />
+          </div>
+        </motion.div>
+      </Link>
+    </motion.div>
+  );
+};
+```
+</CodeBlock>
+
+## Toggle Button Component
+
+<CodeBlock heading="Header/components/ToggleButton.tsx" language="tsx">
+```
+import Link from "next/link";
+import styles from "../style.module.scss";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { hoverLink, toggleMenu, totoggleClose } from "../anim";
+import { useCursorHover } from "@/contexts/CursorHovert.context";
+
+interface Props {
+  onClick: () => void;
+  isOpen: boolean;
+}
+
+export const ToggleButton = ({ onClick, isOpen }: Props) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { setCursorHover } = useCursorHover();
+
+  const handleHover = () => {
+    setIsHovered(true);
+    setTimeout(() => {
+      setIsHovered(false);
+    }, 300);
+  };
+
+  return (
+    <Link
+      onMouseOver={() => setCursorHover(true)}
+      onMouseLeave={() => setCursorHover(false)}
+      href=""
+      onClick={onClick}
+      className={styles.nav_button}
+      onMouseEnter={handleHover}
+    >
+      <div className={styles.button_wrapper}>
+        <div className={styles.button_positioner}>
+          <div className="text-white mr-2">
+            <motion.div
+              variants={hoverLink}
+              initial="initial"
+              animate={isHovered ? ["hovered", "return"] : "initial"}
+              className={styles.button_container}
+            >
+              <motion.div
+                variants={toggleMenu}
+                initial="initial"
+                animate={isOpen ? "isOpen" : "isNotOpen"}
+                className={`${styles.button_text} ${styles.menu}`}
+              >
+                Menu
+              </motion.div>
+              <motion.div
+                variants={totoggleClose}
+                initial="initial"
+                animate={isOpen ? "isOpen" : "isNotOpen"}
+                className={`${styles.button_text} ${styles.close}`}
+              >
+                Close
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.dot}></div>
+    </Link>
+  );
+};
+```
+</CodeBlock>
+
+## Creating the Main Header Component
+
+Now let's build the main header component that brings everything together:
+
+<CodeBlock heading="Header/Header.tsx" language="tsx">
+```
+"use client";
+
+import Link from "next/link";
+import styles from "./style.module.scss";
+import { externalLinks, headerInfo, navLinks } from "@/content";
+import Image from "next/image";
+import { menuGradient, transparentName } from "@/public";
+import { useEffect, useState } from "react";
+import { NavLink } from "./components/NavLink";
+import { ExternalLink } from "./components/ExternalLink";
+import useMousePosition from "@/lib/utils";
+import { ToggleButton } from "./components/ToggleButton";
+import { motion } from "framer-motion";
+import { slideIn, slideUpLogo } from "./anim";
+
+export const ArtHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { x, y } = useMousePosition();
+  const [windowHeight, setWindowHeight] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowHeight(window.innerHeight);
+      setWindowWidth(window.innerWidth);
+    }
+  }, []);
+
+  const centerX = windowWidth / 2;
+  const centerY = windowHeight;
+
+  const translateX = (x - centerX) * 0.5;
+  const translateY = (y - centerY) * 0.5;
+
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <header className={styles.header_element}>
+      <div className="flex justify-between px-8">
+        <div className="">
+          <Link href="/" className={styles.nav_logo_wrapper}>
+            <div className={styles.nav_logo}>
+              <h1 className="text-white text-[2vw] md:text-[1.5vw] lg:text-[1vw]">
+                Your Logo Here
+              </h1>
+            </div>
+          </Link>
+        </div>
+
+        <div>
+          <ToggleButton onClick={() => toggleMenu()} isOpen={isOpen} />
+        </div>
+      </div>
+
+      <div className={styles.nav_wrapper}>
+        <motion.div
+          variants={slideIn}
+          initial="initial"
+          animate={isOpen ? "open" : "close"}
+          className={styles.nav_container}
+        >
+          <div className={styles.nav_body}>
+            <div className={styles.internal_links}>
+              <ul className={styles.navLinks}>
+                {navLinks.map((link, i) => (
+                  <li className="overflow-hidden" key={i}>
+                    <NavLink
+                      isOpen={isOpen}
+                      onClick={() => setIsOpen(false)}
+                      href={link.href}
+                      title={link.title}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.external_links}>
+              <ul className={styles.externalLinks}>
+                {externalLinks.map((link, i) => (
+                  <li className="overflow-hidden" key={i}>
+                    <ExternalLink
+                      isOpen={isOpen}
+                      href={link.href}
+                      title={link.title}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className={styles.nav_footer}>
+            <motion.div
+              variants={slideUpLogo}
+              initial="initial"
+              animate={isOpen ? "open" : "close"}
+              className={styles.footer_container}
+            >
+              <div className={styles.gradient_container}>
+                <Image
+                  src={menuGradient}
+                  alt=""
+                  className={styles.gradient}
+                  style={{
+                    transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
+                  }}
+                />
+              </div>
+
+              <div className={styles.logo_gradient_container}>
+                <Image
+                  src={transparentName}
+                  alt="Logo"
+                  className={styles.logo}
+                />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </header>
+  );
+};
+```
+</CodeBlock>
+
+## Styling with sass
+
+Now let's add the styling for our menu:
+
+<CodeBlock heading="Header/style.module.scss" language="scss">
+```
+.header_element {
+  padding-top: 1rem;
+
+  .nav_logo_wrapper {
+    z-index: 50
+    mix-blend-mode: difference;
+    align-items: center;
+    height: 40px;
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: sticky;
+
+    max-width: fit-content;
+    display: flex;
+    justify-content: start;
+
+    .nav_logo {
+      height: 100%;
+      .logo {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+
+  .nav_button {
+    z-index: 5010;
+    border: 1px solid #fff;
+    mix-blend-mode: difference;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 40px;
+    display: flex;
+    position: sticky;
+    overflow: hidden;
+    max-width: 100%;
+
+    .dot {
+      background-color: #272727;
+      border-radius: 100%;
+      flex: none;
+      width: 15px;
+      height: 15px;
+      margin-right: 10px;
+      background-color: #fff;
+      margin-right: 0;
+    }
+
+    .button_wrapper {
+      pointer-events: none;
+      height: 16px;
+      overflow: hidden;
+
+      .button_positioner {
+        pointer-events: none;
+        overflow: hidden;
+        height: 0.5rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .button_container {
+        width: 50px;
+
+        .button_text {
+          text-transform: uppercase;
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .nav_wrapper {
+    z-index: 5005;
+    position: relative;
+
+    .nav_container {
+      display: none;
+      position: fixed;
+      inset: 0%;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100vw;
+      min-height: 100vh;
+      color: #fff;
+      background-color: #131313;
+
+      .nav_body {
+        grid-template-rows: auto;
+        float: none;
+        clear: none;
+        grid-column-gap: 1rem;
+        grid-row-gap: 4rem;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-auto-columns: 1fr;
+        width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: grid;
+
+        .internal_links {
+          grid-area: span 1 / span 6 / span 1 / span 6;
+          padding-top: 4vw;
+          padding-bottom: 4vw;
+
+          .navLinks {
+            padding-left: 0;
+            list-style: none;
+
+            .menu_item {
+              padding-bottom: 3px;
+              overflow: hidden;
+              color: #fff;
+              flex-direction: column;
+              align-items: flex-start;
+              text-decoration: none;
+              display: flex;
+              max-width: 100%;
+
+              .menu_item_container {
+                align-items: flex-start;
+                display: flex;
+
+                .menu_item_text {
+                  margin-bottom: 0;
+                  letter-spacing: -1px;
+                  font-size: 3vw;
+                  line-height:
+                }
+              }
+            }
+          }
+        }
+
+        .external_links {
+          grid-area: span 1 / span 6 / span 1 / span 6;
+          padding-top: 4vw;
+          padding-bottom: 4vw;
+
+          .externalLinks {
+            padding-left: 0;
+            list-style: none;
+
+            .menu_item {
+              padding-bottom: 3px;
+              overflow: hidden;
+              color: #fff;
+              flex-direction: column;
+              align-items: flex-start;
+              text-decoration: none;
+              display: flex;
+              max-width: 100%;
+
+              .menu_item_container {
+                align-items: flex-start;
+                display: flex;
+
+                .menu_item_text {
+                  margin-bottom: 0;
+                  column-count: auto;
+                  font-size: 1.8vw;
+                  line-height: 1
+                }
+
+                .external_arrow {
+                  flex: none;
+                  margin-top: 0.3vw;
+                  margin-left: 0.5vw;
+
+                  .arrow {
+                    width: 1.2vw;
+                    display: block;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .nav_footer {
+        grid-template-rows: auto;
+        float: none;
+        clear: none;
+        grid-column-gap: 1rem;
+        grid-row-gap: 2rem;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-auto-columns: 1fr;
+        width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: grid;
+
+        .footer_container {
+          grid-area: 1 / 1 / 2 / 19;
+          align-self: start;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          display: flex;
+          position: relative;
+          overflow: hidden;
+
+          .gradient_container {
+            width: 200vw;
+            height: 150vh;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+
+            .gradient {
+              object-fit: cover;
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .logo_gradient_container {
+            object-fit: cover;
+            flex:
+            align-self: stretch;
+            width: 101%;
+            height: 101%;
+            margin: -1px;
+
+            .logo {
+              object-fit: cover;
+              width: 100%;
+              height: 100%;
+              position: relative;
+              transform: scale(1.003);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .nav_button {
+      width: 140px;
+
+      .button_wrapper {
+        height: 1.5rem;
+
+        .button_positioner {
+          height: 1.5rem;
+        }
+
+        .button_container {
+          justify-content: flex-end;
+          width: 80px;
+          display: flex;
+        }
+      }
+    }
+  }
+}
+```
+</CodeBlock>
+
+## Creating the Mouse Position Hook
+
+Our menu includes an interactive gradient that follows the mouse. Let's create a utility hook to track mouse position:
+
+<CodeBlock heading="lib/utils.ts" language="ts">
+```
+import { useState, useEffect } from "react";
+
+const useMousePosition = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updateMousePosition = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener("mousemove", updateMousePosition);
+    
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
+  
+  return mousePosition;
+};
+
+export default useMousePosition;
+```
+</CodeBlock>
+
+## Creating the Cursor Context
+
+Let's set up a cursor context that will enable custom cursor effects when hovering over menu items:
+
+<CodeBlock heading="contexts/CursorHover.context.tsx" language="tsx">
+```
+"use client";
+
+import { createContext, useContext, useState } from "react";
+
+interface CursorHoverContextProps {
+  cursorHover: boolean;
+  setCursorHover: (isHovered: boolean) => void;
+}
+
+const CursorHoverContext = createContext<CursorHoverContextProps>({
+  cursorHover: false,
+  setCursorHover: () => {},
+});
+
+export const CursorHoverProvider = ({ children }) => {
+  const [cursorHover, setCursorHover] = useState(false);
+
+  return (
+    <CursorHoverContext.Provider value={{ cursorHover, setCursorHover }}>
+      {children}
+    </CursorHoverContext.Provider>
+  );
+};
+
+export const useCursorHover = () => useContext(CursorHoverContext);
+```
+</CodeBlock>
+
+## Setting Up Content Data
+
+Let's create a file to store our navigation links:
+
+<CodeBlock heading="content/index.ts" language="ts">
+```
+export const navLinks = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  {
+    title: "About",
+    href: "/about",
+  },
+  {
+    title: "Projects",
+    href: "/projects",
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+  },
+];
+
+export const externalLinks = [
+  {
+    title: "Instagram",
+    href: "https://instagram.com",
+  },
+  {
+    title: "Twitter",
+    href: "https://twitter.com",
+  },
+  {
+    title: "LinkedIn",
+    href: "https://linkedin.com",
+  },
+];
+
+export const headerInfo = ["© 2025", "All Rights Reserved"];
+```
+</CodeBlock>
+
+## Adding Required Assets
+
+Make sure to add these images to your public folder:
+
+- Create a folder called <LanguageJsx>public</LanguageJsx> in your project root if you don't have already
+- Add the following images:
+    - menuGradient.png - A colorful gradient image
+    - transparentName.png - Your transparent logo
+    - externalArrow.svg - A small arrow icon for external links
+
+## Implementing the Menu in Your App
+
+Finally, let's implement our animated menu in the main layout:
+
+<CodeBlock heading="app/layout.tsx" language="tsx">
+```
+import { ArtHeader } from "@/components/Header/Header";
+import { CursorHoverProvider } from "@/contexts/CursorHover.context";
+import "./globals.css";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <CursorHoverProvider>
+          <ArtHeader />
+          {children}
+        </CursorHoverProvider>
+      </body>
+    </html>
+  );
+}
+```
+</CodeBlock>
+
+## Key Features Explained
+
+### 1. Slide-In Animation
+
+The entire menu slides in from the right side of the screen using the <LanguageJsx>slideIn</LanguageJsx> animation variant. This creates a smooth transition when toggling the menu.
+
+### 2. Item Staggering
+
+Menu items appear with a staggered animation using the <LanguageJsx>slideUp</LanguageJsx> variant. They enter from the bottom, creating a cascade effect.
+
+### 3. Interactive Hover Effect
+
+Links have a special bounce animation when hovered over, triggered by the <LanguageJsx>hoverLink</LanguageJsx> variant. This creates a dynamic and playful user experience.
+
+### 4. Mouse-Following Gradient
+
+The background gradient in the footer follows the user's mouse movement, creating an interactive element that responds to user interaction.
+
+### 5. Toggle Button Transition
+
+The toggle button smoothly transitions between "Menu" and "Close" text when clicked, enhancing the user experience.
+
+## Wrapping Up
+
+This animated navigation menu provides a modern, sleek UI component for your Next.js applications. The combination of Framer Motion animations, SCSS styling, and React hooks creates a rich user experience that's both visually appealing and functionally sound.
+
+Key takeaways from this tutorial:
+
+- Using Framer Motion variants for complex animations
+- Creating interactive hover effects
+- Implementing mouse-following elements
+- Building responsive layouts with SCSS modules
+- Organizing component architecture for maintainability
+- Feel free to customize the colors, sizes, and animations to fit your brand's identity and design language.

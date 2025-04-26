@@ -1,0 +1,172 @@
+## Setting up the project
+
+First, create a Next.js project if you haven't already:
+
+<CodeBlock language="bash">
+```
+npx create-next-app@latest my-project
+cd my-project
+```
+</CodeBlock>
+
+Install the required dependencies
+
+<CodeBlock language="bash">
+```
+npm install framer-motion
+```
+</CodeBlock>
+
+## Implementing the Scrolling Images Component
+
+We'll create a component the animates aimages based on the scroll progress.
+
+<CodeBlock heading="components/ImagesScrolling.tsx" language="tsx">
+```
+"use client";
+
+import Image from "next/image";
+import styles from "../style.module.scss";
+import { motion, MotionValue, useTransform } from "framer-motion";
+import { darkCave, darkMountain, shadowBench, shadowPerson } from "@/public";
+
+interface Props {
+  scrollYProgress: MotionValue<number>;
+}
+
+export const ImagesScrolling = ({ scrollYProgress }: Props) => {
+  const x2 = useTransform(scrollYProgress, [0.3, 0.5], ["100%", "0%"]);
+  const x3 = useTransform(scrollYProgress, [0.55, 0.75], ["100%", "0%"]);
+  const x4 = useTransform(scrollYProgress, [0.8, 1], ["100%", "0%"]);
+
+  return (
+   <div className={`${styles.scrollingImagesContainer}`}>
+     <div className={`${styles.image}`}>
+       <Image className={styles.coverImage} src={shadowPerson} alt="Image" loading="lazy" />
+     </div>
+     <motion.div style={{ x: x2 }} className={`${styles.image}`}>
+       <Image className={styles.coverImage} src={shadowBench} alt="Image" loading="lazy" />
+     </motion.div>
+     <motion.div style={{ x: x3 }} className={`${styles.image}`}>
+       <Image className={styles.coverImage} src={darkCave} alt="Image" loading="lazy" />
+     </motion.div>
+     <motion.div style={{ x: x4 }} className={`${styles.image}`}>
+       <Image className={styles.coverImage} src={darkMountain} alt="Image" loading="lazy" />
+     </motion.div>
+   </div>
+  );
+};
+```
+</CodeBlock>
+
+## Adding Scrolling Text Animation
+
+<CodeBlock heading="components/TextOnScroll.tsx" language="tsx">
+```
+"use client";
+
+import styles from "../style.module.scss";
+import { MotionValue, useTransform, motion } from "framer-motion";
+
+interface Props {
+  scrollYProgress: MotionValue<number>;
+}
+
+export const TextOnScroll = ({ scrollYProgress }: Props) => {
+  const y = useTransform(scrollYProgress, [0.3, 0.5, 0.55, 0.75, 0.8, 1], ["100%", "0%", "0%", "-100%", "-100%", "-200%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.3], [0, 0, 1]);
+
+  return (
+    <div className={styles.scrollingHeadings}>
+      <div className={`${styles.scrollingHeadingsContainer} text-white`}>
+        <motion.div style={{ opacity }} className={styles.scrollingHeadingsInner}>
+          <motion.div style={{ y }} className={`${styles.headingContainer}`}>
+            <h2 className={styles.heading}>This Text</h2>
+          </motion.div>
+          <motion.div style={{ y }} className={`${styles.headingContainer}`}>
+            <h2 className={styles.heading}>Translates</h2>
+          </motion.div>
+          <motion.div style={{ y }} className={`${styles.headingContainer}`}>
+            <h2 className={styles.heading}>on Scroll</h2>
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+```
+</CodeBlock>
+
+## Zoom Parallax effects
+
+<CodeBlock heading="components/ZoomParallax.tsx" language="tsx">
+```
+"use client";
+
+import styles from "./style.module.scss";
+import { useScroll, useTransform, motion } from "framer-motion";
+import { useRef, ReactNode } from "react";
+
+interface Props {
+  children: ReactNode;
+}
+
+export const ZoomParallax: React.FC<Props> = ({ children }) => {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["1% start", "30% end"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [0.25, 1]);
+
+  return (
+    <div ref={container} className={styles.container}>
+      <motion.div style={{ scale }} className={styles.sticky}>
+        <div className={styles.imageContainer}>{children}</div>
+      </motion.div>
+    </div>
+  );
+};
+```
+</CodeBlock>
+
+## Integrating components
+
+<CodeBlock heading="ScrollingImages.tsx" language="tsx">
+```
+"use client";
+
+import { useRef } from "react";
+import { ImagesScrolling } from "./ImagesScrolling";
+import { TextOnScroll } from "./TextOnScroll";
+import styles from "../style.module.scss";
+import { ZoomParallax } from "../ZoomParallax";
+import { useScroll } from "framer-motion";
+
+export const ScrollingImages = () => {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start 100%", "end 100%"],
+  });
+
+  return (
+    <section ref={container} id="explore" className="bg-gray">
+      <ZoomParallax>
+        <div className={`${styles.scrollingImages} w-full h-full`}>
+          <ImagesScrolling scrollYProgress={scrollYProgress} />
+          <TextOnScroll scrollYProgress={scrollYProgress} />
+        </div>
+      </ZoomParallax>
+    </section>
+  );
+};
+```
+</CodeBlock>
+
+## Wrapping Up
+
+We've built a visually engaging scrolling image and text animation with a zoom parallax effect using Framer Motion and Next.js. This component adds a modern, immersive feel to web pages. Feel free to tweak the animations and experiment with different effects!
+
+Happy coding! 🚀

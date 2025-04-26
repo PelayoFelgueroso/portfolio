@@ -15,7 +15,7 @@ export const generateMetadata = async ({
     pageTitle.charAt(0).toUpperCase() + pageTitle.slice(1);
 
   return {
-    title: `${pageTitleCapitalized} | BrainHome`,
+    title: `${pageTitleCapitalized} | Pelayo Felgueroso`,
   };
 };
 

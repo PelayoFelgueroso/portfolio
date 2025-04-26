@@ -7,15 +7,15 @@ export const navLinks = [
   },
   {
     title: "Works",
-    href: "#works",
+    href: "/works",
   },
   {
     title: "Resources",
-    href: "#resources",
+    href: "/resources",
   },
   {
     title: "Contact",
-    href: "#contact",
+    href: "#site-footer",
   },
 ];
 
@@ -54,8 +54,13 @@ export const footerLinks = [
     icon: Github,
   },
   {
-    title: "Dowload-CV",
+    title: "Spanish CV",
     href: "/CV-Pelayo_Felgueroso.pdf",
+    icon: Folder
+  },
+  {
+    title: "English CV",
+    href: "/English-CV-Pelayo_Felgueroso.pdf",
     icon: Folder
   },
 ];

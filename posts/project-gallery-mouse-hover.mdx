@@ -1,0 +1,498 @@
+## Creating an Expandable Project List with Framer Motion in React
+
+In this tutorial, we'll build an elegant and interactive project list component that reveals images when users hover over project titles. This clean and minimalist UI component creates a sophisticated way to showcase your portfolio with subtle animations.
+
+## Creating the Project
+
+Let's start by setting up a Next.js application. We can do that by running the following command in the terminal:
+
+<CodeBlock language="bash">
+```
+npx create-next-app@latest my-portfolio-project
+```
+</CodeBlock>
+
+For this project, we'll use:
+
+- Next.js for the framework
+- Framer Motion for animations
+- SCSS modules for styling
+- TypeScript for type safety
+
+Let's install our dependencies:
+
+<CodeBlock language="bash">
+```
+npm install framer-motion sass
+```
+</CodeBlock>
+
+## Project Structure
+
+Our component architecture will consist of:
+
+1. A main <LanguageJsx>Projects</LanguageJsx> component that renders the overall section and list
+2. Individual <LanguageJsx>Project</LanguageJsx> components for each portfolio item
+
+Les't begin building our components.
+
+## Building the Project component
+
+Now let's create our indivdual project component that will handle the hover animation and image reveal.
+
+<CodeBlock heading="components/Project/Project.tsx" language="tsx">
+```
+'use client';
+
+import styles from "./style.module.scss";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
+const anim = {
+  initial: { width: 0 },
+  open: {
+  width: 'auto',
+  transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] },
+  },
+  closed: { width: 0 },
+};
+
+interface Props {
+  slug: string;
+  title: string;
+  featured_image: string;
+}
+
+export const Project = ({ slug, title, featured_image }: Props) => {
+  const [isActive, setIsActive] = useState(false);
+
+  const splitCamelCase = (str: string) => {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2');
+  };
+  
+  const parts = title.includes(' ')
+  ? title.split(' ')
+  : splitCamelCase(title).split(' ');
+  
+  const title1 = parts[0];
+  const title2 = parts.length > 1 ? parts.slice(1).join(' ') : ';
+  
+  return (
+    <Link
+      href={`/${slug}`}
+      onMouseEnter={() => {
+      setIsActive(true);
+      }}
+      onMouseLeave={() => setIsActive(false)}
+      className={styles.project}
+    >
+      <p>{title1}</p>
+      <motion.div
+        variants={anim}
+        animate={isActive ? 'open' : 'closed'}
+        className={styles.imgContainer}
+      >
+        <Image src={featured_image} width={1000} height={1000} alt={title} />
+      </motion.div>
+      <p>{title2}</p>
+    </Link>
+  );
+};
+```
+</CodeBlock>
+
+Now, let's create the SCSS module for the Project component.
+
+<CodeBlock heading="components/Project/style.module.scss" language="scss">
+```
+.project {
+  border-top: 1px solid rgb(201, 201, 201);
+  padding-top: 0.8vw;
+  padding-bottom: 0.8vw;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project p {
+  font-size: 5vw;
+  margin: 0px;
+}
+
+.project p:nth-of-type(1) {
+  margin-right: 0.75vw;
+}
+
+.project p:nth-of-type(2) {
+  margin-left: 0.75vw;
+}
+
+.project:last-of-type {
+  border-bottom: 1px solid rgb(201, 201, 201);
+}
+
+.project .imgContainer {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  width: 0;
+}
+
+.project img {
+  width: 10vw;
+}
+```
+</CodeBlock>
+
+## Creating the Project Section component
+
+Now, let's build the main component that will display the list of projects.
+
+<CodeBlock heading="components/Projects/Project.tsx" language="tsx">
+```
+'use client';
+
+import styles from './style.module.scss';
+import { Rounded } from '@/common/RoundedButton/RoundedButton';
+import { Project } from './components/Project';
+import { useProjects } from '@/contexts/Projects.context';
+
+export const Projects = () => {
+  const { projects } = useProjects();
+  
+  return (
+    <section className={styles.projects}>
+      <div className='w-full flex pb-[50px]'>
+        <div className='pl-[150px] w-[70%] relative block'>
+          <h2>Recent Work</h2>
+        </div>
+      </div>
+      <div className={styles.body}>
+        {projects.map((project) => {
+          return (
+            <Project
+              key={project.id}
+              slug={project.slug}
+              title={project.title.rendered}
+              featured_image={project.featured_image}
+            />
+          );
+        })}
+      </div>
+      <Rounded>
+        <p>More work</p>
+      </Rounded>
+    </section>
+  );
+};
+```
+</CodeBlock>
+
+And its corresponding SCSS module:
+
+<CodeBlock heading="components/Projects/style.module.scss" language="scss">
+```
+.projects {
+  display: flex;
+  align-items: center;
+  padding-left: 200px;
+  padding-right: 200px;
+  flex-direction: column;
+  padding-top: 100px;
+  
+  .body {
+    max-width: 1400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 100px;
+  }
+  
+  .modalContainer {
+    height: 350px;
+    width: 400px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background-color: white;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 3;
+  }
+  
+  .modalSlider {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    transition: top 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  
+  .modal {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal img {
+    height: auto;
+  }
+  
+  .cursor,
+  .cursorLabel {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #455ce9;
+    color: white;
+    position: fixed;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 300;
+    pointer-events: none;
+  }
+  
+  .cursorLabel {
+    background-color: transparent;
+  }
+}
+```
+</CodeBlock>
+
+## Creating a Rounded RoundedButton
+
+The Projects copmonent references a <LanguageJsx>Rounded</LanguageJsx> button component. Let's create that:
+
+<CodeBlock heading="components/RoundedButton/RoundedButton.tsx" language="tsx">
+```
+import React from 'react';
+import { useEffect, useRef } from 'react';
+import styles from './style.module.scss';
+import gsap from 'gsap';
+import { Magnetic } from '../Magnetic/Magnetic';
+
+export const Rounded = ({
+  children,
+  backgroundColor = '#455CE9',
+  ...attributes
+}) => {
+  const circle = useRef(null);
+  let timeline = useRef(null);
+  let timeoutId = null;
+  useEffect(() => {
+    timeline.current = gsap.timeline({ paused: true });
+    timeline.current
+      .to(
+        circle.current,
+        { top: '-25%', width: '150%', duration: 0.4, ease: 'power3.in' },
+        'enter'
+      )
+      .to(
+        circle.current,
+        { top: '-150%', width: '125%', duration: 0.25 },
+        'exit'
+      );
+  }, []);
+
+  const manageMouseEnter = () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeline.current.tweenFromTo('enter', 'exit');
+  };
+
+  const manageMouseLeave = () => {
+    timeoutId = setTimeout(() => {
+      timeline.current.play();
+    }, 300);
+  };
+
+  return (
+    <Magnetic>
+      <div
+        className={styles.roundedButton}
+        style={{ overflow: 'hidden' }}
+        onMouseEnter={() => {
+          manageMouseEnter();
+        }}
+        onMouseLeave={() => {
+          manageMouseLeave();
+        }}
+        {...attributes}
+      >
+        {children}
+        <div
+          ref={circle}
+          style={{ backgroundColor }}
+          className={styles.circle}
+        ></div>
+      </div>
+    </Magnetic>
+  );
+};
+```
+</CodeBlock>
+
+And its corresponding styles:
+
+<CodeBlock heading="components/RoundedButton/style.module.scss" language="scss">
+```
+.roundedButton {
+  border-radius: 3em;
+  border: 1px solid rgb(136, 136, 136);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5em 3em;
+  overflow: hidden;
+  
+  p {
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s linear;
+    margin: 0;
+  }
+  
+  &:hover {
+    p {
+      color: white;
+    }
+    
+    &:before {
+      transform: translateX(0);
+    }
+  }
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #455ce9;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+}
+```
+</CodeBlock>
+
+## How the Projects Component Works 
+
+Let's break down the key elements of our projects list component:
+
+### 1. Title Spliting
+
+One of the most interesting aspects of this component is how it splits each project title into two parts and places an image between them:
+
+
+
+This code handles both regular spaced titles and camelCase titles, ensuring the first word is separated from the rest.
+
+### 2. Hover State Animation
+
+We use Framer Motion to animate the width of the image container when the user hovers over a project:
+
+<CodeBlock language="tsx">
+```
+<motion.div
+    variants={anim}
+    animate={isActive ? 'open' : 'closed'}
+    className={styles.imgContainer}
+>
+    <Image src={featured_image} width={1000} height={1000} alt={title} />
+</motion.div>
+```
+</CodeBlock>
+
+The animation variants define a smooth transition from zero width to auto, creating the expanding effect:
+
+<CodeBlock language="ts">
+```
+const anim = {
+    initial: { width: 0 },
+    open: {
+      width: 'auto',
+      transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] },
+    },
+    closed: { width: 0 },
+  };
+```
+</CodeBlock>
+
+## Using the Projects Component in Your Page
+
+To use this component in your page, you'll just need to put the Projects Component in the place you'd like to see it
+
+<CodeBlock heading="app/page.tsx" language="tsx">
+```
+'use client';
+            
+import { Projects } from '@/components/Projects/Projects';
+
+const projectsData = [
+  {
+    id: 1,
+    slug: 'project-one',
+    title: {
+      rendered: 'Digital Experience'
+    },
+    featured_image: '/images/project1.jpg'
+  },
+  {
+    id: 2,
+    slug: 'project-two',
+    title: {
+      rendered: 'Brand Identity'
+    },
+    featured_image: '/images/project2.jpg'
+  },
+  {
+    id: 3,
+    slug: 'project-three',
+    title: {
+      rendered: 'Interactive Installation'
+    },
+    featured_image: '/images/project3.jpg'
+  }
+];
+
+export default function Home() {
+  return (
+    <main>
+      <Projects />
+    </main>
+  );
+}
+```
+</CodeBlock>
+
+## Wrapping up 
+We've created an elegant and interactive project list component that provides a unique way to showcase your portfolio. The component features:
+
+- Smooth animations when hovering over project titles
+- Split titles with images appearing between words
+- Clean and minimalist design with clear typography
+- Expandable with additional features like custom cursors and categories
+
+This component offers a sophisticated and engaging way to present your work, elevating the user experience of your portfolio site. The combination of subtle animations, clean typography, and visual previews creates a memorable browsing experience that will make your projects stand out.
+
+You can further enhance this component by:
+
+- Adding more complex animations
+- Integrating with a CMS for dynamic content
+- Adding filtering capabilities for different project types
+- Implementing dark/light mode support
+
+I hope you enjoyed building this component and learned valuable techniques for creating engaging UI elements with React and Framer Motion!

@@ -2,7 +2,6 @@
 
 import { useOutsideClick } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { useRef } from "react";
 import { menuSlideIn } from "./anim";
 import { footerLinks, navLinksResources } from "@/content";
@@ -28,7 +27,7 @@ export const ResourcesMenu = () => {
     <header className="sticky top-0 z-[5010] border-b-[1px] border-[#e8e8e8] w-full flex justify-center items-center bg-whiteCustom font-outfit">
       <div className="relative w-full flex justify-between py-[clamp(16px,_1.4vw,_20px)] px-[clamp(16px,_1.4vw,_24px)]">
         <Magnetic max={3}>
-          <Link onClick={handleClose} href="/" className="logo-link-hover">
+          <a onClick={handleClose} href="/" className="logo-link-hover">
             <div className="relative z-[2]">
               <svg
                 width="44"
@@ -42,7 +41,7 @@ export const ResourcesMenu = () => {
                 <path d="M19.7169 6.2693C19.7169 7.39777 19.4348 8.44265 18.8706 9.40394C18.3063 10.3652 17.5436 11.1384 16.5823 11.7236C15.6419 12.2878 14.597 12.5699 13.4476 12.5699H4.73332V9.46664H13.4476C14.3253 9.46664 15.0672 9.15317 15.6732 8.52624C16.3002 7.87841 16.6136 7.1261 16.6136 6.2693C16.6136 5.3916 16.3002 4.64973 15.6732 4.04369C15.0672 3.41676 14.3253 3.1033 13.4476 3.1033H3.1033V17.2406H0V0H13.4476C14.597 0 15.6419 0.282118 16.5823 0.846355C17.5436 1.41059 18.3063 2.17336 18.8706 3.13465C19.4348 4.07504 19.7169 5.11993 19.7169 6.2693Z" />
               </svg>
             </div>
-          </Link>
+          </a>
         </Magnetic>
 
         <div className="flex gap-[15px] uppercase text-[12px] md:text-[14px]">
@@ -76,7 +75,7 @@ export const ResourcesMenu = () => {
                   <p>Navigation</p>
                 </div>
                 {navLinksResources.map((item, index) => (
-                  <Link key={index} onClick={handleClose} href={item.href}>
+                  <a key={index} onClick={handleClose} href={item.href}>
                     <div className="pl-[20px] cursor-pointer transition-all duration-300 flex items-center hover:bg-[#ededed] hover:pl-[30px]">
                       <svg
                         width="14"
@@ -94,7 +93,7 @@ export const ResourcesMenu = () => {
                         {item.title}
                       </p>
                     </div>
-                  </Link>
+                  </a>
                 ))}
 
                 <div className="p-[10px] pl-[25px] text-[13px] bg-[#ebeff8]">
@@ -102,7 +101,7 @@ export const ResourcesMenu = () => {
                 </div>
 
                 {footerLinks.map((item, index) => (
-                  <Link
+                  <a
                     key={index}
                     onClick={handleClose}
                     href={item.href}
@@ -114,7 +113,7 @@ export const ResourcesMenu = () => {
                         {item.title}
                       </p>
                     </div>
-                  </Link>
+                  </a>
                 ))}
               </motion.div>
             )}

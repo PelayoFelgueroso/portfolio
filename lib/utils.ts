@@ -53,3 +53,16 @@ export const useOutsideClick = (
     };
   }, [ref, ref2, callback]);
 };
+
+export const formatDate = (date: number) => {
+  const dateString = date.toString();
+  const year = parseInt(dateString.substring(0, 4), 10);
+  const month = parseInt(dateString.substring(4, 6), 10);
+  const day = parseInt(dateString.substring(6, 8), 10);
+
+  const formattedDate = new Date(year, month - 1, day);
+
+  const monthName = formattedDate.toLocaleString("en-US", { month: "long" });
+
+  return `${monthName}, ${year}`;
+};

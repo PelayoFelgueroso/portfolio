@@ -3,6 +3,7 @@
 import { useProjects } from "@/contexts/Projects.context";
 import { WorkShowcase } from "./WorkShowcase/WorkShowcase";
 import { useEffect } from "react";
+import { WorkNav } from "./WorkShowcase/Components/WorkNav";
 
 interface Props {
   slug: string;
@@ -15,6 +16,7 @@ export const SingleWorkPageTemplate = ({ slug }: Props) => {
 
   const currentIndex = projects.findIndex((item) => item.slug === slug);
   const nextWork = projects[(currentIndex + 1) % projects.length];
+  const prevWork = projects[(currentIndex - 1 + projects.length) % projects.length];
 
   useEffect(() => {
     const footer = document.getElementById("site-footer");
@@ -30,11 +32,16 @@ export const SingleWorkPageTemplate = ({ slug }: Props) => {
   }, []);
 
   return (
-    <div className="h-screen pt-[100px] bg-whiteCustom">
+    <div className="relative h-screen bg-whiteCustom">
       {work ? (
         <WorkShowcase work={work} nextWork={nextWork} />
       ) : (
         <div>This work does not exist</div>
+      )}
+      {work && nextWork ? (
+        <WorkNav nextWork={nextWork} prevWork={prevWork} />
+      ) : (
+        <div className="">Go Home</div>
       )}
     </div>
   );

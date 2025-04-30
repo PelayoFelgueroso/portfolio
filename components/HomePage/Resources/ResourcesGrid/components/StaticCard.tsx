@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRef } from "react";
 import styles from "../../style.module.scss";
 import { truncateText } from "@/lib/utils";
@@ -41,7 +40,7 @@ export const StaticCard = ({
       <div
         className={`h-[200px] rounded-lg overflow-hidden relative ${styles.top_wrapper} resource-card`}
       >
-        <Link target="_blank" href={`/resources/demos/${slug}`}>
+        <a target="_blank" href={`/resources/demos/${slug}`}>
           <Image
             src={featured_image}
             width={300}
@@ -61,10 +60,10 @@ export const StaticCard = ({
             <source src={featured_video} type="video/mp4" />
             Tu navegador no soporta videos.
           </video>
-        </Link>
+        </a>
       </div>
 
-      <Link
+      <a
         href={`/resources/${slug}`}
         className="flex flex-col justify-end h-1/2  z-20 px-5 py-[18px] lg:p-[14px]"
       >
@@ -83,7 +82,7 @@ export const StaticCard = ({
         <p className="text100 text-darkBlueCustom/75">
           {truncateText(short_description, 95)}
         </p>
-      </Link>
+      </a>
     </div>
   );
 };

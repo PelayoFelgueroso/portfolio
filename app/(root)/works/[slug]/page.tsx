@@ -23,7 +23,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export default async function SingleWorkPage ({ params }: Props) {
+export default async function SingleWorkPage({ params }: Props) {
   const slug = (await params).slug;
 
   return (

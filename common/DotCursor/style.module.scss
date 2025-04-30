@@ -47,10 +47,13 @@
       background-color: var(--color-blackCustom) / 50;
       backdrop-filter: invert(100%) contrast(150%);
       transition: width 0.5s, height 0.5s;
-
-      &.wider {
-        width: 100px;
-      }
+    }
+    &.link_wider {
+      width: 100px;
+      height: 30px;
+      background-color: var(--color-blackCustom) / 50;
+      backdrop-filter: invert(100%) contrast(150%);
+      transition: width 0.5s, height 0.5s;
     }
     &.logo_hover {
       width: 80px;
@@ -68,6 +71,19 @@
     &.ipt_hover {
       width: 1px;
       transition: width 0.5s;
+    }
+    &.single_work_hover {
+      width: 50px;
+      height: 50px;
+      background-color: var(--color-whiteCustom);
+      transition: width 0.5s, height 0.5s;
+    }
+    &.next_work {
+      background-color: var(--color-whiteCustom);
+      width: 100px;
+      height: 40px;
+      transition: width 0.5s, height 0.5s;
+      transition-delay: 0s;
     }
   }
 }

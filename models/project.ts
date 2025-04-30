@@ -15,6 +15,8 @@ interface ACF {
     image_4: number;
     image_5: number;
   };
+  date: number;
+  services: string[];
 }
 
 export interface Project {
@@ -33,4 +35,5 @@ export interface FormattedProject {
   featured_image_mobile: string;
   featured_video: string;
   images_collection: string[];
+  formated_date: string;
 }

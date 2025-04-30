@@ -1,22 +1,22 @@
 import Image from "next/image";
-import Link from "next/link";
 
 interface Props {
   slug: string;
   image: string;
   title: string;
+  niche: string;
 }
 
-export const NextWork = ({ slug, image, title }: Props) => {
+export const NextWork = ({ slug, image, title, niche }: Props) => {
   return (
-    <div className="relative max-w-[98vw] 2md:max-w-[680px] h-full object-cover bg-blackCustom overflow-hidden pr-[clamp(16px,_1.4vw,_24px)]">
-      <Link
+    <div className="relative w-fit h-full bg-blackCustom overflow-hidden next-work">
+      <a
         href={`/works/${slug}`}
         className="absolute inset-0 z-[200] w-full h-full flex flex-col justify-center items-center gap-1 bg-[#0000008c]"
       >
         <div className="text400 text-whiteCustom">Next: {title}</div>
-        <div className="text100 relative overflow-hidden text-whiteCustom"></div>
-      </Link>
+        <div className="text100 relative overflow-hidden text-whiteCustom">{niche}</div>
+      </a>
       <Image
         src={image}
         alt={title}

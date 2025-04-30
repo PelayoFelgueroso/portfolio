@@ -1,5 +1,4 @@
 import styles from "../../style.module.scss";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction } from "react";
 import { scale, slide } from "../../anim";
@@ -36,7 +35,7 @@ export const NavLink = ({ data, isActive, setSelectedIndicator }: Props) => {
         animate={isActive ? "open" : "closed"}
         className={styles.indicator}
       ></motion.div>
-      <Link href={href}>{title}</Link>
+      <a href={href}>{title}</a>
     </motion.div>
   );
 };

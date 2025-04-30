@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 
 import {
@@ -32,13 +31,13 @@ export function DropdownLinks({ resources, buttonText }: DropdownLinksProps) {
       <DropdownMenuContent align="start" className="w-[200px] border-0 bg-whiteCustom">
         {resources.map((item) => (
           <DropdownMenuItem key={item.slug} asChild>
-            <Link
+            <a
               href={`/resources/demos/${item.slug}`}
               className="w-full cursor-pointer"
               onClick={() => setIsOpen(false)}
             >
               {item.title.rendered}
-            </Link>
+            </a>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

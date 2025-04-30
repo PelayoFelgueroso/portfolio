@@ -1,5 +1,4 @@
 import { HoverLinkAnim } from "@/common/HoverLinkAnim/HoverLinkAnim";
-import Link from "next/link";
 import { useState } from "react";
 
 interface Props {
@@ -26,7 +25,7 @@ export const FooterLink = ({
   };
 
   return (
-    <Link
+    <a
       href={href}
       target="_blank"
       onMouseEnter={handleMouseEnter}
@@ -35,6 +34,6 @@ export const FooterLink = ({
       download={download}
     >
       <HoverLinkAnim isHovered={isHovered}>{children}</HoverLinkAnim>
-    </Link>
+    </a>
   );
 };

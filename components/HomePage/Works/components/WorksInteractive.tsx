@@ -139,13 +139,13 @@ export const WorksInteractive = () => {
               {currentWork.acf.description}
             </p>
             <div className="mt-8">
-              <Link
-                href={`/projects/${currentWork.slug}`}
+              <a
+                href={`/works/${currentWork.slug}`}
                 className="group flex items-center space-x-2 text-sm text-[#333333] hover:text-[#1a1a1a] transition-colors duration-300"
               >
                 <span>Explorar más</span>
                 <span className="inline-block w-5 h-[1px] bg-[#333333] group-hover:w-8 group-hover:bg-gray-800 transition-all duration-300"></span>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

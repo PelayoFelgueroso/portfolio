@@ -1,5 +1,4 @@
 import { HoverLinkAnim } from "@/common/HoverLinkAnim/HoverLinkAnim";
-import Link from "next/link";
 import { useState } from "react";
 
 interface Props {
@@ -20,7 +19,7 @@ export const DesktopNavLink = ({ href, title }: Props) => {
 
   return (
     <li>
-      <Link
+      <a
         href={href}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -31,7 +30,7 @@ export const DesktopNavLink = ({ href, title }: Props) => {
         <HoverLinkAnim isHovered={isHovered} magnetic={true}>
           {title}
         </HoverLinkAnim>
-      </Link>
+      </a>
     </li>
   );
 };

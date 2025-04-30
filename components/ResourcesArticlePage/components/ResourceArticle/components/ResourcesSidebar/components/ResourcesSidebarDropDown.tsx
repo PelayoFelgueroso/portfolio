@@ -2,7 +2,6 @@
 
 import { FormattedResource } from "@/models/resource";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
@@ -44,11 +43,11 @@ export const ResourcesSidebarDropDown = ({ title, resources }: Props) => {
         style={isOpen ? { height: `${height}px` } : { height: "0px" }}
       >
         {resources.map((item) => (
-          <Link key={item.id} href={`/resources/${item.slug}/`} className="">
+          <a key={item.id} href={`/resources/${item.slug}/`} className="">
             <p className="m-0 px-[10px] py-[5px] rounded-[10px] text-[14px] text-[#4f576c]">
               {item.title.rendered}
             </p>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

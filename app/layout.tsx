@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <ReactLenis root>
         <body
-          className={`${inter.className} antialiased font-helvetica`}
+          className={`${inter.className} antialiased font-helvetica scrollbar-none`}
         >
           <Script
             strategy="beforeInteractive"

@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/utils";
 import { fetchMediaUrls } from "./media.service";
 import { FormattedProject, Project } from "@/models/project";
 
@@ -46,6 +47,7 @@ export async function getFormattedProjects(): Promise<FormattedProject[]> {
       images_collection: Object.values(project.acf.images_collection).map(
         (imageId) => mediaUrls[imageId]
       ),
+      formated_date: formatDate(project.acf.date),
     };
   });
 }

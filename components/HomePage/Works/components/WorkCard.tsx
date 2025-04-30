@@ -43,7 +43,7 @@ export const WorkCard = ({ index, slug, title, niche, images }: Props) => {
         <motion.a
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          href={`#projects/${slug}`}
+          href={`/works/${slug}`}
           className="relative h-[clamp(260px,_24vw,_380px)] max-h-[216px] flex justify-center items-center md:max-h-[440px] rounded-lg overflow-hidden project-preview"
         >
           <AnimatePresence mode="wait">

@@ -1,4 +1,4 @@
-import { DemosHeader } from "@/components/DemosHeader/DemosHeader";
+import { DemosHeader } from "@/common/DemosHeader/DemosHeader";
 import { ResourcesProvider } from "@/contexts/Resources.context";
 
 export default async function Layout({

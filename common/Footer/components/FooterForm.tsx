@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { InputBox } from "./components/InputBox";
-import { formSubmitAction } from "@/app/actions";
-import { getCaptchaToken } from "@/lib/captcha";
+import { useReCaptcha } from "next-recaptcha-v3";
 
 const formSchema = z.object({
   name: z
@@ -44,6 +43,7 @@ export type FormValues = z.infer<typeof formSchema>;
 export const FooterForm = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { executeRecaptcha } = useReCaptcha();
 
   const {
     register,
@@ -63,20 +63,28 @@ export const FooterForm = () => {
     setIsLoading(true);
 
     try {
-      const token = await getCaptchaToken();
-      const res = await formSubmitAction(token, data);
+      const token = await executeRecaptcha("submit_form");
 
-      if (res.succes) {
-        const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
-        const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!;
-        const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
+      const response = await fetch("/api/validate-recaptcha", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
 
+      const result = await response.json();
+
+      if (result.success) {
         const templateParams = {
           name: data.name,
           email: data.email,
           company: data.company,
           message: data.message,
         };
+        const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
+        const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!;
+        const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
 
         emailjs
           .send(serviceId, templateId, templateParams, publicKey)
@@ -91,9 +99,12 @@ export const FooterForm = () => {
           .finally(() => {
             setIsLoading(false);
           });
+      } else {
+        alert("There was an issue verifying the token. Please try again.");
+        setIsLoading(false);
       }
     } catch {
-      alert("There was an issue sending the information. Please try again.");
+      alert("There was an issue getting the token. Please try again.");
       setIsLoading(false);
     }
   };

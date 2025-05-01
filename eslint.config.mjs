@@ -16,6 +16,7 @@ const eslintConfig = [
     files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
     rules: {
       "@next/next/no-html-link-for-pages": "off",
+      "@next/next/explic": "off",
     },
   },
 ];

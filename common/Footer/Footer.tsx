@@ -204,7 +204,7 @@ export const Footer = () => {
                 Do not hesitate to contact me to discuss a possible project or
                 discover more about my work.
               </h3>
-              <FooterForm />
+                <FooterForm />
             </div>
 
             <div className="relative left-0 2md:left-auto bottom-0 right-0 z-[300] flex gap-4 xs:gap-6 md:gap-[clamp(16px,_1vw,_26px)] pr-[clamp(16px,_2vw,_24px)]">
@@ -221,7 +221,9 @@ export const Footer = () => {
 
             <div className="absolute z-[300] bottom-0 right-0 hidden 2md:flex text100 text-grayCustom">
               <div className="text-grayCustom/50">Made by</div>
-              <FooterLink href="/"className="ml-1" >Myself</FooterLink>
+              <FooterLink href="/" className="ml-1">
+                Myself
+              </FooterLink>
             </div>
           </motion.div>
         </div>

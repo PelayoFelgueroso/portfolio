@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactLenis } from "../lib/lenis";
 import DotCursor from "@/common/DotCursor/DotCursor";
-import Script from "next/script";
+import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 export const metadata: Metadata = {
   title: "Pelayo Felgueroso | Portfolio",
@@ -19,18 +19,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ReactLenis root>
-        <body
-          className={`${inter.className} antialiased font-helvetica scrollbar-none`}
-        >
-          <Script
-            strategy="beforeInteractive"
-            src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-          />
-          {children}
-          <DotCursor />
-        </body>
-      </ReactLenis>
+      <ReCaptchaProvider
+        reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+      >
+        <ReactLenis root>
+          <body
+            className={`${inter.className} antialiased font-helvetica scrollbar-none`}
+          >
+            {children}
+            <DotCursor />
+          </body>
+        </ReactLenis>
+      </ReCaptchaProvider>
     </html>
   );
 }

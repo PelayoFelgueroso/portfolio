@@ -10,7 +10,7 @@ export default function ResourcesPage() {
 
   return (
     <>
-      <main className="relative min-h-screen pt-[100px] z-10 bg-whiteCustom text-foreground">
+      <main className="relative min-h-screen pt-[100px] z-10 bg-whiteCustom">
         <AnimatePresence mode="wait">
           {isOpenMenu && (
             <motion.div

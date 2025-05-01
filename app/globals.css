@@ -29,6 +29,9 @@ body.hide-scrollbar::-webkit-scrollbar {
 .scrollbar-none::-webkit-scrollbar {
   width: 0px;
 }
+.grecaptcha-badge {
+  display: none !important;
+}
 
 @layer base {
   body {

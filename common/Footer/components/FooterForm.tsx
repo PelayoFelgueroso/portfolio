@@ -7,6 +7,7 @@ import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { InputBox } from "./components/InputBox";
 import { useReCaptcha } from "next-recaptcha-v3";
+import { AnimatePresence, motion } from "framer-motion";
 
 const formSchema = z.object({
   name: z
@@ -43,6 +44,7 @@ export type FormValues = z.infer<typeof formSchema>;
 export const FooterForm = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
   const { executeRecaptcha } = useReCaptcha();
 
   const {
@@ -75,8 +77,6 @@ export const FooterForm = () => {
 
       const result = await response.json();
 
-      console.log(result)
-
       if (result.success) {
         const templateParams = {
           name: data.name,
@@ -100,6 +100,7 @@ export const FooterForm = () => {
           })
           .finally(() => {
             setIsLoading(false);
+            setName(data.name);
           });
       } else {
         alert("Result error. Please try again.");
@@ -123,55 +124,74 @@ export const FooterForm = () => {
 
   return (
     <>
-      {!submitted ? (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={handleKeyDown}
-          className="h-full flex flex-col"
-        >
-          <InputBox
-            label="Name"
-            placeholder="John Doe"
-            name="name"
-            register={register}
-            error={errors.name?.message}
-          />
-          <InputBox
-            label="Email"
-            placeholder="hello@example.com"
-            name="email"
-            register={register}
-            error={errors.email?.message}
-          />
-          <InputBox
-            label="I work at"
-            placeholder="Company name"
-            name="company"
-            register={register}
-            error={errors.company?.message}
-          />
-          <InputBox
-            textArea={true}
-            label="Details about the project"
-            placeholder="My project is about..."
-            name="message"
-            register={register}
-            error={errors.message?.message}
-          />
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="min-h-12 items-center border-[1px] border-grayCustom/30 text-whiteCustom cursor-pointer px-4 disabled:opacity-50 hover:rounded-4xl hover:text-darkBlueCustom hover:bg-whiteCustom transition-all duration-700< hover-button"
+      <AnimatePresence>
+        {!submitted && (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onKeyDown={handleKeyDown}
+            className="h-full flex flex-col"
           >
-            {isLoading ? "Sending..." : "Send"}
-          </button>
-        </form>
-      ) : (
-        <h3 className="text-whiteCustom">
-          Muchas gracias por ponerte en contacto conmigo
-        </h3>
-      )}
+            <InputBox
+              label="Name"
+              placeholder="John Doe"
+              name="name"
+              register={register}
+              error={errors.name?.message}
+            />
+            <InputBox
+              label="Email"
+              placeholder="hello@example.com"
+              name="email"
+              register={register}
+              error={errors.email?.message}
+            />
+            <InputBox
+              label="I work at"
+              placeholder="Company name"
+              name="company"
+              register={register}
+              error={errors.company?.message}
+            />
+            <InputBox
+              textArea={true}
+              label="Details about the project"
+              placeholder="My project is about..."
+              name="message"
+              register={register}
+              error={errors.message?.message}
+            />
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="min-h-12 items-center border-[1px] border-grayCustom/30 text-whiteCustom cursor-pointer px-4 disabled:opacity-50 hover:rounded-4xl hover:text-darkBlueCustom hover:bg-whiteCustom transition-all duration-700< hover-button"
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </button>
+          </form>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {submitted && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="min-h-[600px]"
+          >
+            <div className="">
+              <h3 className="text400 text-whiteCustom">
+                Email Sent Succesfully.
+              </h3>
+              <p className="mt-4 text100 text-darkGray">
+                Thank you {name}, your message has been submitted to us. We will
+                get back to you as soon as possible!
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

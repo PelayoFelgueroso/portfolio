@@ -19,7 +19,7 @@ export const Footer = () => {
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: ["start 1", "start 0"],
+    offset: ["start 1", "start 10%"],
   });
 
   useEffect(() => {

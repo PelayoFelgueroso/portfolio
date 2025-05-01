@@ -75,6 +75,8 @@ export const FooterForm = () => {
 
       const result = await response.json();
 
+      console.log(result)
+
       if (result.success) {
         const templateParams = {
           name: data.name,
@@ -100,7 +102,7 @@ export const FooterForm = () => {
             setIsLoading(false);
           });
       } else {
-        alert("There was an issue verifying the token. Please try again.");
+        alert("Result error. Please try again.");
         setIsLoading(false);
       }
     } catch {

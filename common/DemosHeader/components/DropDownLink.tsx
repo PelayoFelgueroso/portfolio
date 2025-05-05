@@ -32,7 +32,7 @@ export function DropdownLinks({ resources, buttonText }: DropdownLinksProps) {
         {resources.map((item) => (
           <DropdownMenuItem key={item.slug} asChild>
             <a
-              href={`/resources/demos/${item.slug}`}
+              href={`/demos/${item.slug}`}
               className="w-full cursor-pointer"
               onClick={() => setIsOpen(false)}
             >

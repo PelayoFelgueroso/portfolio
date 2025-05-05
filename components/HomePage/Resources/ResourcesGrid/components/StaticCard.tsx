@@ -40,7 +40,7 @@ export const StaticCard = ({
       <div
         className={`h-[200px] rounded-lg overflow-hidden relative ${styles.top_wrapper} resource-card`}
       >
-        <a target="_blank" href={`/resources/demos/${slug}`}>
+        <a target="_blank" href={`/demos/${slug}`}>
           <Image
             src={featured_image}
             width={300}

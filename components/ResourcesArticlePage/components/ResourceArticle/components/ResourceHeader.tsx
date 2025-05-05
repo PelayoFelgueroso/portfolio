@@ -80,7 +80,7 @@ export const ResourceHeader = ({
 
       <div className="flex gap-[10px]">
         <a
-          href={`/resources/demos/${slug}`}
+          href={`/demos/${slug}`}
           target="_blank"
           className="flex items-center gap-2 bg-blue-100 text-blue-500 p-[10px] font-semibold rounded-lg group"
         >

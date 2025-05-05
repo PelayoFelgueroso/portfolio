@@ -13,7 +13,7 @@ export const TareasCard = ({ title, featured_image, slug }: Props) => {
   return (
     <a
       target="_blank"
-      href={`/tareas-conquer/${slug}`}
+      href={`/demos-tareas/${slug}`}
       className={`${styles.resource_wrapper} flex flex-col justify-between w-full overflow-hidden rounded-lg text-black p-2 max-w-[400px] border-[1px] border-grayCustom bg-white resource-card`}
     >
       <div

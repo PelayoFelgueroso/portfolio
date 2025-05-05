@@ -1,6 +1,7 @@
 "use client";
 
 import { About } from "@/components/HomePage/About/About";
+import { Hero } from "@/components/HomePage/Hero/Hero";
 import { LogoPreoloader } from "@/components/HomePage/LogoPreloader/LogoPreloader";
 import { Resources } from "@/components/HomePage/Resources/ResourcesSection/Resources";
 import { SectionTitle } from "@/components/HomePage/SectionTitle/SectionTitle";
@@ -9,8 +10,6 @@ import {
   AnimatePresence,
   useInView,
   useScroll,
-  useTransform,
-  motion,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
@@ -45,7 +44,6 @@ export default function Home() {
     offset: ["50% end", "end 100%"],
   });
 
-  const opacity = useTransform(scrollHero, [0, 1], [1, 0.08]);
 
   const { scrollYProgress: scrollWorks } = useScroll({
     target: worksRef,
@@ -85,13 +83,7 @@ export default function Home() {
         scrollContact={scrollContact}
       />
 
-      <motion.section
-        ref={heroRef}
-        className="h-[200vh] width-[100svw] relative overflow-hidden"
-        style={{ willChange: "opacity", opacity }}
-      >
-        <div className="fixed aspect-auto pointer-events-none w-screen top-[-18vh] left-0 right-0 z-10 h-[130vh] md:h-[150vh] 2md:h-screen"></div>
-      </motion.section>
+      <Hero heroRef={heroRef} scrollHero={scrollHero} />
 
       <Projects onInViewChange={setInViewWorks} worksRef={worksRef} />
 

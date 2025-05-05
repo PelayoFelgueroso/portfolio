@@ -44,7 +44,7 @@ export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
 
   return (
     <>
-      <section id="resources" className="relative pb-[200px] px-4 overflow-x-hidden">
+      <section id="resources" className="relative mt-[100px] 2md:mt-0 pb-[200px] px-4 overflow-x-hidden">
         <div
           ref={resourcesRef}
           className="perspective-distant w-full xl:max-w-[1600px] mx-auto min-h-[75vh]"

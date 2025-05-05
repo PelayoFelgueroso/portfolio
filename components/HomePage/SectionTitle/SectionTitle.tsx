@@ -26,7 +26,7 @@ export const SectionTitle = ({
   scrollResources,
   scrollAbout,
 }: Props) => {
-  const opacityHero = useTransform(scrollHero, [0, 1], [1, 0.08]);
+  const opacityHero = useTransform(scrollHero, [0.6, 1], [1, 0.08]);
   const opacityWorks = useTransform(scrollWorks, [0, 1], [1, 0.08]);
   const opacityResources = useTransform(scrollResources, [0, 1], [1, 0.08]);
   const opacityAbout = useTransform(scrollAbout, [0, 1], [1, 0.08]);

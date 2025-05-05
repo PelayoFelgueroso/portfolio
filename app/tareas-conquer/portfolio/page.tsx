@@ -24,11 +24,11 @@ const spaceGroteskMd = Space_Grotesk({
 });
 
 const headingXL = `${spaceGroteskBold.className} text-[40px] leading-[1em] tracking-[-1.14px] md:text-[72px] md:tracking-[-2.05px] lg:text-[88px] lg:tracking-[-2.5px]`;
-const headingL = `${spaceGroteskBold.className} text-[32px] leading-[40px] tracking-[-1px] md:text-[48px] md:leading-[56px] md:tracking-[-1.5px] lg:text-[48px] lg:leading-[56px] `;
+const headingL = `${spaceGroteskBold.className} text-[32px] leading-[40px] tracking-[-1px] md:text-[48px] md:leading-[56px] md:tracking-[-1.5px] lg:text-[48px] lg:leading-[56px]`;
 const headingM = `${spaceGroteskBold.className} text-[24px] leading-[32px]`;
 const body = `${spaceGroteskMd.className} text-[16px] leading-[26px] md:text-[18px] md:leading-[28px] text-[#D9D9D9]`;
 const tag = `${spaceGroteskMd.className} text-[18px] leading-[28px] text-[#D9D9D9]`;
-const button = `${spaceGroteskBold.className} text-[16px] leading-[26px] tracking-[2.29px] uppercase pb-3 border-b-2 border-[#4EE1A0] transition-all duration-500 hover:text-[#4EE1A0]`;
+const button = `${spaceGroteskBold.className} text-[16px] leading-[26px] tracking-[2.29px] uppercase pb-3 border-b-2 border-[#4EE1A0] transition-all duration-500 hover:text-[#4EE1A0] cursor-pointer`;
 const paddingGlobal =
   "px-4 md:px-8 lg:px-12 min-[1206px]:px-0 lg:max-w-[1110px] lg:mx-auto";
 

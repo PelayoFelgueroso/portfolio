@@ -199,7 +199,7 @@ export const Footer = () => {
             }}
             className="relative z-20 md:w-full h-full flex flex-col justify-end items-start self-stretch gap-6"
           >
-            <div className="w-full max-w-[560px] 2md:w-[clamp(424px,_40vw,_468px)] min-h-[600px] flex flex-col items-stretch">
+            <div className="w-full max-w-[560px] 2md:w-[clamp(424px,_40vw,_468px)] 2md:min-h-[600px] flex flex-col items-stretch">
               <h3 className="text400 pb300 text-whiteCustom m-0">
                 Do not hesitate to contact me to discuss a possible project or
                 discover more about my work.

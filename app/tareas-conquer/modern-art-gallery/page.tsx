@@ -24,11 +24,11 @@ const headingXl = `${bigShoulders.className} font-black uppercase text-[60px] le
 const headingM = `${bigShoulders.className} font-black uppercase text-[50px] leading-[45px] min-[1300px]:text-[60px] min-[1300px]:leading-[60px]`;
 const bodyM = `${outfit.className} text-[18px] leading-[28px] min-[1300px]:text-[22px] min-[1300px]:leading-[32px]`;
 const bodyS = `${outfit.className} text-[16px] leading-[26px] min-[1300px]:text-[18px] min-[1300px]:leading-[28px]`;
-const buttonStyle1 = `${bigShoulders.className} text-white uppercase tracking-[3.36px] flex items-center w-fit bg-[#151515] hover:bg-[#D5966C] transition-colors duration-500 group`;
+const buttonStyle = `${bigShoulders.className} text-white uppercase tracking-[3.36px] flex items-center w-fit bg-[#151515] hover:bg-[#D5966C] transition-colors duration-500 group`;
 
 export default function ModernArtGallery() {
   return (
-    <>
+    <div className="bg-white">
       <main className={`${outfit.className} text-[#151515]`}>
         <section id="hero" className="relative h-screen w-full">
           <div className="md:absolute left-0 top-0 h-[45%] md:h-full w-full md:w-[57.5%] min-[1300px]:w-2/3 min-[1300px]:flex">
@@ -56,7 +56,7 @@ export default function ModernArtGallery() {
                   started from a spark of inspiration. Will these pieces inspire
                   you? Visit us and find out.
                 </p>
-                <a href="/our-location" className={buttonStyle1}>
+                <a href="/our-location" className={buttonStyle}>
                   <div className="py-6 px-8">Our location</div>
                   <div className="bg-[#D5966C] group-hover:bg-[#151515] transition-colors duration-500 p-6">
                     <svg
@@ -192,6 +192,6 @@ export default function ModernArtGallery() {
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

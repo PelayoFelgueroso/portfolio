@@ -13,6 +13,7 @@ import shadowBench from "./shadow-bench.jpg";
 import shadowPerson from "./shadow-person.jpg";
 import profilePicture from "./foto-perfil-pelayo-felgueroso.jpg";
 import transparentName from "./nombre-transparente.png"
+import heroImage from "./pelayo-felgueroso-hero.webp";
 
 export {
   background,
@@ -29,5 +30,6 @@ export {
   shadowBench,
   shadowPerson,
   profilePicture,
-  transparentName
+  transparentName,
+  heroImage
 };

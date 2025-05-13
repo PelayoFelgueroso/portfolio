@@ -1,10 +1,9 @@
-import { CursorHoverProvider } from "@/contexts/CursorHovert.context";
-import { ResourcesProvider } from "@/contexts/Resources.context";
-import { ProjectsProvider } from "@/contexts/Projects.context";
+import { CursorHoverProvider } from "@/contexts/CursorHover.context";
 import { CurvedMenu } from "@/common/CurvedMenu/CurvedMenu";
 import { Footer } from "@/common/Footer/Footer";
 import { InViewBioProvider } from "@/contexts/inViewBio.context";
 import { InViewContactProvider } from "@/contexts/inViewContact.context";
+import DotCursor from "@/common/DotCursor/DotCursor";
 
 export default function Layout({
   children,
@@ -12,17 +11,14 @@ export default function Layout({
   return (
     <>
       <CursorHoverProvider>
-        <ResourcesProvider>
-          <ProjectsProvider>
-            <InViewBioProvider>
-              <InViewContactProvider>
-                <CurvedMenu />
-                {children}
-                <Footer />
-              </InViewContactProvider>
-            </InViewBioProvider>
-          </ProjectsProvider>
-        </ResourcesProvider>
+          <InViewBioProvider>
+            <InViewContactProvider>
+              <DotCursor />
+              <CurvedMenu />
+              {children}
+              <Footer />
+            </InViewContactProvider>
+          </InViewBioProvider>
       </CursorHoverProvider>
     </>
   );

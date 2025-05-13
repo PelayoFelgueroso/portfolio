@@ -2,12 +2,12 @@
 
 import { HoverLinkAnim } from "@/common/HoverLinkAnim/HoverLinkAnim";
 import { Magnetic } from "@/common/Magnetic/Magnetic";
-import { FormattedProject } from "@/models/project";
+import { Work } from "@/models/work";
 import { useState } from "react";
 
 interface Props {
-  prevWork: FormattedProject;
-  nextWork: FormattedProject;
+  prevWork: Work;
+  nextWork: Work;
 }
 
 export const WorkNav = ({ prevWork, nextWork }: Props) => {
@@ -24,9 +24,7 @@ export const WorkNav = ({ prevWork, nextWork }: Props) => {
             href={`/works/${prevWork.slug}`}
             className="cursor-pointer relative max-w-full inline-block"
           >
-            <div className="text100 text-darkBlueCustom">
-              {prevWork.title.rendered}
-            </div>
+            <div className="text100 text-darkBlueCustom">{prevWork.title}</div>
             <div className="relative text100 text-darkGray">
               <HoverLinkAnim isHovered={isHoveredPrev}>
                 Prev Project
@@ -44,9 +42,7 @@ export const WorkNav = ({ prevWork, nextWork }: Props) => {
             href={`/works/${nextWork.slug}`}
             className="cursor-pointer relative max-w-full inline-block"
           >
-            <div className="text100 text-darkBlueCustom">
-              {nextWork.title.rendered}
-            </div>
+            <div className="text100 text-darkBlueCustom">{nextWork.title}</div>
             <div className="relative text100 text-darkGray">
               <HoverLinkAnim isHovered={isHoveredNext}>
                 Next Project

@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useRef } from "react";
 import styles from "../../style.module.scss";
 import { truncateText } from "@/lib/utils";
+import { Category } from "@prisma/client";
 
 interface Props {
   title: string;
   short_description: string;
   featured_image: string;
   featured_video: string;
-  categories: string[];
+  categories: Category[];
   slug: string;
 }
 
@@ -73,7 +74,7 @@ export const StaticCard = ({
               key={index}
               className="w-fit uppercase text-[.7rem] border border-blackCustom px-2 py-1 rounded-full"
             >
-              {category}
+              {category.name}
             </span>
           ))}
         </div>

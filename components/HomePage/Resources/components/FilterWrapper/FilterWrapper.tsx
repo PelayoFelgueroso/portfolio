@@ -1,19 +1,20 @@
 "use client";
 
-import { useResources } from "@/contexts/Resources.context";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Search, X } from "lucide-react";
 import { useState } from "react";
 import { SearchForm } from "./components/SearchForm";
-import { FormattedResource } from "@/models/resource";
+import { Resource } from "@/models/resource";
+import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 interface Props {
   inViewResources: boolean;
-  onFilterChange: (resources: FormattedResource[]) => void;
+  onFilterChange: (resources: Resource[]) => void;
 }
 
 export const FilterWrapper = ({ inViewResources, onFilterChange }: Props) => {
-  const { categories, resources } = useResources();
+  const { resources, categories } = useResourceStore() as useResourceType;
+
   const [isOpen, setIsOpen] = useState<"cat" | "search" | null>(null);
 
   const handleOpen = (item: "cat" | "search" | null) => {
@@ -24,8 +25,10 @@ export const FilterWrapper = ({ inViewResources, onFilterChange }: Props) => {
     setIsOpen(null);
   };
 
-  const filterByCategory = (catId: number) => {
-    const filtered = resources.filter((r) => r.categories.includes(catId));
+  const filterByCategory = (catId: string) => {
+    const filtered = resources.filter((resource) =>
+      resource.categoryIds.includes(catId)
+    );
     onFilterChange(filtered);
     handleClose();
   };
@@ -44,9 +47,9 @@ export const FilterWrapper = ({ inViewResources, onFilterChange }: Props) => {
     }
 
     const results = resources.filter((res) => {
-      const title = res.title.rendered.toLowerCase();
-      const desc = res.content?.rendered?.toLowerCase() || "";
-      const shortDesc = res.acf?.short_description?.toLowerCase() || "";
+      const title = res.title.toLowerCase();
+      const desc = res.data.description?.toLowerCase() || "";
+      const shortDesc = res.data?.short_description?.toLowerCase() || "";
 
       return (
         title.includes(trimmedQuery) ||
@@ -165,9 +168,7 @@ export const FilterWrapper = ({ inViewResources, onFilterChange }: Props) => {
                   <div className="flex gap-2.5">
                     <button
                       onClick={
-                        isOpen === "cat"
-                          ? handleClose
-                          : () => handleOpen("cat")
+                        isOpen === "cat" ? handleClose : () => handleOpen("cat")
                       }
                       className="cursor-pointer max-w-full h-[60px] flex justify-center items-center px-12 rounded-[10px] bg-darkGrayCustom bg-clip-border"
                     >

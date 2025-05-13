@@ -1,15 +1,18 @@
 "use client";
 
-import { useProjects } from "@/contexts/Projects.context";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import styles from "../style.module.scss";
+import { Work } from "@/models/work";
 
-export const WorksInteractive = () => {
-  const { projects } = useProjects();
-  const [currentWork, setCurrentWork] = useState(projects[0]);
+interface Props {
+  works: Work[];
+}
+
+export const WorksInteractive = ({ works }: Props) => {
+  const [currentWork, setCurrentWork] = useState(works[0]);
 
   const video = useRef<HTMLVideoElement | null>(null);
 
@@ -20,7 +23,7 @@ export const WorksInteractive = () => {
     video.current?.pause();
   };
 
-  if (projects.length === 0) {
+  if (works.length === 0) {
     return <div></div>;
   }
 
@@ -30,25 +33,25 @@ export const WorksInteractive = () => {
         className={`col-start-1 col-end-4 rounded-3xl overflow-hidden w-full h-full bg-whiteCustom text-black`}
       >
         <div className="flex flex-col h-full items-center lg:items-start justify-center gap-6 lg:pl-6">
-          {projects.slice(0, 4).map((project, index) => (
+          {works.slice(0, 4).map((work, index) => (
             <div
-              key={project.id}
+              key={work.id}
               className={`${
-                currentWork.id === project.id ? "block" : "hidden lg:block"
+                currentWork.id === work.id ? "block" : "hidden lg:block"
               } group cursor-pointer`}
-              onMouseEnter={() => setCurrentWork(projects[index])}
+              onMouseEnter={() => setCurrentWork(works[index])}
             >
               <div className="hidden lg:flex items-center space-x-2 mb-2 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                 <div
                   className={`h-[1px] w-6 bg-black ${
-                    currentWork.id === project.id
+                    currentWork.id === work.id
                       ? "w-12 bg-gray-800"
                       : "group-hover:w-12 group-hover:bg-gray-600"
                   } transition-all duration-300`}
                 />
                 <ChevronRight
                   className={`h-4 w-4 text-gray-400 transform ${
-                    currentWork.id === project.id
+                    currentWork.id === work.id
                       ? "translate-x-1 text-gray-800"
                       : "translate-x-0"
                   } group-hover:translate-x-1 group-hover:text-gray-600 transition-all duration-300`}
@@ -56,22 +59,22 @@ export const WorksInteractive = () => {
               </div>
               <h2
                 className={`text-xl font-light uppercase ${
-                  currentWork.id === project.id
+                  currentWork.id === work.id
                     ? "text-gray-900"
                     : "text-gray-500"
                 } group-hover:text-gray-900 transition-colors duration-300`}
               >
-                {project.title.rendered}
+                {work.title}
               </h2>
               <div
                 className={`mt-3 overflow-hidden transition-all duration-500 ${
-                  currentWork.id === project.id
+                  currentWork.id === work.id
                     ? "max-h-20 opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
               >
                 <span className="inline-block py-1.5 px-3 bg-gray text-gray-800 text-sm font-medium rounded-md">
-                  {project.acf.niche}
+                  {work.data.niche}
                 </span>
               </div>
             </div>
@@ -88,26 +91,26 @@ export const WorksInteractive = () => {
           className=""
         >
           <Image
-            src={currentWork.featured_image}
+            src={currentWork.data.featured_image}
             width={1920}
             height={1080}
-            alt={currentWork.title.rendered}
+            alt={currentWork.title}
             className={`object-contain ${styles.image}`}
           />
           <video
-            key={currentWork.featured_video}
+            key={currentWork.id}
             ref={video}
             className={`w-full object-contain ${styles.video}`}
             loop
             muted
             playsInline
           >
-            <source src={currentWork.featured_video} type="video/mp4" />
+            <source src={currentWork.data.featured_video} type="video/mp4" />
             Tu navegador no soporta videos.
           </video>
           <Link
             target="_blank"
-            href={currentWork.acf.live_demo}
+            href={currentWork.data.live_demo}
             className={`absolute bottom-4 right-4 rounded-full flex justify-center items-center gap-2 px-4 py-2 bg-blue-500 z-[1000] text-white ${styles.demo}`}
           >
             View Online
@@ -131,12 +134,10 @@ export const WorksInteractive = () => {
       <div className="col-start-[15] col-end-[19] w-full p-8 flex flex-col justify-center ">
         <div className="space-y-6">
           <div className="h-[1px] w-12 bg-black"></div>
-          <h3 className="text-xl font-light uppercase">
-            {currentWork.title.rendered}
-          </h3>
+          <h3 className="text-xl font-light uppercase">{currentWork.title}</h3>
           <div className="relative overflow-hidden">
             <p className="text-black leading-relaxed">
-              {currentWork.acf.description}
+              {currentWork.data.description}
             </p>
             <div className="mt-8">
               <a

@@ -1,19 +1,17 @@
-'use client';
+"use client";
 
-import { useProjects } from "@/contexts/Projects.context";
-import { FormattedProject } from "@/models/project";
 import Image from "next/image";
 import { useState } from "react";
 import { Card } from "./components/Card";
+import { Work } from "@/models/work";
+import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
 
 export const ProjectsPageGrid = () => {
-  const { projects } = useProjects();
-  const [currentProject, setCurrentProject] = useState<FormattedProject | null>(
-    null
-  );
+  const { works } = useWorkStore() as UseWorkStoreType;
+  const [currentProject, setCurrentProject] = useState<Work | null>(null);
 
-  const handleHover = (project: FormattedProject) => {
-    setCurrentProject(project);
+  const handleHover = (work: Work) => {
+    setCurrentProject(work);
   };
 
   const handleNoHover = () => {
@@ -29,7 +27,7 @@ export const ProjectsPageGrid = () => {
       </section>
       <section className="w-full px-4">
         <div className="fixed w-sreen h-screen inset-0">
-          {projects.map((project) => (
+          {works.map((project) => (
             <div
               key={project.id}
               className={`absolute inset-0 w-full h-full opacity-0 transition-all duration-1000 ${
@@ -37,17 +35,17 @@ export const ProjectsPageGrid = () => {
               }`}
             >
               <Image
-                src={project.featured_image}
+                src={project.data.featured_image}
                 width={1920}
                 height={1080}
-                alt={project.title.rendered}
+                alt={project.title}
                 className="h-full w-full object-cover blur-[20px]"
               />
             </div>
           ))}
         </div>
         <div className="flex flex-col lg:gap-40">
-          {projects.map((project) => (
+          {works.map((project) => (
             <div
               key={project.id}
               className="h-screen w-full flex items-center justify-center"
@@ -55,10 +53,10 @@ export const ProjectsPageGrid = () => {
               <Card
                 onMouseEnter={() => handleHover(project)}
                 onMouseLeave={handleNoHover}
-                featured_image={project.featured_image}
-                featured_image_mobile={project.featured_image_mobile}
-                featured_video={project.featured_video}
-                title={project.title.rendered}
+                featured_image={project.data.featured_image}
+                featured_image_mobile={project.data.featured_image_mobile}
+                featured_video={project.data.featured_video}
+                title={project.title}
               />
             </div>
           ))}

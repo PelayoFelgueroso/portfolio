@@ -6,9 +6,9 @@ import {
   motion,
   useTransform,
 } from "framer-motion";
-import { useResources } from "@/contexts/Resources.context";
 import { ResourcesContainer } from "./components/ResourcesContainer";
 import { FilterWrapper } from "../components/FilterWrapper/FilterWrapper";
+import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
@@ -16,8 +16,13 @@ interface Props {
 }
 
 export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
-  const { loadingResources, loadingCategories, resources } = useResources();
+  const { resources, loading, fetchResources } =
+    useResourceStore() as useResourceType;
   const [filteredResources, setFilteredResources] = useState(resources);
+
+  useEffect(() => {
+    fetchResources();
+  }, []);
 
   useEffect(() => {
     setFilteredResources(resources);
@@ -44,7 +49,10 @@ export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
 
   return (
     <>
-      <section id="resources" className="relative mt-[100px] 2md:mt-0 pb-[200px] px-4 overflow-x-hidden">
+      <section
+        id="resources"
+        className="relative mt-[100px] 2md:mt-0 pb-[200px] px-4 overflow-x-hidden"
+      >
         <div
           ref={resourcesRef}
           className="perspective-distant w-full xl:max-w-[1600px] mx-auto min-h-[75vh]"
@@ -61,7 +69,7 @@ export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
               className={`absolute inset-0 shadow-2xl border-[1px] border-grayCustom rounded-lg bg-white`}
             />
             <AnimatePresence mode="wait">
-              {!loadingCategories && !loadingResources && (
+              {!loading && (
                 <ResourcesContainer
                   resources={resources}
                   filteredResources={filteredResources}

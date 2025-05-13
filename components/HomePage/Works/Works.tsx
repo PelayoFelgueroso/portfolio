@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, useInView } from "framer-motion";
-import { useProjects } from "@/contexts/Projects.context";
 import { WorksInteractive } from "./components/WorksInteractive";
+import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
@@ -11,7 +11,12 @@ interface Props {
 }
 
 export const Works = ({ onInViewChange, worksRef }: Props) => {
-  const { loadingProjects } = useProjects();
+  const { works, fetchWorks, loading } = useWorkStore() as UseWorkStoreType;
+
+  useEffect(() => {
+    fetchWorks();
+  }, []);
+
   const inView = useInView(worksRef, { once: false });
 
   useEffect(() => {
@@ -28,7 +33,7 @@ export const Works = ({ onInViewChange, worksRef }: Props) => {
         className="grid-18 _1row items-center max-w-[1600px] md:mx-auto p-3 bg-whiteCustom shadow-2xl rounded-xl flex-col gap-6"
       >
         <AnimatePresence mode="wait">
-          {!loadingProjects && <WorksInteractive />}
+          {!loading && <WorksInteractive works={works} />}
         </AnimatePresence>
       </div>
     </section>

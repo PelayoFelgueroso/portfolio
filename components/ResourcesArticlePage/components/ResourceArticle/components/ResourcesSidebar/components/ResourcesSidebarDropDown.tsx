@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { FormattedResource } from "@/models/resource";
+import { Resource } from "@/models/resource";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
   title: string;
-  resources: FormattedResource[];
+  resources: Resource[];
 }
 
 export const ResourcesSidebarDropDown = ({ title, resources }: Props) => {
@@ -45,7 +45,7 @@ export const ResourcesSidebarDropDown = ({ title, resources }: Props) => {
         {resources.map((item) => (
           <a key={item.id} href={`/resources/${item.slug}/`} className="">
             <p className="m-0 px-[10px] py-[5px] rounded-[10px] text-[14px] text-[#4f576c]">
-              {item.title.rendered}
+              {item.title}
             </p>
           </a>
         ))}

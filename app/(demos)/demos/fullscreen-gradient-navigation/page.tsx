@@ -1,5 +1,5 @@
 import { ArtHeader } from "@/components/UILibrary/GradientNavigation/Header";
-import { CursorHoverProvider } from "@/contexts/CursorHovert.context";
+import { CursorHoverProvider } from "@/contexts/CursorHover.context";
 
 export default function Home() {
   return (

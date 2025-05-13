@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Card } from "./Card";
 import { MotionValue } from "framer-motion";
-import { FormattedResource } from "@/models/resource";
+import { Resource } from "@/models/resource";
 
 interface Props {
   scrollProgress: MotionValue<number>;
-  filteredResources: FormattedResource[];
-  resources: FormattedResource[];
-  onFilterChange: (resources: FormattedResource[]) => void;
+  filteredResources: Resource[];
+  resources: Resource[];
+  onFilterChange: (resources: Resource[]) => void;
 }
 
 export const ResourcesContainer = ({
@@ -45,11 +45,11 @@ export const ResourcesContainer = ({
               <Card
                 slug={resource.slug}
                 key={resource.id}
-                title={resource.title.rendered}
-                short_description={resource.acf.short_description}
-                featured_image={resource.featured_image}
-                featured_video={resource.featured_video}
-                categories={resource.category_name}
+                title={resource.title}
+                short_description={resource.data.short_description}
+                featured_image={resource.data.featured_image}
+                featured_video={resource.data.featured_video}
+                categories={resource.categories}
                 scrollProgress={scrollProgress}
                 index={index}
               />

@@ -56,7 +56,7 @@ export const SectionTitle = ({
             height="271"
             viewBox="0 0 796 271"
             xmlns="http://www.w3.org/2000/svg"
-            className="fill-darkBlueCustom w-full max-2md:h-full overflow-visible"
+            className="fill-darkBlueCustom w-full max-2md:h-full overflow-visible h-fit"
             preserveAspectRatio="xMinYMin"
             style={{ willChange: "opacity", opacity: opacityHero }}
           >

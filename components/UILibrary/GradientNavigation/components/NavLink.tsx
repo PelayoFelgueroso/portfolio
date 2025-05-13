@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import styles from "../style.module.scss";
 import { hoverLink, slideUp } from "../anim";
 import { useState } from "react";
-import { useCursorHover } from "@/contexts/CursorHovert.context";
+import { useCursorHover } from "@/contexts/CursorHover.context";
 
 interface Props {
   href: string;

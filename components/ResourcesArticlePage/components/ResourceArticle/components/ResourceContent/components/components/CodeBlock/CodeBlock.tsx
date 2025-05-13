@@ -1,84 +1,104 @@
 "use client";
 
-import { useState } from "react";
-import styles from "../../../style.module.scss";
+import type React from "react";
+
+import { useState, useEffect } from "react";
 import { Check, Clipboard } from "lucide-react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { default as prismStyle } from "react-syntax-highlighter/dist/cjs/styles/prism/prism";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { EditorView } from "@codemirror/view";
+import { markdown } from "@codemirror/lang-markdown";
+import { javascript } from "@codemirror/lang-javascript";
+import { css } from "@codemirror/lang-css";
+import { json } from "@codemirror/lang-json";
+import { html } from "@codemirror/lang-html";
 
-const cleanStyle = Object.entries(prismStyle).reduce((acc, [key, value]) => {
-  acc[key] = {
-    ...value,
-    background: "transparent",
-    backgroundColor: "transparent",
-  };
-  return acc;
-}, {} as typeof prismStyle);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const languageMap: Record<string, any> = {
+  typescript: javascript({ typescript: true }),
+  tsx: javascript({ jsx: true, typescript: true }),
+  javascript: javascript(),
+  js: javascript(),
+  jsx: javascript({ jsx: true }),
+  css: css(),
+  scss: css(),
+  html: html(),
+  json: json(),
+  markdown: markdown(),
+  md: markdown(),
 
-import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx";
-import typescript from "react-syntax-highlighter/dist/cjs/languages/prism/typescript";
-import javascript from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
-import css from "react-syntax-highlighter/dist/cjs/languages/prism/css";
-import scss from "react-syntax-highlighter/dist/cjs/languages/prism/scss";
-import bash from "react-syntax-highlighter/dist/cjs/languages/prism/bash";
-import json from "react-syntax-highlighter/dist/cjs/languages/prism/json";
+  default: markdown(),
+};
 
-SyntaxHighlighter.registerLanguage("tsx", tsx);
-SyntaxHighlighter.registerLanguage("ts", typescript);
-SyntaxHighlighter.registerLanguage("js", javascript);
-SyntaxHighlighter.registerLanguage("css", css);
-SyntaxHighlighter.registerLanguage("scss", scss);
-SyntaxHighlighter.registerLanguage("bash", bash);
-SyntaxHighlighter.registerLanguage("json", json);
-
-interface PreCodeElement {
-  type: "pre";
-  props: {
-    children: {
-      props: {
-        children: string;
-      };
-    };
-  };
-}
-
-interface Props {
+interface CodeBlockProps {
   children: React.ReactNode;
   heading?: string;
   language?: string;
+  showLineNumbers?: boolean;
+  className?: string;
 }
 
-export const CodeBlock = ({
+export function CodeBlock({
   children,
   heading,
   language = "typescript",
-}: Props) => {
+  showLineNumbers = true,
+  className,
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const [codeString, setCodeString] = useState("");
 
-  const getCodeString = (): string => {
-    if (typeof children === "string") return children;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const extractTextFromReactNode = (node: any): string => {
+    if (typeof node === "string") return node;
 
-    if (
-      Array.isArray(children) &&
-      children[0]?.type === "pre" &&
-      children[0]?.props?.children?.props?.children
-    ) {
-      return children[0].props.children.props.children;
+    if (Array.isArray(node)) {
+      return node.map(extractTextFromReactNode).join("");
     }
 
-    if (
-      typeof children === "object" &&
-      (children as PreCodeElement).type === "pre" &&
-      (children as PreCodeElement).props?.children?.props?.children
-    ) {
-      return (children as PreCodeElement).props.children.props.children;
+    if (node && typeof node === "object") {
+      if (className && /language-(\w+)/.test(className)) {
+        if (typeof node === "string") return node;
+      }
+
+      if (node.props && node.props.children) {
+        return extractTextFromReactNode(node.props.children);
+      }
+
+      if (node.code) return node.code;
+      if (node.value) return node.value;
+      if (node.content) return node.content;
     }
 
-    return String(children);
+    if (node !== undefined && node !== null) {
+      try {
+        const str = node.toString();
+        if (str !== "[object Object]") return str;
+      } catch (e) {
+        console.error("Error converting to string:", e);
+      }
+    }
+
+    return "";
   };
 
+  useEffect(() => {
+    try {
+      if (typeof children === "string") {
+        setCodeString(children);
+        return;
+      }
+
+      const extractedCode = extractTextFromReactNode(children);
+
+      setCodeString(extractedCode);
+    } catch (error) {
+      console.error("Error extracting code:", error);
+      setCodeString("");
+    }
+  }, [children, className]);
+
   const handleCopy = () => {
-    const codeString = getCodeString();
     navigator.clipboard
       .writeText(codeString)
       .then(() => {
@@ -90,54 +110,49 @@ export const CodeBlock = ({
       });
   };
 
-  return (
-    <>
-      {heading ? (
-        <div className={styles.code_container}>
-          <div className={styles.code_container_header}>
-            <div>
-              <h3>{heading}</h3>
-            </div>
-            <div>
-              <button
-                onClick={handleCopy}
-                className="transition-shadow duration-300 rounded-[10px] p-2 border-[1px] border-transparent hover:shadow-[0_0_21px_0] shadow-blueCustom hover:border hover:border-blueCustom"
-                aria-label="Copy to clipboard"
-              >
-                {copied ? <Check /> : <Clipboard />}
-              </button>
-            </div>
-          </div>
+  const getLanguageExtension = () => {
+    if (className) {
+      const match = /language-(\w+)/.exec(className);
+      if (match && match[1]) {
+        return languageMap[match[1].toLowerCase()] || languageMap.default;
+      }
+    }
+    return languageMap[language.toLowerCase()] || languageMap.default;
+  };
 
-          <div className={styles.code_children}>
-            <SyntaxHighlighter
-              language={language}
-              style={cleanStyle}
-              showLineNumbers={true}
-              lineNumberStyle={{
-                minWidth: "2em",
-                paddingRight: "1em",
-                color: "rgb(107, 114, 128)",
-                marginRight: "16px",
-                textAlign: "right",
-              }}
-              customStyle={{
-                margin: 0,
-                padding: "1rem",
-                borderRadius: 0,
-                background: "transparent",
-              }}
-            >
-              {getCodeString()}
-            </SyntaxHighlighter>
-          </div>
+  if (!codeString.trim()) {
+    return (
+      <div className="relative rounded-md overflow-hidden border border-[#e1e1e1] bg-[#1e1e1e] text-white p-4">
+        <p className="text-gray-400 italic">No code content available</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative rounded-md overflow-hidden border border-[#e1e1e1] bg-[#1e1e1e] text-white">
+      {heading && (
+        <div className="flex justify-between items-center px-4 py-2 bg-[#252525] border-b border-[#333]">
+          <h3 className="text-sm font-medium text-[#e1e1e1]">{heading}</h3>
+          <button
+            onClick={handleCopy}
+            className="p-1.5 rounded hover:bg-[#333] transition-colors"
+            aria-label="Copy to clipboard"
+          >
+            {copied ? (
+              <Check className="w-4 h-4" />
+            ) : (
+              <Clipboard className="w-4 h-4" />
+            )}
+          </button>
         </div>
-      ) : (
-        <div className={styles.code_no_heading}>
-          <div className="absolute top-1 right-1">
+      )}
+
+      <div className="relative">
+        {!heading && (
+          <div className="absolute top-2 right-2 z-10">
             <button
               onClick={handleCopy}
-              className="bg-whiteCustom transition-shadow duration-300 rounded-[10px] p-2 border-[1px] border-transparent hover:shadow-[0_0_21px_0] shadow-blueCustom hover:border hover:border-blueCustom"
+              className="p-1.5 rounded bg-[#252525] hover:bg-[#333] transition-colors"
               aria-label="Copy to clipboard"
             >
               {copied ? (
@@ -147,20 +162,26 @@ export const CodeBlock = ({
               )}
             </button>
           </div>
-          <SyntaxHighlighter
-            language={language}
-            style={cleanStyle}
-            customStyle={{
-              margin: 0,
-              padding: "2rem",
-              borderRadius: 0,
-              background: "transparent",
-            }}
-          >
-            {getCodeString()}
-          </SyntaxHighlighter>
-        </div>
-      )}
-    </>
+        )}
+
+        <CodeMirror
+          value={codeString}
+          theme={vscodeDark}
+          extensions={[
+            getLanguageExtension(),
+            EditorView.lineWrapping,
+            EditorView.editable.of(false),
+          ]}
+          basicSetup={{
+            lineNumbers: showLineNumbers,
+            highlightActiveLineGutter: false,
+            highlightActiveLine: false,
+            foldGutter: false,
+          }}
+          editable={false}
+          className="text-sm"
+        />
+      </div>
+    </div>
   );
-};
+}

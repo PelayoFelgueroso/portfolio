@@ -36,7 +36,7 @@ export function DropdownLinks({ resources, buttonText }: DropdownLinksProps) {
               className="w-full cursor-pointer"
               onClick={() => setIsOpen(false)}
             >
-              {item.title.rendered}
+              {item.title}
             </a>
           </DropdownMenuItem>
         ))}

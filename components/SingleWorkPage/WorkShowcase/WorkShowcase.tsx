@@ -1,9 +1,9 @@
-import { FormattedProject } from "@/models/project";
+import { Work } from "@/models/work";
 import { WorkSlider } from "./Components/WorkSlider";
 
 interface Props {
-  work: FormattedProject;
-  nextWork: FormattedProject;
+  work: Work;
+  nextWork: Work;
 }
 
 export const WorkShowcase = ({ work, nextWork }: Props) => {
@@ -13,12 +13,12 @@ export const WorkShowcase = ({ work, nextWork }: Props) => {
         <WorkSlider
           key={work.id}
           slug={work.slug}
-          title={work.title.rendered}
-          niche={work.acf.niche}
-          images={work.images_collection}
-          description={work.acf.description}
-          date={work.formated_date}
-          services={work.acf.services}
+          title={work.title}
+          niche={work.data.niche}
+          images={work.data.images_collection}
+          description={work.data.description}
+          date={work.data.date}
+          services={work.data.services}
           nextWork={nextWork}
         />
       </div>

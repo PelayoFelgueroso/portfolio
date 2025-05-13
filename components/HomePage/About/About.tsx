@@ -47,7 +47,7 @@ export const About = ({ ref, scrollHero }: Props) => {
     };
   }, []);
 
-  const opacity = useTransform(scrollHero, [0, 1], [1, 0.08]);
+  const opacity = useTransform(scrollHero, [0.6, 1], [1, 0.08]);
 
   return (
     <section

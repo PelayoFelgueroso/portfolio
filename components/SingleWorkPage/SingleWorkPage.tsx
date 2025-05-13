@@ -1,22 +1,22 @@
 "use client";
 
-import { useProjects } from "@/contexts/Projects.context";
 import { WorkShowcase } from "./WorkShowcase/WorkShowcase";
 import { useEffect } from "react";
 import { WorkNav } from "./WorkShowcase/Components/WorkNav";
+import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
 
 interface Props {
   slug: string;
 }
 
 export const SingleWorkPageTemplate = ({ slug }: Props) => {
-  const { projects } = useProjects();
+  const { works } = useWorkStore() as UseWorkStoreType;
 
-  const work = projects.find((item) => item.slug === slug);
+  const work = works.find((item) => item.slug === slug);
 
-  const currentIndex = projects.findIndex((item) => item.slug === slug);
-  const nextWork = projects[(currentIndex + 1) % projects.length];
-  const prevWork = projects[(currentIndex - 1 + projects.length) % projects.length];
+  const currentIndex = works.findIndex((item) => item.slug === slug);
+  const nextWork = works[(currentIndex + 1) % works.length];
+  const prevWork = works[(currentIndex - 1 + works.length) % works.length];
 
   useEffect(() => {
     const footer = document.getElementById("site-footer");

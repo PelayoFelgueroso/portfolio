@@ -1,9 +1,8 @@
-import { FormattedDate } from "@/models/resource";
 import { profilePicture } from "@/public";
 import Image from "next/image";
 
 interface Props {
-  date: FormattedDate;
+  date: string;
   difficulty: string;
   title: string;
   description: string;
@@ -49,7 +48,7 @@ export const ResourceHeader = ({
           <p className="">Pelayo Felgueroso</p>
           <div className="flex items-center">
             <p>
-              {date.month} {date.day}, {date.year}
+              {date}
             </p>
             <p className="mx-1">/</p>
             <div
@@ -63,7 +62,7 @@ export const ResourceHeader = ({
                   ? { backgroundColor: "#a00000" }
                   : difficulty.toLocaleLowerCase() === "expert"
                   ? { backgroundColor: "#8a00a0" }
-                  : {}
+                  : {backgroundColor: "#000000"}
               }
             />
             <p className="ml-1">{difficulty}</p>

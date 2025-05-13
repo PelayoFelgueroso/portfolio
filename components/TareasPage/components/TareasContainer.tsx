@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { MotionValue } from "framer-motion";
 import { TareasCard } from "./TareasCard";
-import { FormattedTarea } from "@/models/tareas-conquer";
+import { Tarea } from "@/models/tareas-conquer";
 
 interface Props {
   scrollProgress?: MotionValue<number>;
-  filteredTareas: FormattedTarea[];
-  tareas: FormattedTarea[];
-  onFilterChange: (resources: FormattedTarea[]) => void;
+  filteredTareas: Tarea[];
+  tareas: Tarea[];
+  onFilterChange: (resources: Tarea[]) => void;
 }
 
 export const TareasContainer = ({
@@ -40,12 +40,12 @@ export const TareasContainer = ({
             </div>
           )}
           {(allVisible ? filteredTareas : filteredTareas.slice(0, 6)).map(
-            (resource) => (
+            (tarea) => (
               <TareasCard
-                slug={resource.slug}
-                key={resource.id}
-                title={resource.title.rendered}
-                featured_image={resource.featured_image}
+                slug={tarea.slug}
+                key={tarea.id}
+                title={tarea.title}
+                featured_image={tarea.data.featured_image}
               />
             )
           )}

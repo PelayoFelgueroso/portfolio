@@ -1,16 +1,16 @@
+"use client";
+
 import { AnimatePresence } from "framer-motion";
 import { ResourcesSidebar } from "./components/ResourceArticle/components/ResourcesSidebar/ResourcesSidebar";
 import { ResourceArticle } from "./components/ResourceArticle/ResourceArticle";
-import { getFormattedResources } from "@/services/resources.service";
-import { getCategories } from "@/services/categories.service";
+import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 interface Props {
   slug: string;
 }
 
-export async function ResourcesArticlePage({ slug }: Props) {
-  const resources = await getFormattedResources();
-  const categories = await getCategories();
+export const ResourcesArticlePage = ({ slug }: Props) => {
+  const { resources } = useResourceStore() as useResourceType;
 
   const resource = resources.find((resource) => resource.slug === slug);
 
@@ -23,7 +23,7 @@ export async function ResourcesArticlePage({ slug }: Props) {
       <AnimatePresence mode="wait">
         {resources && (
           <div className="absolute left-0 pl-[clamp(16px,_1.4vw,_24px)]">
-            <ResourcesSidebar resources={resources} categories={categories} />
+            <ResourcesSidebar />
           </div>
         )}
       </AnimatePresence>
@@ -31,4 +31,4 @@ export async function ResourcesArticlePage({ slug }: Props) {
       <ResourceArticle resource={resource} />
     </div>
   );
-}
+};

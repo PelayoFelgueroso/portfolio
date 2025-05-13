@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReactLenis } from "../lib/lenis";
-import DotCursor from "@/common/DotCursor/DotCursor";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 export const metadata: Metadata = {
@@ -27,7 +26,6 @@ export default function RootLayout({
             className={`${inter.className} antialiased font-helvetica scrollbar-none`}
           >
             {children}
-            <DotCursor />
           </body>
         </ReactLenis>
       </ReCaptchaProvider>

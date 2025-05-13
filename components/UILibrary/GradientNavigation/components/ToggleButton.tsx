@@ -3,7 +3,7 @@ import styles from "../style.module.scss";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { hoverLink, toggleMenu, totoggleClose } from "../anim";
-import { useCursorHover } from "@/contexts/CursorHovert.context";
+import { useCursorHover } from "@/contexts/CursorHover.context";
 
 interface Props {
   onClick: () => void;

@@ -1,13 +1,13 @@
 "use client";
 
-import { useResources } from "@/contexts/Resources.context";
 import { DropdownLinks } from "./components/DropDownLink";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import Link from "next/link";
+import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 export const DemosHeader = () => {
-  const {resources} = useResources();
+  const {resources} = useResourceStore() as useResourceType;
   const route = usePathname();
   const slug = useMemo(() => route.split("/").filter(Boolean).pop(), [route]);
 
@@ -27,7 +27,7 @@ export const DemosHeader = () => {
       <div className="w-full flex justify-center space-y-6">
         <DropdownLinks
           resources={resources}
-          buttonText={activeResource?.title.rendered}
+          buttonText={activeResource?.title}
         />
       </div>
 

@@ -7,7 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { externalArrow } from "@/public";
-import { useCursorHover } from "@/contexts/CursorHovert.context";
+import { useCursorHover } from "@/contexts/CursorHover.context";
 
 interface Props {
   href: string;

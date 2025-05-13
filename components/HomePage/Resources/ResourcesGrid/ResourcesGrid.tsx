@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, motion } from "framer-motion";
-import { useResources } from "@/contexts/Resources.context";
 import { FilterWrapper } from "../components/FilterWrapper/FilterWrapper";
 import { StaticResourcesContainer } from "./components/StaticResourcesContainer";
+import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 export const ResourcesGrid = () => {
-  const { loadingResources, loadingCategories, resources } = useResources();
+  const { resources, loading } = useResourceStore() as useResourceType;
+
   const [filteredResources, setFilteredResources] = useState(resources);
   const container = useRef(null);
 
@@ -30,7 +31,7 @@ export const ResourcesGrid = () => {
             }}
           >
             <AnimatePresence mode="wait">
-              {!loadingCategories && !loadingResources && (
+              {!loading && (
                 <StaticResourcesContainer
                   resources={resources}
                   filteredResources={filteredResources}

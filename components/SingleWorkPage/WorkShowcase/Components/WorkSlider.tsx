@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
 import Image from "next/image";
 import { NextWork } from "./NextWork";
-import { FormattedProject } from "@/models/project";
+import { Work } from "@/models/work";
 
 interface Props {
   slug: string;
@@ -14,7 +14,7 @@ interface Props {
   description: string;
   date: string;
   services: string[];
-  nextWork: FormattedProject;
+  nextWork: Work;
 }
 
 export const WorkSlider = ({
@@ -141,9 +141,9 @@ export const WorkSlider = ({
             ))}
             <NextWork
               slug={nextWork.slug}
-              image={nextWork.images_collection[0]}
-              title={nextWork.title.rendered}
-              niche={nextWork.acf.niche}
+              image={nextWork.data.images_collection[0]}
+              title={nextWork.title}
+              niche={nextWork.data.niche}
             />
           </motion.div>
         </div>

@@ -1,14 +1,18 @@
 "use client";
 
-import { useTareas } from "@/contexts/TareasConquer.context";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { TareasContainer } from "./components/TareasContainer";
+import useTareaStore, { useTareaType } from "@/store/useTareaStore";
 
 export const TareasPage = () => {
-  const { loadingTareas, tareas } = useTareas();
+  const { tareas, fetchTareas, loading } = useTareaStore() as useTareaType;
   const [filteredTareas, setFilteredTareas] = useState(tareas);
   const container = useRef(null);
+
+  useEffect(() => {
+    fetchTareas();
+  }, []);
 
   useEffect(() => {
     setFilteredTareas(tareas);
@@ -29,7 +33,7 @@ export const TareasPage = () => {
             }}
           >
             <AnimatePresence mode="wait">
-              {!loadingTareas && (
+              {!loading && (
                 <TareasContainer
                   tareas={tareas}
                   filteredTareas={filteredTareas}

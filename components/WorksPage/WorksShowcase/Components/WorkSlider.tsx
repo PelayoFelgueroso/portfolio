@@ -1,4 +1,4 @@
-import { FormattedProject } from "@/models/project";
+import { Work } from "@/models/work";
 import Image from "next/image";
 import { NextWork } from "./NextWork";
 
@@ -7,7 +7,7 @@ interface Props {
   title: string;
   niche: string;
   images: string[];
-  nextWork: FormattedProject;
+  nextWork: Work;
 }
 
 export const WorkSlider = ({ slug, title, niche, images, nextWork }: Props) => {
@@ -27,8 +27,8 @@ export const WorkSlider = ({ slug, title, niche, images, nextWork }: Props) => {
           ))}
           <NextWork
             slug={nextWork.slug}
-            image={nextWork.images_collection[0]}
-            title={nextWork.title.rendered}
+            image={nextWork.data.images_collection[0]}
+            title={nextWork.title}
           />
         </div>
       </div>

@@ -5,12 +5,13 @@ import { motion, useMotionValue, animate } from "framer-motion";
 import Image from "next/image";
 import { NextWork } from "./NextWork";
 import { Work } from "@/models/work";
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
 
 interface Props {
   slug: string;
   title: string;
   niche: string;
-  images: string[];
+  images: CloudinaryImage[];
   description: string;
   date: string;
   services: string[];
@@ -132,7 +133,7 @@ export const WorkSlider = ({
             {images.map((img, index) => (
               <Image
                 key={index}
-                src={img}
+                src={img.url}
                 alt={title}
                 width={1000}
                 height={1000}
@@ -141,7 +142,7 @@ export const WorkSlider = ({
             ))}
             <NextWork
               slug={nextWork.slug}
-              image={nextWork.data.images_collection[0]}
+              image={nextWork.data.images_collection[0].url}
               title={nextWork.title}
               niche={nextWork.data.niche}
             />

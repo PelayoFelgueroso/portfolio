@@ -3,10 +3,10 @@ export interface Work {
   slug: string;
   title: string;
   data: {
-    featured_image: string;
-    featured_image_mobile: string;
-    featured_video: string;
-    images_collection: string[];
+    featured_image: CloudinaryImage;
+    featured_image_mobile: CloudinaryImage;
+    featured_video: CloudinaryImage;
+    images_collection: CloudinaryImage[];
     date: string;
     description: string;
     short_description: string;
@@ -16,4 +16,9 @@ export interface Work {
     niche: string;
     services: string[];
   };
+}
+
+export interface CloudinaryImage {
+  url: string;
+  public_id: string;
 }

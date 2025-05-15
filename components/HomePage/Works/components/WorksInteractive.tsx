@@ -91,7 +91,7 @@ export const WorksInteractive = ({ works }: Props) => {
           className=""
         >
           <Image
-            src={currentWork.data.featured_image}
+            src={currentWork.data.featured_image.url}
             width={1920}
             height={1080}
             alt={currentWork.title}
@@ -105,7 +105,7 @@ export const WorksInteractive = ({ works }: Props) => {
             muted
             playsInline
           >
-            <source src={currentWork.data.featured_video} type="video/mp4" />
+            <source src={currentWork.data.featured_video.url} type="video/mp4" />
             Tu navegador no soporta videos.
           </video>
           <Link

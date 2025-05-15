@@ -9,25 +9,25 @@ const projects = [
   id: 0,
   slug: "project-1",
   title: "Charo Nieto",
-  image: "http://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
+  image: "https://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
  },
  {
   id: 1,
   slug: "project-2",
   title: "Charo Nieto",
-  image: "http://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
+  image: "https://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
  },
  {
   id: 2,
   slug: "project-3",
   title: "Charo Nieto",
-  image: "http://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
+  image: "https://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
  },
  {
   id: 3,
   slug: "project-4",
   title: "Charo Nieto",
-  image: "http://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
+  image: "https://res.cloudinary.com/difdtgohp/image/upload/v1746811698/cdzd5yap6iynegnorlpq.webp",
  }
 ]
 

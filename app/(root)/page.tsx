@@ -5,7 +5,7 @@ import { Hero } from "@/components/HomePage/Hero/Hero";
 import { LogoPreoloader } from "@/components/HomePage/LogoPreloader/LogoPreloader";
 import { Resources } from "@/components/HomePage/Resources/ResourcesSection/Resources";
 import { SectionTitle } from "@/components/HomePage/SectionTitle/SectionTitle";
-import { Projects } from "@/components/HomePage/Works/WorksNew";
+import { Works } from "@/components/HomePage/Works/WorksNew";
 import {
   AnimatePresence,
   useInView,
@@ -85,7 +85,7 @@ export default function Home() {
 
       <Hero heroRef={heroRef} scrollHero={scrollHero} />
 
-      <Projects onInViewChange={setInViewWorks} worksRef={worksRef} />
+      <Works onInViewChange={setInViewWorks} worksRef={worksRef} />
 
       <Resources
         onInViewChange={setInViewResources}

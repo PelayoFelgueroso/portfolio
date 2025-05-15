@@ -1,5 +1,6 @@
 "use client";
 
+import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -17,29 +18,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Post, Category } from "@/schemas/edit-post.schema";
+import type { Post, Category, PostEditInput } from "@/schemas/edit-post.schema";
+import {
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
-interface Props {
+interface PostDetailsCardProps {
   post: Post;
-  title: string;
-  setTitle: (title: string) => void;
-  categoryId: string;
-  setCategoryId: (categoryId: string) => void;
   categories: Category[];
   selectedCategory: Category | null;
   formatDate: (dateString: string) => string;
 }
 
-export const PostDetailsCard = ({
+export function PostDetailsCard({
   post,
-  title,
-  setTitle,
-  categoryId,
-  setCategoryId,
   categories,
   selectedCategory,
   formatDate,
-}: Props) => {
+}: PostDetailsCardProps) {
+  const { control, setValue } = useFormContext<PostEditInput>();
+
   return (
     <Card className="bg-white border-[#e1e1e1]">
       <CardHeader>
@@ -69,52 +70,72 @@ export const PostDetailsCard = ({
         <Separator className="my-4" />
 
         <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="title" className="text100">
-              Title
-            </Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter post title"
-              className="border-[#e1e1e1]"
-            />
-          </div>
+          <FormField
+            control={control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <Label htmlFor="title" className="text100">
+                  Title
+                </Label>
+                <FormControl>
+                  <Input
+                    id="title"
+                    placeholder="Enter post title"
+                    className="border-[#e1e1e1]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {categories.length > 0 && (
-            <div className="grid gap-2">
-              <Label htmlFor="category" className="text100">
-                Category
-              </Label>
-              <Select
-                value={categoryId}
-                onValueChange={setCategoryId}
-                defaultValue={categoryId}
-              >
-                <SelectTrigger
-                  id="category"
-                  className="border-[#e1e1e1] bg-white"
-                >
-                  <SelectValue placeholder="Select a category">
-                    {selectedCategory
-                      ? selectedCategory.name
-                      : "Select a category"}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-white border-[#e1e1e1]">
-                  <SelectItem value="none">None</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <FormField
+              control={control}
+              name="categoryIds"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="category" className="text100">
+                    Category
+                  </Label>
+                  <Select
+                    value={field.value?.[0] || "none"}
+                    onValueChange={(value) => {
+                      setValue("categoryIds", value === "none" ? [] : [value], {
+                        shouldValidate: true,
+                      });
+                    }}
+                  >
+                    <FormControl>
+                      <SelectTrigger
+                        id="category"
+                        className="border-[#e1e1e1] bg-white"
+                      >
+                        <SelectValue placeholder="Select a category">
+                          {selectedCategory
+                            ? selectedCategory.name
+                            : "Select a category"}
+                        </SelectValue>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-white border-[#e1e1e1]">
+                      <SelectItem value="none">None</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
         </div>
       </CardContent>
     </Card>
   );
-};
+}

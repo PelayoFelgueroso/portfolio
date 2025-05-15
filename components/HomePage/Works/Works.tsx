@@ -11,12 +11,8 @@ interface Props {
 }
 
 export const Works = ({ onInViewChange, worksRef }: Props) => {
-  const { works, fetchWorks, loading } = useWorkStore() as UseWorkStoreType;
-
-  useEffect(() => {
-    fetchWorks();
-  }, []);
-
+  const { works, loading } = useWorkStore() as UseWorkStoreType;
+  
   const inView = useInView(worksRef, { once: false });
 
   useEffect(() => {

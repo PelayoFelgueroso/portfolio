@@ -35,7 +35,7 @@ export const ProjectsPageGrid = () => {
               }`}
             >
               <Image
-                src={project.data.featured_image}
+                src={project.data.featured_image.url}
                 width={1920}
                 height={1080}
                 alt={project.title}
@@ -53,9 +53,9 @@ export const ProjectsPageGrid = () => {
               <Card
                 onMouseEnter={() => handleHover(project)}
                 onMouseLeave={handleNoHover}
-                featured_image={project.data.featured_image}
-                featured_image_mobile={project.data.featured_image_mobile}
-                featured_video={project.data.featured_video}
+                featured_image={project.data.featured_image.url}
+                featured_image_mobile={project.data.featured_image_mobile.url}
+                featured_video={project.data.featured_video.url}
                 title={project.title}
               />
             </div>

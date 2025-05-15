@@ -16,13 +16,8 @@ interface Props {
 }
 
 export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
-  const { resources, loading, fetchResources } =
-    useResourceStore() as useResourceType;
+  const { resources, loading } = useResourceStore() as useResourceType;
   const [filteredResources, setFilteredResources] = useState(resources);
-
-  useEffect(() => {
-    fetchResources();
-  }, []);
 
   useEffect(() => {
     setFilteredResources(resources);

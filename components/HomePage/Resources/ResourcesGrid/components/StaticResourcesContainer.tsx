@@ -46,8 +46,8 @@ export const StaticResourcesContainer = ({
                 key={resource.id}
                 title={resource.title}
                 short_description={resource.data.short_description}
-                featured_image={resource.data.featured_image}
-                featured_video={resource.data.featured_video}
+                featured_image={resource.data.featured_image.url}
+                featured_video={resource.data.featured_video.url}
                 categories={resource.categories}
               />
             )

@@ -9,13 +9,11 @@ interface Props {
   worksRef: React.RefObject<HTMLDivElement | null>;
 }
 
-export const Projects = ({ onInViewChange, worksRef }: Props) => {
+export const Works = ({ onInViewChange, worksRef }: Props) => {
   const inView = useInView(worksRef, { once: false });
-  const { works, fetchWorks, loading } = useWorkStore() as UseWorkStoreType;
+  const { works, loading } = useWorkStore() as UseWorkStoreType;
 
-  useEffect(() => {
-    fetchWorks();
-  }, []);
+  console.log(works);
 
   useEffect(() => {
     onInViewChange(inView);
@@ -29,7 +27,7 @@ export const Projects = ({ onInViewChange, worksRef }: Props) => {
 
   return (
     <section
-      id="projects"
+      id="works"
       ref={worksRef}
       className="relative z-[200] w-full flex flex-col gap-[12vh] md:gap-[5vh] md:mb-[20svh] 2md:mb-0 2md:gap-0"
     >

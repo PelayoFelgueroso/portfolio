@@ -1,3 +1,4 @@
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
 import { Category } from "@prisma/client";
 
 export interface Resource {
@@ -8,8 +9,8 @@ export interface Resource {
   categoryIds: string[];
   categories: Category[];
   data: {
-    featured_image: string;
-    featured_video: string;
+    featured_image: CloudinaryImage;
+    featured_video: CloudinaryImage;
     short_description: string;
     description: string;
     difficulty: string;

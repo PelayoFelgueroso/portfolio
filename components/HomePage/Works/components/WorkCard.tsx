@@ -1,5 +1,6 @@
 import { BlurryHoverText } from "@/common/BlurryHoverText/BlurryHoverText";
 import { Magnetic } from "@/common/Magnetic/Magnetic";
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
@@ -8,7 +9,7 @@ interface Props {
   slug: string;
   title: string;
   niche: string;
-  images: string[];
+  images: CloudinaryImage[];
 }
 
 export const WorkCard = ({ index, slug, title, niche, images }: Props) => {
@@ -73,7 +74,7 @@ export const WorkCard = ({ index, slug, title, niche, images }: Props) => {
                 style={
                   currentImageIndex === index ? { opacity: 1 } : { opacity: 0 }
                 }
-                src={image}
+                src={image.url}
                 loading="lazy"
                 className={`${
                   index === 0 ? "relative w-auto" : "absolute w-full"

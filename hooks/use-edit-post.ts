@@ -1,13 +1,17 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import type {
   Post,
   Category,
   MetaField,
+  PostEditInput,
   MetaFieldValue,
 } from "@/schemas/edit-post.schema";
+import { PostEditSchema } from "@/schemas/edit-post.schema";
 import {
   fetchPost,
   fetchCategories,
@@ -17,7 +21,6 @@ import {
 
 export function usePostEdit(postTypeSlug: string, postId: string) {
   const router = useRouter();
-  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const [post, setPost] = useState<Post | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -25,18 +28,23 @@ export function usePostEdit(postTypeSlug: string, postId: string) {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
-
-  const [title, setTitle] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [metaValues, setMetaValues] = useState<Record<string, MetaFieldValue>>(
-    {}
-  );
   const [fileNames, setFileNames] = useState<Record<string, string>>({});
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Initialize react-hook-form
+  const form = useForm<PostEditInput>({
+    resolver: zodResolver(PostEditSchema),
+    defaultValues: {
+      title: "",
+      categoryIds: [],
+      data: {},
+    },
+    mode: "onChange",
+  });
 
   // Fetch post data, categories, and meta fields
   useEffect(() => {
@@ -53,8 +61,8 @@ export function usePostEdit(postTypeSlug: string, postId: string) {
         ]);
 
         setPost(postData);
-        setTitle(postData.title);
-        setCategoryId(postData.categoryIds?.[0] || "");
+        setCategories(categoriesData);
+        setMetaFields(metaData || []);
 
         // Find the selected category
         const category = categoriesData.find(
@@ -62,51 +70,58 @@ export function usePostEdit(postTypeSlug: string, postId: string) {
         );
         setSelectedCategory(category || null);
 
-        // Initialize meta values from post data or with defaults
-        const initialMetaValues: Record<string, MetaFieldValue> = {};
+        // Initialize form values
+        form.reset({
+          title: postData.title,
+          categoryIds: postData.categoryIds || [],
+          data: postData.data || {},
+        });
+
+        // Initialize file names for display
         const initialFileNames: Record<string, string> = {};
         const metaFieldsData = metaData || [];
 
         metaFieldsData.forEach((field: MetaField) => {
-          // Use existing meta value if available, otherwise set default value
-          if (postData.data && postData.data[field.name] !== undefined) {
-            initialMetaValues[field.name] = postData.data[field.name];
-
-            // If it's a file field, store the filename for display
-            if (field.type === "file" || field.type === "file[]") {
-              const rawValue = postData.data?.[field.name];
-
-              const fileName =
-                typeof rawValue === "string" && rawValue
-                  ? rawValue.split("/").pop() ?? ""
-                  : "";
-              initialFileNames[field.name] = fileName || "";
+          if (
+            field.type === "file" &&
+            postData.data &&
+            postData.data[field.name]
+          ) {
+            const fileData = postData.data[field.name];
+            if (
+              typeof fileData === "object" &&
+              fileData !== null &&
+              "url" in fileData
+            ) {
+              const fileName = fileData.url.split("/").pop() || "";
+              initialFileNames[field.name] = fileName;
             }
-          } else {
-            // Set default values based on field type
-            switch (field.type) {
-              case "boolean":
-                initialMetaValues[field.name] = false;
-                break;
-              case "number":
-                initialMetaValues[field.name] = 0;
-                break;
-              case "string[]":
-                initialMetaValues[field.name] = [];
-                break;
-              case "file[]":
-                initialMetaValues[field.name] = [];
-                break;
-              default:
-                initialMetaValues[field.name] = "";
+          } else if (
+            field.type === "file[]" &&
+            postData.data &&
+            Array.isArray(postData.data[field.name])
+          ) {
+            const fileArray = postData.data[field.name];
+            if (Array.isArray(fileArray) && fileArray.length > 0) {
+              const fileNames = fileArray
+                .map((file) => {
+                  if (
+                    typeof file === "object" &&
+                    file !== null &&
+                    "url" in file
+                  ) {
+                    return file.url.split("/").pop() || "";
+                  }
+                  return "";
+                })
+                .filter(Boolean)
+                .join(", ");
+              initialFileNames[field.name] = fileNames;
             }
           }
         });
 
-        setMetaValues(initialMetaValues);
         setFileNames(initialFileNames);
-        setCategories(categoriesData);
-        setMetaFields(metaFieldsData);
       } catch (err) {
         setError("Failed to load post data. Please try again.");
         console.error(err);
@@ -116,39 +131,33 @@ export function usePostEdit(postTypeSlug: string, postId: string) {
     };
 
     fetchData();
-  }, [postTypeSlug, postId]);
+  }, [postTypeSlug, postId, form]);
 
+  // Update selected category when categoryId changes
   useEffect(() => {
+    const categoryId = form.watch("categoryIds")?.[0] || "";
     const category = categories.find((c: Category) => c.id === categoryId);
     setSelectedCategory(category || null);
-  }, [categoryId, categories]);
+  }, [form.watch("categoryIds"), categories]);
 
   // Handle meta field changes
   const handleMetaChange = (fieldName: string, value: MetaFieldValue) => {
-    setMetaValues({
-      ...metaValues,
-      [fieldName]: value,
-    });
+    const currentData = form.getValues("data") || {};
+    form.setValue(
+      "data",
+      { ...currentData, [fieldName]: value },
+      { shouldValidate: true }
+    );
   };
 
   // Save post changes
-  const handleSave = async () => {
-    if (!title.trim()) {
-      setError("Post title is required");
-      return;
-    }
-
+  const onSubmit = async (data: PostEditInput) => {
     setIsSaving(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
-      await updatePost(postTypeSlug, postId, {
-        title,
-        categoryIds: categoryId ? [categoryId] : [],
-        data: metaValues,
-      });
-
+      await updatePost(postTypeSlug, postId, data);
       setSuccessMessage("Post updated successfully!");
 
       // Clear success message after 3 seconds
@@ -188,20 +197,15 @@ export function usePostEdit(postTypeSlug: string, postId: string) {
     categories,
     metaFields,
     selectedCategory,
-    title,
-    setTitle,
-    categoryId,
-    setCategoryId,
-    metaValues,
     fileNames,
     setFileNames,
     isLoading,
     isSaving,
     error,
     successMessage,
-    fileInputRefs,
+    form,
     handleMetaChange,
-    handleSave,
+    onSubmit,
     handleBack,
     navigateToContentEditor,
     formatDate,

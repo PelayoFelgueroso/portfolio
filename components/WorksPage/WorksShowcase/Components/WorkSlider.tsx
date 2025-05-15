@@ -1,12 +1,13 @@
 import { Work } from "@/models/work";
 import Image from "next/image";
 import { NextWork } from "./NextWork";
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
 
 interface Props {
   slug: string;
   title: string;
   niche: string;
-  images: string[];
+  images: CloudinaryImage[];
   nextWork: Work;
 }
 
@@ -18,7 +19,7 @@ export const WorkSlider = ({ slug, title, niche, images, nextWork }: Props) => {
           {images.map((img, index) => (
             <Image
               key={index}
-              src={img}
+              src={img.url}
               alt={title}
               width={1000}
               height={1000}
@@ -27,7 +28,7 @@ export const WorkSlider = ({ slug, title, niche, images, nextWork }: Props) => {
           ))}
           <NextWork
             slug={nextWork.slug}
-            image={nextWork.data.images_collection[0]}
+            image={nextWork.data.images_collection[0].url}
             title={nextWork.title}
           />
         </div>

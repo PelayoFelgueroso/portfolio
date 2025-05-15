@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-
+import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -10,28 +9,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { MetaField, MetaFieldValue } from "@/schemas/edit-post.schema";
+import type {
+  MetaField,
+  PostEditInput,
+  MetaFieldValue,
+} from "@/schemas/edit-post.schema";
 import { MetaFieldInput } from "./MetaFieldInput";
 
 interface MetaFieldsCardProps {
   metaFields: MetaField[];
-  metaValues: Record<string, MetaFieldValue>;
   fileNames: Record<string, string>;
   setFileNames: (fileNames: Record<string, string>) => void;
   handleMetaChange: (fieldName: string, value: MetaFieldValue) => void;
-  fileInputRefs: React.MutableRefObject<
-    Record<string, HTMLInputElement | null>
-  >;
 }
 
 export function MetaFieldsCard({
   metaFields,
-  metaValues,
   fileNames,
   setFileNames,
   handleMetaChange,
-  fileInputRefs,
 }: MetaFieldsCardProps) {
+  const { watch } = useFormContext<PostEditInput>();
+  const data = watch("data") || {};
+
   if (metaFields.length === 0) {
     return null;
   }
@@ -53,14 +53,8 @@ export function MetaFieldsCard({
               </Label>
               <MetaFieldInput
                 field={field}
-                value={metaValues[field.name]}
+                value={data[field.name]}
                 onChange={(value) => handleMetaChange(field.name, value)}
-                fileInputRef={
-                  fileInputRefs.current[field.name]
-                    ? { current: fileInputRefs.current[field.name] }
-                    : undefined
-                }
-                metaValues={metaValues}
                 fileNames={fileNames}
                 setFileNames={setFileNames}
               />

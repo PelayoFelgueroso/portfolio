@@ -26,7 +26,7 @@ export const ResourceArticle = ({ resource }: Props) => {
 
         <div className="relative w-full aspect-[16/9] mt-[30px] rounded-xl overflow-hidden">
           <Image
-            src={resource?.data.featured_image}
+            src={resource?.data.featured_image.url}
             width={1000}
             height={1000}
             alt=""
@@ -43,7 +43,7 @@ export const ResourceArticle = ({ resource }: Props) => {
               playsInline
               autoPlay
             >
-              <source src={resource.data.featured_video} type="video/mp4" />
+              <source src={resource.data.featured_video.url} type="video/mp4" />
               Tu navegador no soporta videos.
             </video>
           </div>

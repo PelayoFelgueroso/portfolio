@@ -7,21 +7,21 @@ import { FileUp, X, FileText, AlertCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { CloudinaryImage } from "@/models/work";
 
 interface FileItem {
-  id: string;
-  name: string;
   url: string;
-  size: number;
-  type: string;
-  status: "uploading" | "success" | "error";
-  progress: number;
+  size?: number;
+  type?: string;
+  status?: "uploading" | "success" | "error";
+  public_id: string;
+  progress?: number;
   error?: string;
 }
 
 interface MultiFileUploadProps {
-  value: string[];
-  onChange?: (urls: string[]) => void; // Added onChange to update parent component
+  value: CloudinaryImage[];
+  onChange?: (value: CloudinaryImage[]) => void; // Added onChange to update parent component
   onFileChange?: (files: FileList | null) => void;
   maxFiles?: number;
   maxSize?: number; // in MB
@@ -38,41 +38,26 @@ export function MultiFileUpload({
   accept = "*/*",
   uploadUrl,
 }: MultiFileUploadProps) {
-  const [files, setFiles] = useState<FileItem[]>([]);
+  const [files, setFiles] = useState<FileItem[]>(value || []);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Initialize files from value prop
-  useEffect(() => {
-    const initialFiles: FileItem[] = value.map((url) => {
-      const fileName = url.split("/").pop() || "file";
-      return {
-        id: Math.random().toString(36).substring(2, 9),
-        name: fileName,
-        url: url,
-        size: 0,
-        type: "",
-        status: "success",
-        progress: 100,
-      };
-    });
-
-    if (initialFiles.length > 0 && files.length === 0) {
-      setFiles(initialFiles);
-    }
-  }, [value, files.length]);
 
   // Update parent component when files change
   useEffect(() => {
     // Only include successfully uploaded files
-    const successUrls = files
-      .filter(file => file.status === "success" && file.url)
-      .map(file => file.url);
-    
-    if (onChange && JSON.stringify(successUrls) !== JSON.stringify(value)) {
-      onChange(successUrls);
+    const successFiles = files
+      .filter((file) => file.status === "success" && file.url && file.public_id)
+      .map((file) => {
+        return {
+          url: file.url,
+          public_id: file.public_id,
+        };
+      });
+
+    if (onChange && JSON.stringify(successFiles) !== JSON.stringify(value)) {
+      onChange(successFiles);
     }
-  }, [files, onChange, value]);
+  }, [files, onChange]);
 
   const handleFileSelect = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
@@ -98,9 +83,8 @@ export function MultiFileUpload({
 
       // Create a new file item
       const newFile: FileItem = {
-        id: Math.random().toString(36).substring(2, 9),
-        name: file.name,
         url: URL.createObjectURL(file),
+        public_id: "Loading",
         size: file.size,
         type: file.type,
         status: "uploading",
@@ -110,7 +94,7 @@ export function MultiFileUpload({
       setFiles((prevFiles) => [...prevFiles, newFile]);
 
       // Upload the file
-      uploadFile(file, newFile.id);
+      uploadFile(file, newFile.public_id);
     });
   };
 
@@ -130,17 +114,18 @@ export function MultiFileUpload({
         throw new Error(`Upload failed with status ${uploadRes.status}`);
       }
 
-      const { url } = await uploadRes.json();
+      const { url, public_id } = await uploadRes.json();
 
       // Update the file with the returned URL
       setFiles((prevFiles) =>
         prevFiles.map((f) =>
-          f.id === fileId
+          f.public_id === fileId
             ? {
                 ...f,
                 status: "success",
                 progress: 100,
                 url: url, // Use the URL returned from the server
+                public_id: public_id,
               }
             : f
         )
@@ -149,12 +134,13 @@ export function MultiFileUpload({
       console.error("Upload error:", err);
       setFiles((prevFiles) =>
         prevFiles.map((f) =>
-          f.id === fileId
+          f.public_id === fileId
             ? {
                 ...f,
                 status: "error",
                 progress: 100,
-                error: err instanceof Error ? err.message : "Failed to upload file",
+                error:
+                  err instanceof Error ? err.message : "Failed to upload file",
               }
             : f
         )
@@ -162,8 +148,26 @@ export function MultiFileUpload({
     }
   };
 
-  const removeFile = (fileId: string) => {
-    setFiles((prevFiles) => prevFiles.filter((f) => f.id !== fileId));
+  const removeFile = async (public_id: string) => {
+    try {
+      const deleteRes = await fetch(uploadUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ public_id }),
+      });
+
+      if (!deleteRes.ok) {
+        throw new Error("Failed to delete file");
+      }
+
+      setFiles((prevFiles) =>
+        prevFiles.filter((f) => f.public_id != public_id)
+      );
+    } catch (err) {
+      console.error("Failed to delete file. Please try again.", err);
+    }
   };
 
   const triggerFileInput = () => {
@@ -234,17 +238,15 @@ export function MultiFileUpload({
           <p className="text-sm font-medium">Files ({files.length})</p>
           <div className="border rounded-md divide-y divide-[#e1e1e1]">
             {files.map((file) => (
-              <div key={file.id} className="p-3 flex items-center gap-3">
+              <div key={file.public_id} className="p-3 flex items-center gap-3">
                 <div className="flex-shrink-0">
                   <FileText className="h-8 w-8 text-[#1f77ff]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start">
                     <div className="truncate pr-2">
-                      <p className="text-sm font-medium truncate">
-                        {file.url}
-                      </p>
-                      {file.size > 0 && (
+                      <p className="text-sm font-medium truncate">{file.url}</p>
+                      {file.size && file.size > 0 && (
                         <p className="text-xs text-[#949596]">
                           {formatFileSize(file.size)}
                         </p>
@@ -256,7 +258,7 @@ export function MultiFileUpload({
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        removeFile(file.id);
+                        removeFile(file.public_id);
                       }}
                       className="h-6 w-6 p-0 text-[#949596] hover:text-red-500"
                     >

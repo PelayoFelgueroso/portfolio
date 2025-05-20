@@ -1,6 +1,6 @@
 "use client";
 
-import { darkCave } from "@/public";
+import { portfolioImage } from "@/public";
 import { MotionValue, useTransform, motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -126,7 +126,7 @@ export const About = ({ ref, scrollHero }: Props) => {
                   </BlurryScrollText>
                 </p>
                 <div className="relative w-full">
-                  <Image src={darkCave} alt="" className="w-full" />
+                  <Image src={portfolioImage} alt="" className="w-full" />
                 </div>
               </div>
             </div>

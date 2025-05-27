@@ -5,12 +5,8 @@ import { Hero } from "@/components/HomePage/Hero/Hero";
 import { LogoPreoloader } from "@/components/HomePage/LogoPreloader/LogoPreloader";
 import { Resources } from "@/components/HomePage/Resources/ResourcesSection/Resources";
 import { SectionTitle } from "@/components/HomePage/SectionTitle/SectionTitle";
-import { Works } from "@/components/HomePage/Works/WorksNew";
-import {
-  AnimatePresence,
-  useInView,
-  useScroll,
-} from "framer-motion";
+import { Works } from "@/components/HomePage/Works/Works";
+import { AnimatePresence, useInView, useScroll } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
@@ -43,7 +39,6 @@ export default function Home() {
     target: heroRef,
     offset: ["50% end", "end 100%"],
   });
-
 
   const { scrollYProgress: scrollWorks } = useScroll({
     target: worksRef,

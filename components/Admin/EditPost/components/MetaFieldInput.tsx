@@ -218,7 +218,7 @@ export function MetaFieldInput({
             }
           }}
           maxFiles={10}
-          maxSize={1} // 1MB per file
+          maxSize={50} // 1MB per file
           accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
           uploadUrl="/api/upload"
         />

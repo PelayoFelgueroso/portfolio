@@ -1,9 +1,8 @@
-"use client";
-
-import { useEffect } from "react";
-import { AnimatePresence, useInView } from "framer-motion";
-import { WorksInteractive } from "./components/WorksInteractive";
+import { WorkCard } from "./components/WorkCard";
+import { Work } from "@/models/work";
 import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
+import { AnimatePresence, useInView } from "framer-motion";
+import { useEffect } from "react";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
@@ -11,27 +10,48 @@ interface Props {
 }
 
 export const Works = ({ onInViewChange, worksRef }: Props) => {
-  const { works, loading } = useWorkStore() as UseWorkStoreType;
-  
   const inView = useInView(worksRef, { once: false });
+  const { works, loading } = useWorkStore() as UseWorkStoreType;
 
   useEffect(() => {
     onInViewChange(inView);
   }, [inView, onInViewChange]);
 
+  const groupedWorks = works.reduce<Work[][]>((acc, work, index) => {
+    if (index % 2 === 0) acc.push([work]);
+    else acc[acc.length - 1].push(work);
+    return acc;
+  }, []);
+
   return (
     <section
       id="works"
-      className="relative mt-[200px] pb-[200px] lg:h-screen px-4"
+      ref={worksRef}
+      className="relative z-[200] w-full flex flex-col gap-[12vh] md:gap-[5vh] md:mb-[20svh] 2md:mb-0 2md:gap-0"
     >
-      <div
-        ref={worksRef}
-        className="grid-18 _1row items-center max-w-[1600px] md:mx-auto p-3 bg-whiteCustom shadow-2xl rounded-xl flex-col gap-6"
-      >
-        <AnimatePresence mode="wait">
-          {!loading && <WorksInteractive works={works} />}
-        </AnimatePresence>
-      </div>
+      <AnimatePresence mode="wait">
+        {!loading && (
+          <>
+            {groupedWorks.map((pair, index) => (
+              <div
+                key={index}
+                className="relative z-20 w-full flex flex-col justify-start items-start px-[clamp(16px,_1.4vw,_24px)] gap-[12svh] md:gap-0 md:flex-row"
+              >
+                {pair.map((project, index) => (
+                  <WorkCard
+                    key={project.id}
+                    index={index}
+                    slug={project.slug}
+                    title={project.title}
+                    niche={project.data.niche}
+                    images={project.data.images_collection}
+                  />
+                ))}
+              </div>
+            ))}
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

@@ -7,6 +7,7 @@ export interface Work {
     featured_image_mobile: CloudinaryImage;
     featured_video: CloudinaryImage;
     images_collection: CloudinaryImage[];
+    videos_collection: CloudinaryImage[];
     date: string;
     description: string;
     short_description: string;
@@ -14,7 +15,8 @@ export interface Work {
     live_demo: URL;
     techs: string[];
     niche: string;
-    services: string[];
+    services: string;
+    location: string;
   };
 }
 

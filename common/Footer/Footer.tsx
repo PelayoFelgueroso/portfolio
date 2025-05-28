@@ -166,10 +166,10 @@ export const Footer = () => {
                 <div className="contact_item">
                   <p className="text100 text-whiteCustom/80">Email</p>
                   <Link
-                    href="mailto:info@pelayofelgueroso.es"
+                    href="mailto:pfelguerosogalguera@gmail.com"
                     className="text-100"
                   >
-                    info@pelayofelgueroso.es
+                    pfelguerosogalguera@gmail.com
                   </Link>
                 </div>
 

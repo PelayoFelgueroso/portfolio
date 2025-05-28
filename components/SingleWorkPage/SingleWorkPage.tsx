@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkShowcase } from "./WorkShowcase/WorkShowcase";
+import { WorkShowcase } from "./components/WorkShowcase";
 import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
 
 interface Props {

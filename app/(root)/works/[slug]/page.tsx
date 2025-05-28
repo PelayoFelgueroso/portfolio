@@ -27,7 +27,7 @@ export default async function SingleWorkPage({ params }: Props) {
   const slug = (await params).slug;
 
   return (
-    <main className="relative top-0 z-[200] h-full overflow-hidden">
+    <main className="relative top-0 z-[200] w-full h-full overflow-hidden">
       <SingleWorkPageTemplate slug={slug} />
     </main>
   );

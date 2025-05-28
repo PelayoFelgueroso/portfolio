@@ -25,11 +25,7 @@ export const Footer = () => {
           <h3>
             <span>
               <div className={styles.imageContainer}>
-                <Image
-                  fill={true}
-                  alt={"image"}
-                  src={profilePicture}
-                />
+                <Image fill={true} alt={"image"} src={profilePicture} />
               </div>
               Let&apos;s work
             </span>
@@ -58,7 +54,7 @@ export const Footer = () => {
         </div>
         <div className={styles.nav}>
           <Rounded>
-            <p>info@pelayofelgueroso.es</p>
+            <p>pfelguerosogalguera@gmail.com</p>
           </Rounded>
           <Rounded>
             <p>+34 684 35 35 95</p>

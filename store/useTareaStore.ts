@@ -7,6 +7,7 @@ export interface useTareaType {
   categories: FormattedCategory[];
   fetchTareas: () => void;
   loading: boolean;
+  error: Error | null;
 }
 
 const useTareaStore = create((set) => ({
@@ -23,10 +24,13 @@ const useTareaStore = create((set) => ({
       });
       const dataTareas = await resTareas.json();
 
-      const resCategories = await fetch("/api/admin/tareas-conquer/categories", {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const resCategories = await fetch(
+        "/api/admin/tareas-conquer/categories",
+        {
+          cache: "force-cache",
+          next: { revalidate: 3600 },
+        }
+      );
       const dataCategories = await resCategories.json();
 
       set({

@@ -15,7 +15,7 @@ export const WorksGrid = ({ works }: Props) => {
             slug={work.slug}
             title={work.title}
             niche={work.data.niche}
-            image={work.data.featured_image}
+            image={work.data.images_collection[0]}
             bg={work.data.featured_image}
             date={work.data.date}
           />

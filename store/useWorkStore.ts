@@ -15,10 +15,9 @@ const useWorkStore = create((set) => ({
   fetchWorks: async () => {
     set({ loading: true });
     try {
-      const res = await fetch("/api/admin/works/posts", {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const res = await fetch(
+        "/api/admin/works/posts"
+      );
       const data = await res.json();
       set({ works: data, loading: false });
     } catch (error) {

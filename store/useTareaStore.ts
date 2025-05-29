@@ -18,18 +18,13 @@ const useTareaStore = create((set) => ({
   fetchTareas: async () => {
     set({ loading: true });
     try {
-      const resTareas = await fetch("/api/admin/tareas-conquer/posts", {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const resTareas = await fetch(
+        "/api/admin/tareas-conquer/posts"
+      );
       const dataTareas = await resTareas.json();
 
       const resCategories = await fetch(
-        "/api/admin/tareas-conquer/categories",
-        {
-          cache: "force-cache",
-          next: { revalidate: 3600 },
-        }
+        "/api/admin/tareas-conquer/categories"
       );
       const dataCategories = await resCategories.json();
 

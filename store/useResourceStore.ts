@@ -18,16 +18,14 @@ const useResourceStore = create((set) => ({
   fetchResources: async () => {
     set({ loading: true });
     try {
-      const resResources = await fetch("/api/admin/resources/posts", {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const resResources = await fetch(
+        "/api/admin/resources/posts"
+      );
       const dataResources = await resResources.json();
 
-      const resCategories = await fetch("/api/admin/resources/categories", {
-        cache: "force-cache",
-        next: { revalidate: 3600 },
-      });
+      const resCategories = await fetch(
+        "/api/admin/resources/categories"
+      );
       const dataCategories = await resCategories.json();
 
       set({

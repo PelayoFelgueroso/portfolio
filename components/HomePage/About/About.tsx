@@ -33,7 +33,7 @@ export const About = ({ ref, scrollHero }: Props) => {
       },
       {
         threshold: 0.1,
-      }
+      },
     );
 
     if (bioRef.current) {
@@ -45,7 +45,7 @@ export const About = ({ ref, scrollHero }: Props) => {
         observer.unobserve(bioRef.current);
       }
     };
-  }, []);
+  }, [setInViewBio]);
 
   const opacity = useTransform(scrollHero, [0.6, 1], [1, 0.08]);
 
@@ -147,7 +147,7 @@ export const About = ({ ref, scrollHero }: Props) => {
                   </p>
                   <p className="text100 text-darkBlueCustom/60">
                     <BlurryScrollShortText className="gap-x-1">
-                      May 2023 - Present
+                      May 2023 - 2025
                     </BlurryScrollShortText>
                   </p>
                 </div>
@@ -161,6 +161,39 @@ export const About = ({ ref, scrollHero }: Props) => {
                       specializing in corporate sites, e-commerce, and
                       portfolios. I combine versatility with technical expertise
                       to deliver seamless, user-centered solutions.
+                    </BlurryScrollText>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col pb-[clamp(24px,_2vw,_32px)] last:pb-0">
+                <div className="pb-[clamp(8px,_1vw,_12px)]">
+                  <p className="text100">
+                    <BlurryScrollShortText className="gap-x-1">
+                      Dxc Technology
+                    </BlurryScrollShortText>
+                  </p>
+                  <p className="text100 text-darkBlueCustom/60">
+                    <BlurryScrollShortText className="gap-x-1">
+                      2025 - Present
+                    </BlurryScrollShortText>
+                  </p>
+                </div>
+
+                <div className="">
+                  <p className="text100">
+                    <BlurryScrollText className="gap-x-1">
+                      Developed and maintained a corporate Design System,
+                      building reusable components with React and TypeScript
+                      while defining their APIs through technical discussions
+                      with the team. Reviewed Pull Requests to ensure
+                      visual consistency, accessibility, and code quality before
+                      merge. Built internal platform applications from Figma
+                      designs, following a collaborative workflow from design to
+                      development, code review, and deployment. Developed a
+                      real-time chatbot using WebSockets.Collaborated in technical
+                      decision-making within a fully remote, distributed, Agile
+                      team.
                     </BlurryScrollText>
                   </p>
                 </div>

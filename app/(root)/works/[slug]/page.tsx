@@ -15,7 +15,8 @@ export const generateMetadata = async ({
     pageTitle.charAt(0).toUpperCase() + pageTitle.slice(1);
 
   return {
-    title: `${pageTitleCapitalized} | Pelayo Felgueroso`,
+    title: `${pageTitleCapitalized} | Custom Web App by Pelayo Felgueroso`,
+    description: `Explore how I built ${pageTitleCapitalized}. A custom solution focused on scalability, performance, and user experience.`
   };
 };
 

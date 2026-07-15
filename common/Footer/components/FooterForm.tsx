@@ -3,11 +3,16 @@
 import { z } from "zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { InputBox } from "./components/InputBox";
 import { useReCaptcha } from "next-recaptcha-v3";
 import { AnimatePresence, motion } from "framer-motion";
+import { UpsendJS } from "upsend-js";
+
+const upsend = new UpsendJS(
+  process.env.NEXT_PUBLIC_UPSEND_API_KEY!,
+  process.env.NEXT_PUBLIC_UPSEND_SECRET_KEY!
+);
 
 const formSchema = z.object({
   name: z
@@ -78,18 +83,19 @@ export const FooterForm = () => {
       const result = await response.json();
 
       if (result.success) {
-        const templateParams = {
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          message: data.message,
-        };
-        const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
-        const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!;
-        const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
+        const templateId = process.env.NEXT_PUBLIC_UPSEND_TEMPLATE_ID!;
 
-        emailjs
-          .send(serviceId, templateId, templateParams, publicKey)
+        upsend
+          .send({
+            templateId,
+            to: "pfelguerosogalguera@gmail.com",
+            variables: {
+              name: data.name,
+              email: data.email,
+              phone: data.company,
+              message: data.message,
+            },
+          })
           .then(() => {
             setSubmitted(true);
           })

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, motion } from "framer-motion";
 import { FilterWrapper } from "../components/FilterWrapper/FilterWrapper";

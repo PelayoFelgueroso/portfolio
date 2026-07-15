@@ -5,8 +5,9 @@ import { ReactLenis } from "../lib/lenis";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 export const metadata: Metadata = {
-  title: "Pelayo Felgueroso | Portfolio",
-  description: "Portfolio de Pelayo Felgueroso",
+  title: "Pelayo Felgueroso | Frontend Developer",
+  description:
+    "Custom web development and scalable full stack apps using Astro, React, Next.js, and Node. Explore my work and see how I can help your company build better software.",
 };
 
 const inter = Inter({ subsets: ["latin"] });

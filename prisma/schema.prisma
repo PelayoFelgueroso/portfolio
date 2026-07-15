@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -15,31 +16,31 @@ model PostType {
   categories Category[]
   createdAt  DateTime   @default(now())
 
-  meta        Json?
+  meta Json?
 }
 
 model Category {
-  id         String     @id @default(cuid())
+  id         String   @id @default(cuid())
   name       String
   postTypeId String
-  postType   PostType   @relation(fields: [postTypeId], references: [id])
-  posts      Post[]     @relation("CategoryPosts")
+  postType   PostType @relation(fields: [postTypeId], references: [id])
+  posts      Post[]   @relation("CategoryPosts")
 }
 
 model Post {
-  id          String     @id @default(cuid())
-  slug        String     @unique
-  title       String
-  content     String
-  postTypeId  String
-  postType    PostType   @relation("PostTypePosts", fields: [postTypeId], references: [id])
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  content    String
+  postTypeId String
+  postType   PostType @relation("PostTypePosts", fields: [postTypeId], references: [id])
 
-  categoryIds String[]   // Si es múltiple (o usar tabla intermedia más adelante)
+  categoryIds String[] // Si es múltiple (o usar tabla intermedia más adelante)
 
-  categories  Category[] @relation("CategoryPosts")
+  categories Category[] @relation("CategoryPosts")
 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  data        Json
+  data Json
 }

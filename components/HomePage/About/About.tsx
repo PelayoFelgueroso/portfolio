@@ -36,13 +36,15 @@ export const About = ({ ref, scrollHero }: Props) => {
       },
     );
 
-    if (bioRef.current) {
-      observer.observe(bioRef.current);
+    const currentBioRef = bioRef.current;
+
+    if (currentBioRef) {
+      observer.observe(currentBioRef);
     }
 
     return () => {
-      if (bioRef.current) {
-        observer.unobserve(bioRef.current);
+      if (currentBioRef) {
+        observer.unobserve(currentBioRef);
       }
     };
   }, [setInViewBio]);

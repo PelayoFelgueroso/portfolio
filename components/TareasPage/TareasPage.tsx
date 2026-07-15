@@ -12,7 +12,7 @@ export const TareasPage = () => {
 
   useEffect(() => {
     fetchTareas();
-  }, []);
+  }, [fetchTareas]);
 
   useEffect(() => {
     setFilteredTareas(tareas);

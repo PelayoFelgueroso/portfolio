@@ -48,41 +48,41 @@ export function CodeBlock({
   const [copied, setCopied] = useState(false);
   const [codeString, setCodeString] = useState("");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extractTextFromReactNode = (node: any): string => {
-    if (typeof node === "string") return node;
-
-    if (Array.isArray(node)) {
-      return node.map(extractTextFromReactNode).join("");
-    }
-
-    if (node && typeof node === "object") {
-      if (className && /language-(\w+)/.test(className)) {
-        if (typeof node === "string") return node;
-      }
-
-      if (node.props && node.props.children) {
-        return extractTextFromReactNode(node.props.children);
-      }
-
-      if (node.code) return node.code;
-      if (node.value) return node.value;
-      if (node.content) return node.content;
-    }
-
-    if (node !== undefined && node !== null) {
-      try {
-        const str = node.toString();
-        if (str !== "[object Object]") return str;
-      } catch (e) {
-        console.error("Error converting to string:", e);
-      }
-    }
-
-    return "";
-  };
-
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const extractTextFromReactNode = (node: any): string => {
+      if (typeof node === "string") return node;
+
+      if (Array.isArray(node)) {
+        return node.map(extractTextFromReactNode).join("");
+      }
+
+      if (node && typeof node === "object") {
+        if (className && /language-(\w+)/.test(className)) {
+          if (typeof node === "string") return node;
+        }
+
+        if (node.props && node.props.children) {
+          return extractTextFromReactNode(node.props.children);
+        }
+
+        if (node.code) return node.code;
+        if (node.value) return node.value;
+        if (node.content) return node.content;
+      }
+
+      if (node !== undefined && node !== null) {
+        try {
+          const str = node.toString();
+          if (str !== "[object Object]") return str;
+        } catch (e) {
+          console.error("Error converting to string:", e);
+        }
+      }
+
+      return "";
+    };
+
     try {
       if (typeof children === "string") {
         setCodeString(children);

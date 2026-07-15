@@ -19,7 +19,8 @@ export default function Layout({
   useEffect(() => {
     fetchResources();
     fetchWorks();
-  }, []);
+  }, [fetchResources, fetchWorks]);
+  
   return (
     <>
       <CursorHoverProvider>

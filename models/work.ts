@@ -1,3 +1,5 @@
+import type { CloudinaryImage } from "@/schemas/edit-post.schema";
+
 export interface Work {
   id: string;
   slug: string;
@@ -18,9 +20,4 @@ export interface Work {
     services: string;
     location: string;
   };
-}
-
-export interface CloudinaryImage {
-  url: string;
-  public_id: string;
 }

@@ -10,6 +10,7 @@ import {
   type Category,
   type MetaField,
 } from "@/lib/schemas/post-schema";
+import { uploadFile } from "@/services/edit-post.service";
 
 interface UsePostFormProps {
   slug: string;
@@ -23,7 +24,7 @@ export function usePostForm({ slug, id }: UsePostFormProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [metaFields, setMetaFields] = useState<MetaField[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
+    null,
   );
   const [fileNames, setFileNames] = useState<Record<string, string>>({});
 
@@ -75,7 +76,7 @@ export function usePostForm({ slug, id }: UsePostFormProps) {
 
         // Find the selected category
         const category = categoriesData.find(
-          (c: Category) => c.id === postData.categoryIds?.[0]
+          (c: Category) => c.id === postData.categoryIds?.[0],
         );
         setSelectedCategory(category || null);
 
@@ -128,7 +129,7 @@ export function usePostForm({ slug, id }: UsePostFormProps) {
   // Handle file upload
   const handleFileChange = async (
     fieldName: string,
-    files: FileList | null
+    files: FileList | null,
   ) => {
     if (!files || files.length === 0) return;
 
@@ -139,27 +140,12 @@ export function usePostForm({ slug, id }: UsePostFormProps) {
     });
 
     try {
-      // Create a FormData object to send the file
-      const formData = new FormData();
-      formData.append("file", file);
+      const result = await uploadFile(file);
 
-      // Upload the file to your server
-      const uploadRes = await fetch(`/api/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      const { url } = await uploadRes.json();
-
-      // Update the form data with the file URL
       const currentData = watch("data") || {};
       setValue("data", {
         ...currentData,
-        [fieldName]: url,
+        [fieldName]: result.secure_url,
       });
     } catch (err) {
       setError("Failed to upload file. Please try again.");

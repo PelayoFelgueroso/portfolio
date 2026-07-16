@@ -10,8 +10,8 @@ import { MultiFileUpload } from "@/components/Admin/common/MutilFileUpload";
 import type {
   MetaField,
   MetaFieldValue,
-  CloudinaryImage,
 } from "@/schemas/edit-post.schema";
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
 import { uploadFile, deleteFile } from "@/services/edit-post.service";
 
 interface MetaFieldInputProps {
@@ -45,8 +45,8 @@ export function MetaFieldInput({
     });
 
     try {
-      const { url, public_id } = await uploadFile(file);
-      onChange({ url, public_id });
+      const { secure_url, public_id } = await uploadFile(file);
+      onChange({ url: secure_url, public_id });
     } catch (err) {
       console.error("Failed to upload file:", err);
     }
@@ -220,7 +220,6 @@ export function MetaFieldInput({
           maxFiles={10}
           maxSize={50} // 1MB per file
           accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-          uploadUrl="/api/upload"
         />
       );
     default:

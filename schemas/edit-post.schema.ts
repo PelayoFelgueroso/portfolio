@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Define the CloudinaryImage type
+// CloudinaryImage type definition
 export const CloudinaryImageSchema = z.object({
   url: z.string().url("Invalid image URL"),
   public_id: z.string().min(1, "Public ID is required"),
@@ -72,3 +72,9 @@ export const CategorySchema = z.object({
 });
 
 export type Category = z.infer<typeof CategorySchema>;
+
+export type UploadResult = {
+  secure_url: string;
+  public_id: string;
+  [key: string]: unknown;
+};

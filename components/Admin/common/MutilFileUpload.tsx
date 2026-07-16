@@ -7,7 +7,8 @@ import { FileUp, X, FileText, AlertCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { CloudinaryImage } from "@/models/work";
+import { CloudinaryImage } from "@/schemas/edit-post.schema";
+import { uploadToCloudinary, deleteFile } from "@/services/edit-post.service";
 
 interface FileItem {
   url: string;
@@ -26,7 +27,6 @@ interface MultiFileUploadProps {
   maxFiles?: number;
   maxSize?: number; // in MB
   accept?: string;
-  uploadUrl: string;
 }
 
 export function MultiFileUpload({
@@ -36,7 +36,6 @@ export function MultiFileUpload({
   maxFiles = 10,
   maxSize = 2, // 2MB default
   accept = "*/*",
-  uploadUrl,
 }: MultiFileUploadProps) {
   const [files, setFiles] = useState<FileItem[]>(value || []);
   const [isDragging, setIsDragging] = useState(false);
@@ -57,6 +56,8 @@ export function MultiFileUpload({
     if (onChange && JSON.stringify(successFiles) !== JSON.stringify(value)) {
       onChange(successFiles);
     }
+
+    console.log(files);
   }, [files, onChange, value]);
 
   const handleFileSelect = (selectedFiles: FileList | null) => {
@@ -73,18 +74,17 @@ export function MultiFileUpload({
       return;
     }
 
-    // Process each file
     Array.from(selectedFiles).forEach((file) => {
-      // Check file size
       if (file.size > maxSize * 1024 * 1024) {
         alert(`File ${file.name} exceeds the maximum size of ${maxSize}MB.`);
         return;
       }
 
-      // Create a new file item
+      const tempId = crypto.randomUUID(); // único por archivo
+
       const newFile: FileItem = {
         url: URL.createObjectURL(file),
-        public_id: "Loading",
+        public_id: tempId,
         size: file.size,
         type: file.type,
         status: "uploading",
@@ -93,48 +93,42 @@ export function MultiFileUpload({
 
       setFiles((prevFiles) => [...prevFiles, newFile]);
 
-      // Upload the file
-      uploadFile(file, newFile.public_id);
+      handleFileUpload(file, tempId);
     });
   };
 
-  const uploadFile = async (file: File, fileId: string) => {
-    // Create a FormData object to send the file - similar to single file upload
-    const formData = new FormData();
-    formData.append("file", file);
-
+  const handleFileUpload = async (file: File, tempId: string) => {
     try {
-      // Use fetch API instead of XMLHttpRequest for consistency with single file upload
-      const uploadRes = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
+      const uploadRes = await uploadToCloudinary(file, {
+        folder: "uploads",
+        resourceType: "auto",
+        onProgress: (percent) => {
+          setFiles((prevFiles) =>
+            prevFiles.map((f) =>
+              f.public_id === tempId ? { ...f, progress: percent } : f,
+            ),
+          );
+        },
       });
 
-      if (!uploadRes.ok) {
-        throw new Error(`Upload failed with status ${uploadRes.status}`);
-      }
-
-      const { url, public_id } = await uploadRes.json();
-
-      // Update the file with the returned URL
       setFiles((prevFiles) =>
         prevFiles.map((f) =>
-          f.public_id === fileId
+          f.public_id === tempId
             ? {
                 ...f,
                 status: "success",
                 progress: 100,
-                url: url, // Use the URL returned from the server
-                public_id: public_id,
+                url: uploadRes.secure_url,
+                public_id: uploadRes.public_id,
               }
-            : f
-        )
+            : f,
+        ),
       );
     } catch (err) {
       console.error("Upload error:", err);
       setFiles((prevFiles) =>
         prevFiles.map((f) =>
-          f.public_id === fileId
+          f.public_id === tempId
             ? {
                 ...f,
                 status: "error",
@@ -142,28 +136,18 @@ export function MultiFileUpload({
                 error:
                   err instanceof Error ? err.message : "Failed to upload file",
               }
-            : f
-        )
+            : f,
+        ),
       );
     }
   };
 
   const removeFile = async (public_id: string) => {
     try {
-      const deleteRes = await fetch(uploadUrl, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ public_id }),
-      });
-
-      if (!deleteRes.ok) {
-        throw new Error("Failed to delete file");
-      }
+      await deleteFile(public_id);
 
       setFiles((prevFiles) =>
-        prevFiles.filter((f) => f.public_id != public_id)
+        prevFiles.filter((f) => f.public_id !== public_id),
       );
     } catch (err) {
       console.error("Failed to delete file. Please try again.", err);
@@ -217,7 +201,7 @@ export function MultiFileUpload({
           "border-2 border-dashed rounded-md p-6 text-center cursor-pointer transition-colors",
           isDragging
             ? "border-[#1f77ff] bg-[#e6f0ff]"
-            : "border-[#e1e1e1] bg-[#f8f8f8] hover:bg-[#f0f0f0]"
+            : "border-[#e1e1e1] bg-[#f8f8f8] hover:bg-[#f0f0f0]",
         )}
         onClick={triggerFileInput}
         onDragOver={handleDragOver}

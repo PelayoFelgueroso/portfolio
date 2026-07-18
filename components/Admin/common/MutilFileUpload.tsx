@@ -56,8 +56,6 @@ export function MultiFileUpload({
     if (onChange && JSON.stringify(successFiles) !== JSON.stringify(value)) {
       onChange(successFiles);
     }
-
-    console.log(files);
   }, [files, onChange, value]);
 
   const handleFileSelect = (selectedFiles: FileList | null) => {

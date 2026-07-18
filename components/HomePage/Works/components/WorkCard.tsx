@@ -34,8 +34,6 @@ export const WorkCard = ({ index, slug, title, niche, images }: Props) => {
     return () => clearInterval(interval);
   }, [isHovered, images.length]);
 
-  console.log(title, niche, images)
-
   return (
     <div
       className={`w-full min-h-[auto] py-6 flex ${

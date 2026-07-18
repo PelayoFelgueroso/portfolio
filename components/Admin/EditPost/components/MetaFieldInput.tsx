@@ -12,7 +12,7 @@ import type {
   MetaFieldValue,
 } from "@/schemas/edit-post.schema";
 import { CloudinaryImage } from "@/schemas/edit-post.schema";
-import { uploadFile, deleteFile } from "@/services/edit-post.service";
+import { uploadToCloudinary, deleteFile } from "@/services/edit-post.service";
 
 interface MetaFieldInputProps {
   field: MetaField;
@@ -45,7 +45,10 @@ export function MetaFieldInput({
     });
 
     try {
-      const { secure_url, public_id } = await uploadFile(file);
+      const { secure_url, public_id } = await uploadToCloudinary(file, {
+        folder: "uploads",
+        resourceType: "auto",
+      });
       onChange({ url: secure_url, public_id });
     } catch (err) {
       console.error("Failed to upload file:", err);

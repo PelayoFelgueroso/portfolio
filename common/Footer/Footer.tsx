@@ -174,11 +174,11 @@ export const Footer = () => {
                 </div>
 
                 <div className="contact_item">
-                  <p className="text100 text-whiteCustom/80">Opening Hours</p>
+                  <p className="text100 text-whiteCustom/80">Working Hours</p>
                   <p className="text100 text-whiteCustom">
-                    Mon - Thu: 9:00 am – 7:00 pm
+                    Mon - Thu: 8:00 am – 5:00 pm
                     <br />
-                    Friday: 9:00 am – 5:00 pm
+                    Friday: 8:00 am – 3:00 pm
                   </p>
                 </div>
 

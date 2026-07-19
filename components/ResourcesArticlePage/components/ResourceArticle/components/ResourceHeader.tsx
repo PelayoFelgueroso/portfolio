@@ -98,7 +98,7 @@ export const ResourceHeader = ({
         <a
           href={github_link}
           target="_blank"
-          className="flex items-center gap-2 bg-blue-100 text-blue-500 p-[10px] font-semibold rounded-lg group"
+          className="flex items-center gap-2 bg-blue-100 text-blue-500 p-[10px] font-semibold rounded-lg group cursor-pointer"
         >
           Source Code
           <svg

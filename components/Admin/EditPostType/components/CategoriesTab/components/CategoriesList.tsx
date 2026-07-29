@@ -95,6 +95,6 @@ export const CategoriesList = React.memo<Props>(({
       </table>
     </div>
   );
-}));
+});
 
 CategoriesList.displayName = "CategoriesList";

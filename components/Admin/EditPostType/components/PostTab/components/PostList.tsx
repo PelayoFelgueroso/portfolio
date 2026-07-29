@@ -120,6 +120,6 @@ export const PostsList = React.memo<Props>(({
       </table>
     </div>
   );
-}));
+});
 
 PostsList.displayName = "PostsList";

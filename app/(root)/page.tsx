@@ -62,7 +62,7 @@ export default function Home() {
         resourcesRef={refs.resourcesRef}
       />
 
-      <About scrollHero={scrollValues.scrollHero} ref={refs.aboutRef} />
+      <About scrollHero={scrollValues.scrollHero} ref={refs.aboutRef as React.RefObject<HTMLDivElement | null>} />
     </main>
   );
 }

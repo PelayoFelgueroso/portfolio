@@ -388,6 +388,6 @@ export const MetaFieldInput = React.memo<MetaFieldInputProps>(({
         />
       );
   }
-}));
+});
 
 MetaFieldInput.displayName = "MetaFieldInput";

@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
-  worksRef: React.RefObject<HTMLDivElement | null>;
+  worksRef: React.RefObject<HTMLElement | null>;
 }
 
 export const Works = ({ onInViewChange, worksRef }: Props) => {

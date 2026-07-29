@@ -15,12 +15,13 @@ export function formatFieldError(error?: FieldError): string | undefined {
 /**
  * Establece múltiples errores en un formulario
  */
-export function setFormErrors<T extends Record<string, any>>(
+export function setFormErrors<T extends Record<string, unknown>>(
   setError: UseFormSetError<T>,
   errors: Partial<Record<keyof T, string>>
 ) {
   Object.entries(errors).forEach(([field, message]) => {
-    setError(field as keyof T, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setError(field as any, {
       type: "manual",
       message: message as string,
     });
@@ -127,8 +128,8 @@ export function validateFile(
 /**
  * Convierte FormData a objeto plano
  */
-export function formDataToObject(formData: FormData): Record<string, any> {
-  const obj: Record<string, any> = {};
+export function formDataToObject(formData: FormData): Record<string, unknown> {
+  const obj: Record<string, unknown> = {};
   
   formData.forEach((value, key) => {
     if (obj[key]) {
@@ -149,12 +150,13 @@ export function formDataToObject(formData: FormData): Record<string, any> {
 /**
  * Limpia valores vacíos de un objeto
  */
-export function removeEmptyValues<T extends Record<string, any>>(
+export function removeEmptyValues<T extends Record<string, unknown>>(
   obj: T
 ): Partial<T> {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     if (value !== null && value !== undefined && value !== "") {
-      acc[key as keyof T] = value;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (acc as any)[key] = value;
     }
     return acc;
   }, {} as Partial<T>);

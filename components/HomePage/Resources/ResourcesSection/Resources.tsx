@@ -12,7 +12,7 @@ import useResourceStore, { useResourceType } from "@/store/useResourceStore";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
-  resourcesRef: React.RefObject<HTMLDivElement | null>;
+  resourcesRef: React.RefObject<HTMLElement | null>;
 }
 
 export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
@@ -49,7 +49,7 @@ export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
         className="relative mt-[100px] 2md:mt-0 py-24 px-4 overflow-x-hidden"
       >
         <div
-          ref={resourcesRef}
+          ref={resourcesRef as React.RefObject<HTMLDivElement | null>}
           className="perspective-distant w-full xl:max-w-[1600px] mx-auto min-h-[75vh]"
         >
           <motion.div

@@ -88,6 +88,6 @@ export const AddCategoryForm = React.memo<AddCategoryFormProps>(({
       </CardContent>
     </Card>
   );
-}));
+});
 
 AddCategoryForm.displayName = "AddCategoryForm";

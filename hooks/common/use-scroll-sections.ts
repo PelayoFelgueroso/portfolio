@@ -12,11 +12,11 @@ interface ScrollSection {
 
 interface UseScrollSectionsReturn {
   refs: {
-    heroRef: React.RefObject<HTMLElement>;
-    worksRef: React.RefObject<HTMLElement>;
-    resourcesRef: React.RefObject<HTMLElement>;
-    aboutRef: React.RefObject<HTMLElement>;
-    contactRef: React.RefObject<HTMLElement>;
+    heroRef: React.RefObject<HTMLElement | null>;
+    worksRef: React.RefObject<HTMLElement | null>;
+    resourcesRef: React.RefObject<HTMLElement | null>;
+    aboutRef: React.RefObject<HTMLElement | null>;
+    contactRef: React.RefObject<HTMLElement | null>;
   };
   scrollValues: {
     scrollHero: MotionValue<number>;
@@ -32,11 +32,11 @@ interface UseScrollSectionsReturn {
  * Simplifica el código de la página principal
  */
 export function useScrollSections(): UseScrollSectionsReturn {
-  const heroRef = useRef(null);
-  const worksRef = useRef(null);
-  const resourcesRef = useRef(null);
-  const aboutRef = useRef(null);
-  const contactRef = useRef(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const worksRef = useRef<HTMLElement>(null);
+  const resourcesRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress: scrollHero } = useScroll({
     target: heroRef,

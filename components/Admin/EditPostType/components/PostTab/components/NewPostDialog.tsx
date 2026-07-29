@@ -140,6 +140,6 @@ export const NewPostDialog = React.memo<Props>(({
       </DialogContent>
     </Dialog>
   );
-}));
+});
 
 NewPostDialog.displayName = "NewPostDialog";

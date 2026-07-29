@@ -4,7 +4,7 @@
  */
 
 // ============= HOOKS COMUNES =============
-export * from "./hooks/common";
+export * from "../hooks/common";
 
 // ============= CONTEXTOS =============
 export {
@@ -15,12 +15,12 @@ export {
   CursorHoverProvider,
   useCursorHover,
   createBooleanContext,
-} from "./lib/context-factory";
+} from "./context-factory";
 
 // ============= UTILIDADES =============
-export { apiClient, buildAdminUrl, buildQueryUrl } from "./lib/api-client";
-export * from "./lib/form-utils";
-export * from "./lib/animation-variants";
+export { apiClient, buildAdminUrl, buildQueryUrl } from "./api-client";
+export * from "./form-utils";
+export * from "./animation-variants";
 
 // ============= SERVICIOS =============
 export {
@@ -29,4 +29,4 @@ export {
   metaFieldService,
   postTypeService,
   postContentService,
-} from "./services/api.service";
+} from "../services/api.service";

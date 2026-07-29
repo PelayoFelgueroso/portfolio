@@ -90,6 +90,6 @@ export const MetaFieldsCard = React.memo<MetaFieldsCardProps>(({
       </CardContent>
     </Card>
   );
-}));
+});
 
 MetaFieldsCard.displayName = "MetaFieldsCard";

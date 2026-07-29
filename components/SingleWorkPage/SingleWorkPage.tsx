@@ -38,7 +38,7 @@ export const SingleWorkPageTemplate = React.memo<Props>(({ slug }: Props) => {
         <div className="text-center px-4">
           <h2 className="text300 text-darkBlueCustom/90 mb-4">Project not found</h2>
           <p className="text100 text-[#393939] mb-6">
-            The project you're looking for doesn't exist or has been removed.
+            The project you&apos;re looking for doesn&apos;t exist or has been removed.
           </p>
           <a href="/works" className="text-[#1f77ff] hover:underline">
             ← Back to projects

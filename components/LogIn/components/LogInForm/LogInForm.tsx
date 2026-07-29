@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { z } from "zod";
 import { AlertCircle, LogIn } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";

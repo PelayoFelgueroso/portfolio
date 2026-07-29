@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-
+import React, { useCallback } from "react";
 import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +34,7 @@ interface Props {
   isSubmitting: boolean;
 }
 
-export const NewPostDialog = ({
+export const NewPostDialog = React.memo<Props>(({
   isOpen,
   onClose,
   onSubmit,
@@ -46,12 +45,18 @@ export const NewPostDialog = ({
   categories,
   isSubmitting,
 }: Props) => {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && title.trim() && !isSubmitting) {
       e.preventDefault();
       onSubmit(e as unknown as React.FormEvent);
     }
-  };
+  }, [title, isSubmitting, onSubmit]);
+
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onTitleChange(e.target.value);
+  }, [onTitleChange]);
+
+  const isDisabled = isSubmitting || !title.trim();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -72,7 +77,7 @@ export const NewPostDialog = ({
               <Input
                 id="title"
                 value={title}
-                onChange={(e) => onTitleChange(e.target.value)}
+                onChange={handleTitleChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter post title"
                 className="border-[#e1e1e1]"
@@ -116,7 +121,7 @@ export const NewPostDialog = ({
             <Button
               type="submit"
               className="bg-[#1f77ff] hover:bg-[#1f77ff]/90 text-white"
-              disabled={isSubmitting || !title.trim()}
+              disabled={isDisabled}
             >
               {isSubmitting ? (
                 <>
@@ -135,4 +140,6 @@ export const NewPostDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
+}));
+
+NewPostDialog.displayName = "NewPostDialog";

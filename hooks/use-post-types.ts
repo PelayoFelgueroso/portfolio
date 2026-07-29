@@ -1,7 +1,9 @@
 "use client";
 
-import { createPostType } from "@/services/post-types.service";
+import { fetchPostTypes, createPostType, deletePostType } from "@/services/post-types.service";
 import { useState, useEffect } from "react";
+import { useDeleteDialog } from "./common/use-delete-dialog";
+import { useAsyncState } from "./common/use-async-state";
 
 interface PostType {
   id: string;
@@ -11,95 +13,61 @@ interface PostType {
 
 export function usePostTypes() {
   const [postTypes, setPostTypes] = useState<PostType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  
+  // Usa los hooks genéricos
+  const deleteDialog = useDeleteDialog<string>();
+  const asyncState = useAsyncState();
 
-  const fetchPostTypes = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/admin/post-types");
-      if (!res.ok) {
-        throw new Error("Failed to fetch post types");
-      }
-      const data = await res.json();
+  // Carga inicial de post types
+  const loadPostTypes = async () => {
+    const data = await asyncState.executeAsync(
+      () => fetchPostTypes(),
+      { errorMessage: "Failed to load post types. Please try again." }
+    );
+    
+    if (data) {
       setPostTypes(data);
-    } catch (err) {
-      setError("Failed to load post types. Please try again.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPostTypes();
+    loadPostTypes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Agregar post type
   const addPostType = async (name: string) => {
-    setError(null);
+    asyncState.resetAll();
 
     try {
       const createdPostType = await createPostType(name);
       setPostTypes([...postTypes, createdPostType]);
       return createdPostType;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message || "Failed to create post type. Please try again.");
+      asyncState.setError(err.message || "Failed to create post type. Please try again.");
       console.error(err);
       throw err;
     }
   };
 
-  const handleDeleteClick = (id: string) => {
-    setDeleteId(id);
-    setShowDeleteDialog(true);
-  };
-
+  // Eliminar post type
   const handleDeleteConfirm = async () => {
-    if (!deleteId) return;
-
-    setIsDeleting(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`/api/admin/post-types?id=${deleteId}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to delete post type");
-      }
-
-      setPostTypes(postTypes.filter((pt) => pt.id !== deleteId));
-      setShowDeleteDialog(false);
-    } catch (err) {
-      setError("Failed to delete post type. Please try again.");
-      console.error(err);
-    } finally {
-      setIsDeleting(false);
-      setDeleteId(null);
-    }
-  };
-
-  const closeDeleteDialog = () => {
-    setShowDeleteDialog(false);
-    setDeleteId(null);
+    await deleteDialog.executeDelete(async (id) => {
+      await deletePostType(id);
+      setPostTypes(postTypes.filter((pt) => pt.id !== id));
+    });
   };
 
   return {
     postTypes,
-    isLoading,
-    error,
-    deleteId,
-    isDeleting,
-    showDeleteDialog,
+    isLoading: asyncState.isLoading,
+    error: asyncState.error,
+    deleteId: deleteDialog.deleteId,
+    isDeleting: deleteDialog.isDeleting,
+    showDeleteDialog: deleteDialog.showDeleteDialog,
     addPostType,
-    handleDeleteClick,
+    handleDeleteClick: deleteDialog.handleDeleteClick,
     handleDeleteConfirm,
-    closeDeleteDialog,
+    closeDeleteDialog: deleteDialog.closeDeleteDialog,
   };
 }

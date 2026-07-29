@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useCallback } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +36,7 @@ interface Props {
   title?: string;
 }
 
-export const DeleteDialog = ({
+export const DeleteDialog = React.memo(({
   isOpen,
   isDeleting,
   onClose,
@@ -51,20 +52,22 @@ export const DeleteDialog = ({
     mode: "onChange",
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     await onConfirm();
     form.reset();
-  };
+  }, [onConfirm, form]);
+
+  const handleOpenChange = useCallback((open: boolean) => {
+    if (!open) {
+      onClose();
+      form.reset();
+    }
+  }, [onClose, form]);
 
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={(open) => {
-        if (!open) {
-          onClose();
-          form.reset();
-        }
-      }}
+      onOpenChange={handleOpenChange}
     >
       <DialogContent className="sm:max-w-md bg-white border-0">
         <DialogHeader>
@@ -136,4 +139,6 @@ export const DeleteDialog = ({
       </DialogContent>
     </Dialog>
   );
-};
+});
+
+DeleteDialog.displayName = "DeleteDialog";

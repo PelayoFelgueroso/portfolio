@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -18,7 +19,7 @@ interface CategoriesTabProps {
   postTypeSlug: string;
 }
 
-export function CategoriesTab({ postTypeSlug }: CategoriesTabProps) {
+export const CategoriesTab = React.memo<CategoriesTabProps>(({ postTypeSlug }: CategoriesTabProps) => {
   const {
     categories,
     isLoading,
@@ -76,4 +77,6 @@ export function CategoriesTab({ postTypeSlug }: CategoriesTabProps) {
       />
     </div>
   );
-}
+});
+
+CategoriesTab.displayName = "CategoriesTab";

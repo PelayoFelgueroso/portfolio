@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import {
   Card,
@@ -20,7 +20,7 @@ export const LogInAdmin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (data: { email: string; password: string }) => {
+  const handleLogin = useCallback(async (data: { email: string; password: string }) => {
     setIsLoading(true);
     setError(null);
 
@@ -37,7 +37,7 @@ export const LogInAdmin = () => {
     } else {
       router.push("/admin");
     }
-  };
+  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f4f4f4] p-4">

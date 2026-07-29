@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ export function AddPostTypeForm({ onAddPostType }: AddPostTypeFormProps) {
   const [newPostType, setNewPostType] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPostType.trim()) return;
 
@@ -41,7 +41,11 @@ export function AddPostTypeForm({ onAddPostType }: AddPostTypeFormProps) {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [newPostType, onAddPostType]);
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPostType(e.target.value);
+  }, []);
 
   return (
     <Card className="bg-white border-[#e1e1e1]">
@@ -64,7 +68,7 @@ export function AddPostTypeForm({ onAddPostType }: AddPostTypeFormProps) {
               id="new-post-type"
               type="text"
               value={newPostType}
-              onChange={(e) => setNewPostType(e.target.value)}
+              onChange={handleInputChange}
               placeholder="e.g. Blog, Products, Services"
               className="border-[#e1e1e1] focus:border-[#1f77ff] focus:ring-[#1f77ff]"
               disabled={isSubmitting}

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import {
@@ -23,12 +24,41 @@ interface MetaFieldsCardProps {
   handleMetaChange: (fieldName: string, value: MetaFieldValue) => void;
 }
 
-export function MetaFieldsCard({
+// Componente individual para cada campo
+const MetaFieldRow = React.memo<{
+  field: MetaField;
+  value: MetaFieldValue;
+  fileNames: Record<string, string>;
+  setFileNames: (fileNames: Record<string, string>) => void;
+  onMetaChange: (fieldName: string, value: MetaFieldValue) => void;
+}>(({ field, value, fileNames, setFileNames, onMetaChange }) => {
+  const handleChange = useCallback((newValue: MetaFieldValue) => {
+    onMetaChange(field.name, newValue);
+  }, [field.name, onMetaChange]);
+
+  return (
+    <div className="grid gap-2">
+      <Label htmlFor={`meta-${field.name}`} className="text100">
+        {field.label}
+      </Label>
+      <MetaFieldInput
+        field={field}
+        value={value}
+        onChange={handleChange}
+        fileNames={fileNames}
+        setFileNames={setFileNames}
+      />
+    </div>
+  );
+});
+MetaFieldRow.displayName = "MetaFieldRow";
+
+export const MetaFieldsCard = React.memo<MetaFieldsCardProps>(({
   metaFields,
   fileNames,
   setFileNames,
   handleMetaChange,
-}: MetaFieldsCardProps) {
+}: MetaFieldsCardProps) => {
   const { watch } = useFormContext<PostEditInput>();
   const data = watch("data") || {};
 
@@ -47,21 +77,19 @@ export function MetaFieldsCard({
       <CardContent>
         <div className="grid gap-6">
           {metaFields.map((field) => (
-            <div key={field.name} className="grid gap-2">
-              <Label htmlFor={`meta-${field.name}`} className="text100">
-                {field.label}
-              </Label>
-              <MetaFieldInput
-                field={field}
-                value={data[field.name]}
-                onChange={(value) => handleMetaChange(field.name, value)}
-                fileNames={fileNames}
-                setFileNames={setFileNames}
-              />
-            </div>
+            <MetaFieldRow
+              key={field.name}
+              field={field}
+              value={data[field.name]}
+              fileNames={fileNames}
+              setFileNames={setFileNames}
+              onMetaChange={handleMetaChange}
+            />
           ))}
         </div>
       </CardContent>
     </Card>
   );
-}
+}));
+
+MetaFieldsCard.displayName = "MetaFieldsCard";

@@ -2,7 +2,7 @@ import { WorkCard } from "./components/WorkCard";
 import { Work } from "@/models/work";
 import useWorkStore, { UseWorkStoreType } from "@/store/useWorkStore";
 import { AnimatePresence, useInView } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 interface Props {
   onInViewChange: (visible: boolean) => void;
@@ -17,11 +17,13 @@ export const Works = ({ onInViewChange, worksRef }: Props) => {
     onInViewChange(inView);
   }, [inView, onInViewChange]);
 
-  const groupedWorks = works.reduce<Work[][]>((acc, work, index) => {
-    if (index % 2 === 0) acc.push([work]);
-    else acc[acc.length - 1].push(work);
-    return acc;
-  }, []);
+  const groupedWorks = useMemo(() => {
+    return works.reduce<Work[][]>((acc, work, index) => {
+      if (index % 2 === 0) acc.push([work]);
+      else acc[acc.length - 1].push(work);
+      return acc;
+    }, []);
+  }, [works]);
 
   return (
     <section

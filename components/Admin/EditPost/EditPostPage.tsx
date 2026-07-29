@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { FormProvider } from "react-hook-form";
 import { usePostEdit } from "@/hooks/use-edit-post";
 import { ActionButtons } from "./components/ActionButtons";
@@ -14,7 +15,7 @@ interface Props {
   id: string;
 }
 
-export default function EditPostPage({ slug, id }: Props) {
+const EditPostPage = React.memo(({ slug, id }: Props) => {
   const {
     post,
     categories,
@@ -84,4 +85,8 @@ export default function EditPostPage({ slug, id }: Props) {
       </FormProvider>
     </div>
   );
-}
+});
+
+EditPostPage.displayName = "EditPostPage";
+
+export default EditPostPage;

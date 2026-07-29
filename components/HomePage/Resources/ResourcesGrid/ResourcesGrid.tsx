@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, motion } from "framer-motion";
 import { FilterWrapper } from "../components/FilterWrapper/FilterWrapper";
 import { StaticResourcesContainer } from "./components/StaticResourcesContainer";
 import useResourceStore, { useResourceType } from "@/store/useResourceStore";
+import { LoadingSpinner } from "@/components/common/LoadingSpinner/LoadingSpinner";
 
-export const ResourcesGrid = () => {
-  const { resources, loading } = useResourceStore() as useResourceType;
+export const ResourcesGrid = React.memo(() => {
+  const { resources, loading, error } = useResourceStore() as useResourceType;
 
   const [filteredResources, setFilteredResources] = useState(resources);
   const container = useRef(null);
@@ -18,12 +19,27 @@ export const ResourcesGrid = () => {
 
   const inView = useInView(container);
 
+  if (loading) {
+    return <LoadingSpinner message="Loading resources..." fullScreen={true} />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-center px-4">
+          <h2 className="text300 text-darkBlueCustom/90 mb-4">Error loading resources</h2>
+          <p className="text100 text-[#393939]">Please try refreshing the page</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <section
         ref={container}
         id="resources"
-        className="relative pb-[200px] px-4"
+        className="relative px-4"
       >
         <div className="perspective-distant w-full xl:max-w-[1600px] mx-auto min-h-[75vh]">
           <motion.div
@@ -33,7 +49,7 @@ export const ResourcesGrid = () => {
             }}
           >
             <AnimatePresence mode="wait">
-              {!loading && (
+              {!loading && resources && (
                 <StaticResourcesContainer
                   resources={resources}
                   filteredResources={filteredResources}
@@ -51,4 +67,6 @@ export const ResourcesGrid = () => {
       />
     </>
   );
-};
+});
+
+ResourcesGrid.displayName = "ResourcesGrid";

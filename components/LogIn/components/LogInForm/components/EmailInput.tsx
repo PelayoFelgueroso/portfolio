@@ -1,5 +1,6 @@
 "use client"
 
+import React, { useCallback } from "react"
 import { Mail } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,7 +11,10 @@ type EmailInputProps = {
   error?: string
 }
 
-export function EmailInput({ value, onChange, error }: EmailInputProps) {
+export const EmailInput = React.memo(({ value, onChange, error }: EmailInputProps) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+  }, [onChange]);
   return (
     <div className="space-y-2">
       <Label htmlFor="email" className="text-[#393939]">
@@ -24,7 +28,7 @@ export function EmailInput({ value, onChange, error }: EmailInputProps) {
           type="email"
           id="email"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           required
           placeholder="name@example.com"
           className={`pl-10 border-[#e1e1e1] focus:border-[#1f77ff] focus:ring-[#1f77ff] ${
@@ -35,4 +39,6 @@ export function EmailInput({ value, onChange, error }: EmailInputProps) {
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   )
-}
+});
+
+EmailInput.displayName = "EmailInput";

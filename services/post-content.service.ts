@@ -1,33 +1,32 @@
 import type { Post } from "@/schemas/post-content.schema";
+import { apiClient, buildAdminUrl } from "@/lib/api-client";
 
 export async function fetchPost(
   postTypeSlug: string,
   postId: string
 ): Promise<Post> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/posts/${postId}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch post");
-  }
-
-  return res.json();
+  return apiClient.get<Post>(buildAdminUrl(postTypeSlug, "posts", postId));
 }
 
 export async function fetchPostContent(
   postTypeSlug: string,
   postId: string
 ): Promise<string> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/posts/${postId}/content`);
+  try {
+    const res = await fetch(`/api/admin/${postTypeSlug}/posts/${postId}/content`);
 
-  if (res.status === 404) {
-    return "";
+    if (res.status === 404) {
+      return "";
+    }
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch content");
+    }
+
+    return res.text();
+  } catch (err) {
+    throw err;
   }
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch content");
-  }
-
-  return res.text();
 }
 
 export async function savePostContent(

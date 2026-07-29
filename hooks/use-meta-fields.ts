@@ -3,37 +3,33 @@
 import { useState, useEffect } from "react"
 import { type MetaField, MetaFieldsSchema } from "@/schemas/meta-field.schema"
 import { fetchMetaFields, saveMetaFields } from "@/services/meta-field.service"
+import { useDeleteDialog } from "./common/use-delete-dialog"
+import { useAsyncState } from "./common/use-async-state"
 
 export function useMetaFields(postTypeSlug: string) {
   const [meta, setMeta] = useState<MetaField[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [newFieldIndex, setNewFieldIndex] = useState<number | null>(null)
 
-  // Estados para el diálogo de eliminación
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  // Usa los hooks genéricos
+  const deleteDialog = useDeleteDialog<number>();
+  const asyncState = useAsyncState();
+
+  // Carga inicial de meta fields
+  const loadMetaFields = async () => {
+    const data = await asyncState.executeAsync(
+      () => fetchMetaFields(postTypeSlug),
+      { errorMessage: "Failed to load meta fields. Please try again." }
+    );
+    
+    if (data) {
+      setMeta(data || []);
+    }
+  };
 
   useEffect(() => {
-    const loadMetaFields = async () => {
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        const data = await fetchMetaFields(postTypeSlug)
-        setMeta(data || [])
-      } catch (err) {
-        setError("Failed to load meta fields. Please try again.")
-        console.error(err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadMetaFields()
+    loadMetaFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postTypeSlug])
 
   const addField = () => {
@@ -49,41 +45,21 @@ export function useMetaFields(postTypeSlug: string) {
     setMeta(updatedMeta)
   }
 
-  const handleDeleteClick = (index: number) => {
-    setDeleteIndex(index)
-    setShowDeleteDialog(true)
-  }
-
+  // Eliminar meta field
   const confirmDelete = async (): Promise<void> => {
-    if (deleteIndex === null) return
-
-    setIsDeleting(true)
-    try {
-      const updatedMeta = meta.filter((_, i) => i !== deleteIndex)
-      setMeta(updatedMeta)
-      setShowDeleteDialog(false)
-    } catch (err) {
-      setError("Failed to delete meta field.")
-      console.error(err)
-    } finally {
-      setIsDeleting(false)
-      setDeleteIndex(null)
-    }
-  }
-
-  const closeDeleteDialog = () => {
-    setDeleteIndex(null)
-    setShowDeleteDialog(false)
-  }
+    await deleteDialog.executeDelete(async (index) => {
+      const updatedMeta = meta.filter((_, i) => i !== index);
+      setMeta(updatedMeta);
+    });
+  };
 
   const saveFields = async () => {
-    setError(null)
-    setSuccessMessage(null)
+    asyncState.resetAll();
 
     // Validate with Zod
     const result = MetaFieldsSchema.safeParse(meta)
     if (!result.success) {
-      setError("Please fix the validation errors before saving")
+      asyncState.setError("Please fix the validation errors before saving")
       return
     }
 
@@ -91,13 +67,9 @@ export function useMetaFields(postTypeSlug: string) {
 
     try {
       await saveMetaFields(postTypeSlug, meta)
-      setSuccessMessage("Meta fields saved successfully!")
-
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 3000)
+      asyncState.setSuccess("Meta fields saved successfully!")
     } catch (err) {
-      setError("Failed to save meta fields. Please try again.")
+      asyncState.setError("Failed to save meta fields. Please try again.")
       console.error(err)
     } finally {
       setIsSaving(false)
@@ -111,18 +83,18 @@ export function useMetaFields(postTypeSlug: string) {
 
   return {
     meta,
-    isLoading,
+    isLoading: asyncState.isLoading,
     isSaving,
-    isDeleting,
-    error,
-    successMessage,
-    showDeleteDialog,
+    isDeleting: deleteDialog.isDeleting,
+    error: asyncState.error,
+    successMessage: asyncState.successMessage,
+    showDeleteDialog: deleteDialog.showDeleteDialog,
     newFieldIndex,
     addField,
     updateField,
-    handleDeleteClick,
+    handleDeleteClick: deleteDialog.handleDeleteClick,
     confirmDelete,
-    closeDeleteDialog,
+    closeDeleteDialog: deleteDialog.closeDeleteDialog,
     saveFields,
     clearNewFieldIndex,
   }

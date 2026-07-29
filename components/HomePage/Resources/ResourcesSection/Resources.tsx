@@ -46,7 +46,7 @@ export const Resources = ({ onInViewChange, resourcesRef }: Props) => {
     <>
       <section
         id="resources"
-        className="relative mt-[100px] 2md:mt-0 pb-[200px] px-4 overflow-x-hidden"
+        className="relative mt-[100px] 2md:mt-0 py-24 px-4 overflow-x-hidden"
       >
         <div
           ref={resourcesRef}

@@ -11,17 +11,13 @@ import {
   createPost,
   deletePost,
 } from "@/services/post.services";
+import { useDeleteDialog } from "./common/use-delete-dialog";
+import { useFetchParallel } from "./common/use-fetch";
 
 export function useCreatePost(postTypeSlug: string) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Estados para el diálogo de eliminación
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   // Estados para el diálogo de creación
   const [showNewPostDialog, setShowNewPostDialog] = useState(false);
@@ -29,29 +25,20 @@ export function useCreatePost(postTypeSlug: string) {
   const [categoryId, setCategoryId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const loadData = async () => {
-    setIsLoading(true);
-    setError(null);
+  // Usa los hooks genéricos
+  const deleteDialog = useDeleteDialog<string>();
 
-    try {
-      const [postsData, categoriesData] = await Promise.all([
-        fetchPosts(postTypeSlug),
-        fetchCategories(postTypeSlug),
-      ]);
+  // Carga paralela de posts y categorías
+  const { data, isLoading } = useFetchParallel({
+    posts: () => fetchPosts(postTypeSlug),
+    categories: () => fetchCategories(postTypeSlug),
+  });
 
-      setPosts(postsData);
-      setCategories(categoriesData);
-    } catch (err) {
-      setError("Failed to load data. Please try again.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Actualiza los estados cuando los datos se cargan
   useEffect(() => {
-    loadData();
-  }, [postTypeSlug]);
+    if (data.posts) setPosts(data.posts);
+    if (data.categories) setCategories(data.categories);
+  }, [data]);
 
   const handleCreatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -82,31 +69,12 @@ export function useCreatePost(postTypeSlug: string) {
     setShowNewPostDialog(false);
   };
 
-  const handleDeleteClick = (id: string) => {
-    setDeleteId(id);
-    setShowDeleteDialog(true);
-  };
-
+  // Eliminar post
   const confirmDelete = async (): Promise<void> => {
-    if (!deleteId) return;
-
-    setIsDeleting(true);
-    try {
-      await deletePost(postTypeSlug, deleteId);
-      setPosts(posts.filter((post) => post.id !== deleteId));
-      setShowDeleteDialog(false);
-    } catch (err) {
-      setError("Failed to delete post. Please try again.");
-      console.error(err);
-    } finally {
-      setIsDeleting(false);
-      setDeleteId(null);
-    }
-  };
-
-  const closeDeleteDialog = () => {
-    setDeleteId(null);
-    setShowDeleteDialog(false);
+    await deleteDialog.executeDelete(async (id) => {
+      await deletePost(postTypeSlug, id);
+      setPosts(posts.filter((post) => post.id !== id));
+    });
   };
 
   return {
@@ -114,8 +82,8 @@ export function useCreatePost(postTypeSlug: string) {
     categories,
     isLoading,
     error,
-    showDeleteDialog,
-    isDeleting,
+    showDeleteDialog: deleteDialog.showDeleteDialog,
+    isDeleting: deleteDialog.isDeleting,
     showNewPostDialog,
     newPostTitle,
     categoryId,
@@ -124,8 +92,8 @@ export function useCreatePost(postTypeSlug: string) {
     setNewPostTitle,
     setCategoryId,
     handleCreatePost,
-    handleDeleteClick,
+    handleDeleteClick: deleteDialog.handleDeleteClick,
     confirmDelete,
-    closeDeleteDialog,
+    closeDeleteDialog: deleteDialog.closeDeleteDialog,
   };
 }

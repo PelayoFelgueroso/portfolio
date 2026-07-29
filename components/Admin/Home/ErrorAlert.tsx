@@ -1,3 +1,4 @@
+import React from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -5,7 +6,7 @@ interface ErrorAlertProps {
   error: string | null;
 }
 
-export function ErrorAlert({ error }: ErrorAlertProps) {
+export const ErrorAlert = React.memo(({ error }: ErrorAlertProps) => {
   if (!error) return null;
 
   return (
@@ -18,4 +19,6 @@ export function ErrorAlert({ error }: ErrorAlertProps) {
       <AlertDescription>{error}</AlertDescription>
     </Alert>
   );
-}
+});
+
+ErrorAlert.displayName = "ErrorAlert";

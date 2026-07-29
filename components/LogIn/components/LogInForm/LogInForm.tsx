@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { z } from "zod";
 import { AlertCircle, LogIn } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -29,7 +29,7 @@ export const LoginForm = ({ onSubmit, error, isLoading }: LoginFormProps) => {
     password?: string;
   }>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
     const result = loginSchema.safeParse({ email, password });
@@ -46,7 +46,7 @@ export const LoginForm = ({ onSubmit, error, isLoading }: LoginFormProps) => {
     setValidationErrors({});
 
     await onSubmit({ email, password });
-  };
+  }, [email, password, onSubmit]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

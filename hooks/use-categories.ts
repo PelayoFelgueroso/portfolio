@@ -7,48 +7,47 @@ import {
   createCategory,
   deleteCategory,
 } from "@/services/category.service";
+import { useDeleteDialog } from "./common/use-delete-dialog";
+import { useAsyncState } from "./common/use-async-state";
 
 export function useCategories(postTypeSlug: string) {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  // Usa los hooks genéricos en lugar de duplicar la lógica
+  const deleteDialog = useDeleteDialog<string>();
+  const asyncState = useAsyncState();
+
+  // Carga inicial de categorías
   const loadCategories = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await fetchCategories(postTypeSlug);
+    const data = await asyncState.executeAsync(
+      () => fetchCategories(postTypeSlug),
+      { errorMessage: "Failed to load categories. Please try again." }
+    );
+    
+    if (data) {
       setCategories(data);
-    } catch (err) {
-      setError("Failed to load categories. Please try again.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     loadCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postTypeSlug]);
 
+  // Agregar categoría
   const addCategory = async (name: string): Promise<boolean> => {
-    if (!name.trim()) return false; // Retorna false en lugar de undefined
+    if (!name.trim()) return false;
 
     setIsSubmitting(true);
-    setError(null);
+    asyncState.resetAll();
 
     try {
       const newCategory = await createCategory(postTypeSlug, { name });
       setCategories([...categories, newCategory]);
       return true;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message || "Failed to create category. Please try again.");
+      asyncState.setError(err.message || "Failed to create category. Please try again.");
       console.error(err);
       return false;
     } finally {
@@ -56,45 +55,24 @@ export function useCategories(postTypeSlug: string) {
     }
   };
 
-  const handleDeleteClick = (id: string) => {
-    setDeleteId(id);
-    setShowDeleteDialog(true);
-  };
-
+  // Eliminar categoría
   const confirmDelete = async (): Promise<void> => {
-    if (!deleteId) return;
-
-    setIsDeleting(true);
-    try {
-      await deleteCategory(postTypeSlug, deleteId);
-      setCategories(categories.filter((cat) => cat.id !== deleteId));
-      setShowDeleteDialog(false);
-      // No retornamos ningún valor aquí
-    } catch (err) {
-      setError("Failed to delete category. Please try again.");
-      console.error(err);
-      // No retornamos ningún valor aquí tampoco
-    } finally {
-      setIsDeleting(false);
-      setDeleteId(null);
-    }
-  };
-
-  const closeDeleteDialog = () => {
-    setDeleteId(null);
-    setShowDeleteDialog(false);
+    await deleteDialog.executeDelete(async (id) => {
+      await deleteCategory(postTypeSlug, id);
+      setCategories(categories.filter((cat) => cat.id !== id));
+    });
   };
 
   return {
     categories,
-    isLoading,
+    isLoading: asyncState.isLoading,
     isSubmitting,
-    isDeleting,
-    error,
-    showDeleteDialog,
+    isDeleting: deleteDialog.isDeleting,
+    error: asyncState.error,
+    showDeleteDialog: deleteDialog.showDeleteDialog,
     addCategory,
-    handleDeleteClick,
+    handleDeleteClick: deleteDialog.handleDeleteClick,
     confirmDelete,
-    closeDeleteDialog,
+    closeDeleteDialog: deleteDialog.closeDeleteDialog,
   };
 }

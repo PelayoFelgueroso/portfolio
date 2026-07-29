@@ -2,13 +2,14 @@
 import { heroImage } from "@/public";
 import { motion, MotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
+import React from "react";
 
 interface Props {
   heroRef: React.RefObject<HTMLElement | null>;
   scrollHero: MotionValue<number>;
 }
 
-export const Hero = ({ heroRef, scrollHero }: Props) => {
+export const Hero = React.memo(({ heroRef, scrollHero }: Props) => {
   const opacity = useTransform(scrollHero, [0.6, 1], [1, 0.08]);
 
   return (
@@ -33,4 +34,6 @@ export const Hero = ({ heroRef, scrollHero }: Props) => {
       <div className="fixed aspect-auto pointer-events-none w-screen top-[-18vh] left-0 right-0 z-10 h-[130vh] md:h-[150vh] 2md:h-screen"></div>
     </motion.section>
   );
-};
+});
+
+Hero.displayName = "Hero";

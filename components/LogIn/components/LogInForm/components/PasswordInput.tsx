@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState, useCallback } from "react"
 import { Eye, EyeOff, Lock } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,8 +11,16 @@ type PasswordInputProps = {
   error?: string
 }
 
-export function PasswordInput({ value, onChange, error }: PasswordInputProps) {
+export const PasswordInput = React.memo(({ value, onChange, error }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false)
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+  }, [onChange]);
+
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -27,7 +35,7 @@ export function PasswordInput({ value, onChange, error }: PasswordInputProps) {
           type={showPassword ? "text" : "password"}
           id="password"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           required
           placeholder="••••••••"
           className={`pl-10 border-[#e1e1e1] focus:border-[#1f77ff] focus:ring-[#1f77ff] ${
@@ -36,7 +44,7 @@ export function PasswordInput({ value, onChange, error }: PasswordInputProps) {
         />
         <button
           type="button"
-          onClick={() => setShowPassword(!showPassword)}
+          onClick={togglePasswordVisibility}
           className="absolute inset-y-0 right-0 flex items-center pr-3 text-[#949596] hover:text-[#393939]"
         >
           {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -46,4 +54,6 @@ export function PasswordInput({ value, onChange, error }: PasswordInputProps) {
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   )
-}
+});
+
+PasswordInput.displayName = "PasswordInput";

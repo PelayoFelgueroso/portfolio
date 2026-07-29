@@ -5,62 +5,32 @@ import type {
 } from "@/schemas/category-page.schema";
 import type { Post } from "@/schemas/create-post.schema";
 import type { PostType } from "@/schemas/post-type.schema";
+import { apiClient, buildAdminUrl, buildQueryUrl } from "@/lib/api-client";
 
 export async function fetchPostType(slug: string): Promise<PostType> {
-  const res = await fetch(`/api/admin/post-types?slug=${slug}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch post type");
-  }
-
-  return res.json();
+  return apiClient.get<PostType>(buildQueryUrl("/api/admin/post-types", { slug }));
 }
 
 export async function fetchCategories(
   postTypeSlug: string
 ): Promise<Category[]> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/categories`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories");
-  }
-
-  return res.json();
+  return apiClient.get<Category[]>(buildAdminUrl(postTypeSlug, "categories"));
 }
 
 export async function fetchPostsForCategory(
   postTypeSlug: string,
   categoryId: string
 ): Promise<Post[]> {
-  const res = await fetch(
-    `/api/admin/${postTypeSlug}/posts?categoryId=${categoryId}`
+  return apiClient.get<Post[]>(
+    buildQueryUrl(buildAdminUrl(postTypeSlug, "posts"), { categoryId })
   );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch posts");
-  }
-
-  return res.json();
 }
 
 export async function createCategory(
   postTypeSlug: string,
   data: CreateCategoryInput
 ): Promise<Category> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/categories`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "Failed to create category");
-  }
-
-  return res.json();
+  return apiClient.post<Category>(buildAdminUrl(postTypeSlug, "categories"), data);
 }
 
 export async function updateCategory(
@@ -68,37 +38,17 @@ export async function updateCategory(
   categoryId: string,
   data: UpdateCategoryInput
 ): Promise<Category> {
-  const res = await fetch(
-    `/api/admin/${postTypeSlug}/categories/${categoryId}`,
-    {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
+  return apiClient.put<Category>(
+    buildAdminUrl(postTypeSlug, "categories", categoryId),
+    data
   );
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "Failed to update category");
-  }
-
-  return res.json();
 }
 
 export async function deleteCategory(
   postTypeSlug: string,
   categoryId: string
 ): Promise<void> {
-  const res = await fetch(
-    `/api/admin/${postTypeSlug}/categories?id=${categoryId}`,
-    {
-      method: "DELETE",
-    }
+  return apiClient.delete(
+    buildQueryUrl(buildAdminUrl(postTypeSlug, "categories"), { id: categoryId })
   );
-
-  if (!res.ok) {
-    throw new Error("Failed to delete category");
-  }
 }

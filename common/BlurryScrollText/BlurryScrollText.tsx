@@ -1,44 +1,49 @@
 import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
-import React, { useRef } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 
 interface Props {
   children: string;
   className?: string;
 }
 
-export const BlurryScrollText = ({ children, className }: Props) => {
+// Función de clamp fuera del componente para evitar recreaciones
+const clamp = (val: number, min: number, max: number) =>
+  Math.min(Math.max(val, min), max);
+
+const OVERLAP = 0.25;
+
+export const BlurryScrollText = React.memo(({ children, className }: Props) => {
   const container = useRef(null);
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start 1", "start 0.85"],
   });
 
-  const words = children.split(" ");
+  const words = useMemo(() => children.split(" "), [children]);
 
-  const clamp = (val: number, min: number, max: number) =>
-    Math.min(Math.max(val, min), max);
-
-  const overlap = 0.25;
+  const wordRanges = useMemo(() => {
+    const total = words.length;
+    return words.map((word, i) => ({
+      word,
+      range: [clamp(i / total - OVERLAP, 0, 1), clamp((i + 1) / total + OVERLAP, 0, 1)],
+    }));
+  }, [words]);
 
   return (
     <div
       ref={container}
       className={`${className} flex flex-wrap items-baseline`}
     >
-      {words.map((word, i) => {
-        const total = words.length;
-        const start = clamp(i / total - overlap, 0, 1);
-        const end = clamp((i + 1) / total + overlap, 0, 1);
-
-        return (
-          <Word key={i} progress={scrollYProgress} range={[start, end]}>
-            {word}
-          </Word>
-        );
-      })}
+      {wordRanges.map(({ word, range }, i) => (
+        <Word key={i} progress={scrollYProgress} range={range}>
+          {word}
+        </Word>
+      ))}
     </div>
   );
-};
+});
+
+BlurryScrollText.displayName = "BlurryScrollText";
 
 interface WordProps {
   children: string;
@@ -46,7 +51,7 @@ interface WordProps {
   range: number[];
 }
 
-const Word = ({ children, progress, range }: WordProps) => {
+const Word = React.memo(({ children, progress, range }: WordProps) => {
   const opacity = useTransform(progress, range, [0, 1]);
   const filter = useTransform(progress, range, ["blur(4px)", "blur(0px)"]);
   const y = useTransform(progress, range, ["10px", "0px"]);
@@ -59,4 +64,6 @@ const Word = ({ children, progress, range }: WordProps) => {
       {children}
     </motion.span>
   );
-};
+});
+
+Word.displayName = "Word";

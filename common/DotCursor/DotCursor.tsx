@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./style.module.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useMousePosition from "@/lib/utils";
 
@@ -16,7 +16,7 @@ const HOVER_CLASSES = [
   { className: ".input-form", stateKey: "input" },
   { className: ".single-work-slider", stateKey: "singleWork" },
   { className: ".next-work", stateKey: "nextWork" },
-];
+] as const;
 
 const DotCursor = () => {
   const { x, y } = useMousePosition();
@@ -24,50 +24,76 @@ const DotCursor = () => {
     {}
   );
 
+  const handleMouseEnter = useCallback((stateKey: string) => {
+    setHoverStates((s) => ({ ...s, [stateKey]: true }));
+  }, []);
+
+  const handleMouseLeave = useCallback((stateKey: string) => {
+    setHoverStates((s) => ({ ...s, [stateKey]: false }));
+  }, []);
+
   useEffect(() => {
+    const listeners = new Map<Element, { enter: () => void; leave: () => void }>();
+
+    function attachHoverListeners() {
+      // Remove old listeners
+      listeners.forEach(({ enter, leave }, el) => {
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
+      });
+      listeners.clear();
+
+      // Attach new listeners
+      HOVER_CLASSES.forEach(({ className, stateKey }) => {
+        document.querySelectorAll(className).forEach((el) => {
+          const enter = () => handleMouseEnter(stateKey);
+          const leave = () => handleMouseLeave(stateKey);
+          
+          el.addEventListener("mouseenter", enter);
+          el.addEventListener("mouseleave", leave);
+          
+          listeners.set(el, { enter, leave });
+        });
+      });
+    }
+
     const observer = new MutationObserver(attachHoverListeners);
     observer.observe(document.body, { childList: true, subtree: true });
 
     attachHoverListeners();
 
-    function attachHoverListeners() {
-      HOVER_CLASSES.forEach(({ className, stateKey }) => {
-        document.querySelectorAll(className).forEach((el) => {
-          el.addEventListener("mouseenter", () =>
-            setHoverStates((s) => ({ ...s, [stateKey]: true }))
-          );
-          el.addEventListener("mouseleave", () =>
-            setHoverStates((s) => ({ ...s, [stateKey]: false }))
-          );
-        });
+    return () => {
+      observer.disconnect();
+      listeners.forEach(({ enter, leave }, el) => {
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
       });
-    }
+      listeners.clear();
+    };
+  }, [handleMouseEnter, handleMouseLeave]);
 
-    return () => observer.disconnect();
-  }, []);
-
-  const getCursorOffset = () => {
+  const offset = useMemo(() => {
     if (hoverStates.project) return { x: x + 50, y: y - 17.5 };
     if (hoverStates.resource) return { x: x + 60, y: y - 17.5 };
     return { x: x - 10, y: y - 10 };
-  };
+  }, [hoverStates.project, hoverStates.resource, x, y]);
 
-  const offset = getCursorOffset();
-
-  const dynamicClasses = [
-    hoverStates.project && styles.project_preview,
-    hoverStates.resource && styles.resource_demo,
-    hoverStates.dark && styles.cursor_light,
-    hoverStates.link && styles.link_hover,
-    hoverStates.linkWider && styles.link_wider,
-    hoverStates.logoLink && styles.logo_hover,
-    hoverStates.button && styles.btn_hover,
-    hoverStates.input && styles.ipt_hover,
-    hoverStates.singleWork && styles.single_work_hover,
-    hoverStates.nextWork && styles.next_work,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const dynamicClasses = useMemo(() => {
+    return [
+      hoverStates.project && styles.project_preview,
+      hoverStates.resource && styles.resource_demo,
+      hoverStates.dark && styles.cursor_light,
+      hoverStates.link && styles.link_hover,
+      hoverStates.linkWider && styles.link_wider,
+      hoverStates.logoLink && styles.logo_hover,
+      hoverStates.button && styles.btn_hover,
+      hoverStates.input && styles.ipt_hover,
+      hoverStates.singleWork && styles.single_work_hover,
+      hoverStates.nextWork && styles.next_work,
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }, [hoverStates]);
 
   return (
     <div className={`flex ${styles.cursor_wrapper}`}>

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useCallback, useMemo } from "react";
 import { FileText, Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Post } from "@/schemas/create-post.schema";
@@ -12,20 +13,68 @@ interface Props {
   postTypeSlug: string;
 }
 
-export const PostsList = ({
+// Mover la función de formato fuera del componente
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+// Componente de fila individual para mejor memoización
+const PostRow = React.memo<{
+  post: Post;
+  postTypeSlug: string;
+  onDeleteClick: (id: string) => void;
+}>(({ post, postTypeSlug, onDeleteClick }) => {
+  const handleDelete = useCallback(() => {
+    onDeleteClick(post.id);
+  }, [post.id, onDeleteClick]);
+
+  const createdDate = useMemo(() => {
+    return post.createdAt ? formatDate(post.createdAt) : "N/A";
+  }, [post.createdAt]);
+
+  const updatedDate = useMemo(() => {
+    return post.updatedAt ? formatDate(post.updatedAt) : "N/A";
+  }, [post.updatedAt]);
+
+  return (
+    <tr className="bg-white hover:bg-[#f4f4f4]">
+      <td className="px-4 py-3 text100">
+        <a
+          href={`/admin/${postTypeSlug}/${post.id}`}
+          className="font-medium text-[#1f77ff] hover:underline"
+        >
+          {post.title}
+        </a>
+      </td>
+      <td className="px-4 py-3 text100 text-[#393939]">{post.slug}</td>
+      <td className="px-4 py-3 text100 text-[#393939]">{createdDate}</td>
+      <td className="px-4 py-3 text100 text-[#393939]">{updatedDate}</td>
+      <td className="px-4 py-3 text-right">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          className="text-red-500 hover:bg-red-50 hover:text-red-600"
+        >
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">Delete {post.title}</span>
+        </Button>
+      </td>
+    </tr>
+  );
+});
+PostRow.displayName = "PostRow";
+
+export const PostsList = React.memo<Props>(({
   posts,
   isLoading,
   onDeleteClick,
   postTypeSlug,
 }: Props) => {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -60,37 +109,17 @@ export const PostsList = ({
         </thead>
         <tbody className="divide-y divide-[#e1e1e1]">
           {posts.map((post) => (
-            <tr key={post.id} className="bg-white hover:bg-[#f4f4f4]">
-              <td className="px-4 py-3 text100">
-                <a
-                  href={`/admin/${postTypeSlug}/${post.id}`}
-                  className="font-medium text-[#1f77ff] hover:underline"
-                >
-                  {post.title}
-                </a>
-              </td>
-              <td className="px-4 py-3 text100 text-[#393939]">{post.slug}</td>
-              <td className="px-4 py-3 text100 text-[#393939]">
-                {post.createdAt ? formatDate(post.createdAt) : "N/A"}
-              </td>
-              <td className="px-4 py-3 text100 text-[#393939]">
-                {post.updatedAt ? formatDate(post.updatedAt) : "N/A"}
-              </td>
-              <td className="px-4 py-3 text-right">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onDeleteClick(post.id)}
-                  className="text-red-500 hover:bg-red-50 hover:text-red-600"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Delete {post.title}</span>
-                </Button>
-              </td>
-            </tr>
+            <PostRow
+              key={post.id}
+              post={post}
+              postTypeSlug={postTypeSlug}
+              onDeleteClick={onDeleteClick}
+            />
           ))}
         </tbody>
       </table>
     </div>
   );
-};
+}));
+
+PostsList.displayName = "PostsList";

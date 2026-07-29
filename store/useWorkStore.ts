@@ -10,7 +10,7 @@ export interface UseWorkStoreType {
 
 const useWorkStore = create((set) => ({
   works: [],
-  loading: false,
+  loading: true,
   error: null,
   fetchWorks: async () => {
     set({ loading: true });

@@ -1,18 +1,5 @@
-import { useEffect, useState } from "react";
+import { useMediaQuery } from "./common/use-media-query";
 
 export function useIsDesktop(breakpoint = 1024) {
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const checkIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= breakpoint);
-    };
-
-    checkIsDesktop();
-    window.addEventListener("resize", checkIsDesktop);
-
-    return () => window.removeEventListener("resize", checkIsDesktop);
-  }, [breakpoint]);
-
-  return isDesktop;
+  return useMediaQuery(`(min-width: ${breakpoint}px)`);
 }

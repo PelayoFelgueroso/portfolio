@@ -1,3 +1,4 @@
+import React from "react";
 import { usePostContent } from "@/hooks/use-post-content";
 import { Loader2 } from "lucide-react";
 import { ContentNav } from "./components/ContentNav";
@@ -9,7 +10,7 @@ interface Props {
   id: string;
 }
 
-export const ContentPage = ({ slug, id }: Props) => {
+export const ContentPage = React.memo(({ slug, id }: Props) => {
   const {
     postTitle,
     content,
@@ -54,4 +55,6 @@ export const ContentPage = ({ slug, id }: Props) => {
       </div>
     </div>
   );
-};
+});
+
+ContentPage.displayName = "ContentPage";

@@ -1,6 +1,6 @@
+import React, { useState, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Settings, Tag } from "lucide-react";
-import { useState } from "react";
 import { CategoriesTab } from "./components/CategoriesTab/CategoriesTab";
 import { MetaFieldsTab } from "./components/MetaFieldsTab/MetaFieldsTab";
 import { PostsTab } from "./components/PostTab/PostTab";
@@ -10,8 +10,12 @@ interface Props {
   postTypeTitle: string;
 }
 
-export const EditPostTypePage = ({ slug, postTypeTitle }: Props) => {
+export const EditPostTypePage = React.memo<Props>(({ slug, postTypeTitle }: Props) => {
   const [activeTab, setActiveTab] = useState("posts");
+
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value);
+  }, []);
 
   return (
     <div className="pb300">
@@ -26,7 +30,7 @@ export const EditPostTypePage = ({ slug, postTypeTitle }: Props) => {
         <Tabs
           defaultValue="posts"
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={handleTabChange}
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-3 mb-6">
@@ -59,4 +63,6 @@ export const EditPostTypePage = ({ slug, postTypeTitle }: Props) => {
       </div>
     </div>
   );
-};
+});
+
+EditPostTypePage.displayName = "EditPostTypePage";

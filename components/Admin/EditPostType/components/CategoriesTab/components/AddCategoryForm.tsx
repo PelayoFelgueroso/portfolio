@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { FolderPlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,13 +18,13 @@ interface AddCategoryFormProps {
   isSubmitting: boolean;
 }
 
-export function AddCategoryForm({
+export const AddCategoryForm = React.memo<AddCategoryFormProps>(({
   onAddCategory,
   isSubmitting,
-}: AddCategoryFormProps) {
+}: AddCategoryFormProps) => {
   const [newCategory, setNewCategory] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCategory.trim()) return;
 
@@ -34,7 +32,13 @@ export function AddCategoryForm({
     if (success) {
       setNewCategory("");
     }
-  };
+  }, [newCategory, onAddCategory]);
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategory(e.target.value);
+  }, []);
+
+  const isDisabled = isSubmitting || !newCategory.trim();
 
   return (
     <Card className="bg-white border-[#e1e1e1]">
@@ -57,7 +61,7 @@ export function AddCategoryForm({
               id="new-category"
               type="text"
               value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
+              onChange={handleInputChange}
               placeholder="e.g. News, Featured, Products"
               className="border-[#e1e1e1] focus:border-[#1f77ff] focus:ring-[#1f77ff]"
               disabled={isSubmitting}
@@ -66,7 +70,7 @@ export function AddCategoryForm({
           <Button
             type="submit"
             className="bg-[#1f77ff] hover:bg-[#1f77ff]/90 text-white"
-            disabled={isSubmitting || !newCategory.trim()}
+            disabled={isDisabled}
           >
             {isSubmitting ? (
               <>
@@ -84,4 +88,6 @@ export function AddCategoryForm({
       </CardContent>
     </Card>
   );
-}
+}));
+
+AddCategoryForm.displayName = "AddCategoryForm";

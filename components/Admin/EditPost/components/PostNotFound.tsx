@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ interface PostNotFoundProps {
   handleBack: () => void;
 }
 
-export function PostNotFound({ handleBack }: PostNotFoundProps) {
+export const PostNotFound = React.memo(({ handleBack }: PostNotFoundProps) => {
   return (
     <div className="flex flex-col gap-6">
       <Alert
@@ -27,4 +28,6 @@ export function PostNotFound({ handleBack }: PostNotFoundProps) {
       </Button>
     </div>
   );
-}
+});
+
+PostNotFound.displayName = "PostNotFound";

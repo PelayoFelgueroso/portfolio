@@ -6,7 +6,18 @@ interface Props {
   text: string;
 }
 
-export const BlurryHoverText = ({ text }: Props) => {
+// Valores constantes fuera del componente para evitar recreaciones
+const Y_VALUES = [30, -30, 20, -20, 25, -25] as const;
+
+// Funciones puras fuera del componente
+const getRandomYValue = () => {
+  const randomIndex = Math.floor(Math.random() * Y_VALUES.length);
+  return Y_VALUES[randomIndex];
+};
+
+const getRandomDelay = () => Math.random() * 0.3;
+
+export const BlurryHoverText = React.memo(({ text }: Props) => {
   const words = text.split(" ");
   return (
     <>
@@ -15,13 +26,15 @@ export const BlurryHoverText = ({ text }: Props) => {
       })}
     </>
   );
-};
+});
+
+BlurryHoverText.displayName = "BlurryHoverText";
 
 interface WordProps {
   children: string;
 }
 
-const Word = ({ children }: WordProps) => {
+const Word = React.memo(({ children }: WordProps) => {
   const chars = children.split("");
 
   return (
@@ -31,30 +44,22 @@ const Word = ({ children }: WordProps) => {
       ))}
     </motion.span>
   );
-};
+});
+
+Word.displayName = "Word";
 
 interface charProps {
   children: string;
 }
 
 const Char = ({ children }: charProps) => {
-  const y = () => {
-    const values = [30, -30, 20, -20, 25, -25];
-    const randomIndex = Math.floor(Math.random() * values.length);
-    return values[randomIndex];
-  };
-
-  const delay = () => {
-    return Math.random() * 0.3;
-  };
-
   return (
     <motion.span
-      variants={blurryChar(y())}
+      variants={blurryChar(getRandomYValue())}
       initial="initial"
       animate="open"
       exit="close"
-      transition={{ duration: 0.5, delay: delay() }}
+      transition={{ duration: 0.5, delay: getRandomDelay() }}
       style={{ willChange: "opacity, filter, transform" }}
       className="inline-block"
     >

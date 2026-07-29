@@ -5,42 +5,25 @@ import type {
   PostEditInput,
   UploadResult,
 } from "@/schemas/edit-post.schema";
+import { apiClient, buildAdminUrl } from "@/lib/api-client";
 
 export async function fetchPost(
   postTypeSlug: string,
   postId: string,
 ): Promise<Post> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/posts/${postId}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch post");
-  }
-
-  return res.json();
+  return apiClient.get<Post>(buildAdminUrl(postTypeSlug, "posts", postId));
 }
 
 export async function fetchCategories(
   postTypeSlug: string,
 ): Promise<Category[]> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/categories`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories");
-  }
-
-  return res.json();
+  return apiClient.get<Category[]>(buildAdminUrl(postTypeSlug, "categories"));
 }
 
 export async function fetchMetaFields(
   postTypeSlug: string,
 ): Promise<MetaField[]> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/meta`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch meta fields");
-  }
-
-  return res.json();
+  return apiClient.get<MetaField[]>(buildAdminUrl(postTypeSlug, "meta"));
 }
 
 export async function updatePost(
@@ -48,20 +31,7 @@ export async function updatePost(
   postId: string,
   data: PostEditInput,
 ): Promise<Post> {
-  const res = await fetch(`/api/admin/${postTypeSlug}/posts/${postId}`, {
-    method: "PUT",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "Failed to update post");
-  }
-
-  return res.json();
+  return apiClient.put<Post>(buildAdminUrl(postTypeSlug, "posts", postId), data);
 }
 
 export async function getSignature(folder: string) {

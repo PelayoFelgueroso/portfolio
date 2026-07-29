@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useCallback } from "react";
 import { AlertCircle, Plus } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ interface Props {
   postTypeSlug: string;
 }
 
-export const PostsTab = ({ postTypeSlug }: Props) => {
+export const PostsTab = React.memo<Props>(({ postTypeSlug }: Props) => {
   const {
     posts,
     categories,
@@ -34,6 +35,14 @@ export const PostsTab = ({ postTypeSlug }: Props) => {
     closeDeleteDialog,
   } = useCreatePost(postTypeSlug);
 
+  const handleOpenNewPost = useCallback(() => {
+    setShowNewPostDialog(true);
+  }, [setShowNewPostDialog]);
+
+  const handleCloseNewPost = useCallback(() => {
+    setShowNewPostDialog(false);
+  }, [setShowNewPostDialog]);
+
   return (
     <div className="flex flex-col gap-6">
       {error && (
@@ -50,7 +59,7 @@ export const PostsTab = ({ postTypeSlug }: Props) => {
       <div className="flex justify-between items-center">
         <h2 className="text300">Posts</h2>
         <Button
-          onClick={() => setShowNewPostDialog(true)}
+          onClick={handleOpenNewPost}
           className="bg-[#1f77ff] hover:bg-[#1f77ff]/90 text-white"
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -71,7 +80,7 @@ export const PostsTab = ({ postTypeSlug }: Props) => {
 
       <NewPostDialog
         isOpen={showNewPostDialog}
-        onClose={() => setShowNewPostDialog(false)}
+        onClose={handleCloseNewPost}
         onSubmit={handleCreatePost}
         title={newPostTitle}
         onTitleChange={setNewPostTitle}
@@ -91,4 +100,6 @@ export const PostsTab = ({ postTypeSlug }: Props) => {
       />
     </div>
   );
-};
+});
+
+PostsTab.displayName = "PostsTab";

@@ -1,3 +1,4 @@
+import React from "react";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -6,7 +7,7 @@ interface Props {
   successMessage: string | null;
 }
 
-export function StatusAlert({ error, successMessage }: Props) {
+export const StatusAlert = React.memo(({ error, successMessage }: Props) => {
   if (!error && !successMessage) return null;
 
   if (error) {
@@ -29,4 +30,6 @@ export function StatusAlert({ error, successMessage }: Props) {
       <AlertDescription>{successMessage}</AlertDescription>
     </Alert>
   );
-}
+});
+
+StatusAlert.displayName = "StatusAlert";

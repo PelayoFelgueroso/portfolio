@@ -1,30 +1,15 @@
 import type { MetaField } from "@/schemas/meta-field.schema";
+import { apiClient, buildAdminUrl } from "@/lib/api-client";
 
 export async function fetchMetaFields(
   postTypeSlug: string
 ): Promise<MetaField[]> {
-  const response = await fetch(`/api/admin/${postTypeSlug}/meta`);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch meta fields");
-  }
-
-  return response.json();
+  return apiClient.get<MetaField[]>(buildAdminUrl(postTypeSlug, "meta"));
 }
 
 export async function saveMetaFields(
   postTypeSlug: string,
   meta: MetaField[]
 ): Promise<void> {
-  const response = await fetch(`/api/admin/${postTypeSlug}/meta`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ meta }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to save meta fields");
-  }
+  return apiClient.put<void>(buildAdminUrl(postTypeSlug, "meta"), { meta });
 }

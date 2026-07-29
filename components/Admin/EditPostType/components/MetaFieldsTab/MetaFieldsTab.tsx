@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Loader2, Plus, Settings } from "lucide-react";
 import {
   Card,
@@ -19,7 +20,7 @@ interface MetaFieldsTabProps {
   postTypeSlug: string;
 }
 
-export function MetaFieldsTab({ postTypeSlug }: MetaFieldsTabProps) {
+export const MetaFieldsTab = React.memo<MetaFieldsTabProps>(({ postTypeSlug }: MetaFieldsTabProps) => {
   const {
     meta,
     isLoading,
@@ -37,6 +38,8 @@ export function MetaFieldsTab({ postTypeSlug }: MetaFieldsTabProps) {
     saveFields,
     clearNewFieldIndex,
   } = useMetaFields(postTypeSlug);
+
+  const hasFields = meta.length > 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -56,7 +59,7 @@ export function MetaFieldsTab({ postTypeSlug }: MetaFieldsTabProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-6">
-              {meta.length === 0 ? (
+              {!hasFields ? (
                 <EmptyState
                   icon={<Settings className="h-6 w-6 text-[#393939]" />}
                   heading="No Meta Fields Defined"
@@ -93,7 +96,7 @@ export function MetaFieldsTab({ postTypeSlug }: MetaFieldsTabProps) {
                 <Button
                   type="button"
                   onClick={saveFields}
-                  disabled={isSaving || meta.length === 0}
+                  disabled={isSaving || !hasFields}
                   className="bg-[#1f77ff] hover:bg-[#1f77ff]/90 text-white"
                 >
                   {isSaving ? (
@@ -121,4 +124,6 @@ export function MetaFieldsTab({ postTypeSlug }: MetaFieldsTabProps) {
       />
     </div>
   );
-}
+});
+
+MetaFieldsTab.displayName = "MetaFieldsTab";

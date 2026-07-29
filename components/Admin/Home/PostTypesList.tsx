@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useCallback } from "react";
 import { Loader2, Tag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,11 +23,11 @@ interface PostTypesListProps {
   onDeleteClick: (id: string) => void;
 }
 
-export function PostTypesList({
+export const PostTypesList = React.memo(({
   postTypes,
   isLoading,
   onDeleteClick,
-}: PostTypesListProps) {
+}: PostTypesListProps) => {
   return (
     <Card className="bg-white border-[#e1e1e1]">
       <CardHeader>
@@ -48,9 +49,11 @@ export function PostTypesList({
       </CardContent>
     </Card>
   );
-}
+});
 
-function EmptyState() {
+PostTypesList.displayName = "PostTypesList";
+
+const EmptyState = React.memo(() => {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       <div className="rounded-full bg-[#e1e1e1] p-3 mb-4">
@@ -62,15 +65,19 @@ function EmptyState() {
       </p>
     </div>
   );
-}
+});
 
-function PostTypesTable({
-  postTypes,
-  onDeleteClick,
-}: {
+EmptyState.displayName = "EmptyState";
+
+interface PostTypesTableProps {
   postTypes: PostType[];
   onDeleteClick: (id: string) => void;
-}) {
+}
+
+const PostTypesTable = React.memo(({
+  postTypes,
+  onDeleteClick,
+}: PostTypesTableProps) => {
   return (
     <div className="overflow-hidden rounded-md border border-[#e1e1e1]">
       <table className="w-full text-left">
@@ -114,4 +121,6 @@ function PostTypesTable({
       </table>
     </div>
   );
-}
+});
+
+PostTypesTable.displayName = "PostTypesTable";

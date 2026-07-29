@@ -13,7 +13,7 @@ export interface useResourceType {
 const useResourceStore = create((set) => ({
   resources: [],
   categories: [],
-  loading: false,
+  loading: true,
   error: null,
   fetchResources: async () => {
     set({ loading: true });

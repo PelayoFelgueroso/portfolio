@@ -6,59 +6,34 @@ import { LogoPreoloader } from "@/components/HomePage/LogoPreloader/LogoPreloade
 import { Resources } from "@/components/HomePage/Resources/ResourcesSection/Resources";
 import { SectionTitle } from "@/components/HomePage/SectionTitle/SectionTitle";
 import { Works } from "@/components/HomePage/Works/Works";
-import { AnimatePresence, useInView, useScroll } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useScrollSections, usePreloader } from "@/hooks/common";
+import { AnimatePresence, useInView } from "framer-motion";
+import { useCallback, useState } from "react";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
   const [inViewWorks, setInViewWorks] = useState(false);
   const [inViewResources, setInViewResources] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-      document.body.style.cursor = "default";
-      window.scrollTo(0, 0);
-    }, 1100);
-  }, []);
+  const isLoading = usePreloader({ duration: 1100 });
+  const { refs, scrollValues } = useScrollSections();
 
-  const heroRef = useRef(null);
-  const worksRef = useRef(null);
-  const resourcesRef = useRef(null);
-  const aboutRef = useRef(null);
-  const contactRef = useRef(null);
-
-  const inViewTitle = useInView(heroRef, {
-    once: false,
-  });
-  const inViewAbout = useInView(aboutRef, {
+  const inViewTitle = useInView(refs.heroRef, {
     once: false,
   });
 
-  const { scrollYProgress: scrollHero } = useScroll({
-    target: heroRef,
-    offset: ["50% end", "end 100%"],
+  const inViewAbout = useInView(refs.aboutRef, {
+    once: false,
   });
 
-  const { scrollYProgress: scrollWorks } = useScroll({
-    target: worksRef,
-    offset: ["end 100%", "end 50%"],
-  });
+  const handleWorksInView = useCallback(
+    (inView: boolean) => setInViewWorks(inView),
+    []
+  );
 
-  const { scrollYProgress: scrollResources } = useScroll({
-    target: resourcesRef,
-    offset: ["end 100%", "end 50%"],
-  });
-
-  const { scrollYProgress: scrollAbout } = useScroll({
-    target: aboutRef,
-    offset: ["end 100%", "end 50%"],
-  });
-
-  const { scrollYProgress: scrollContact } = useScroll({
-    target: contactRef,
-    offset: ["end 100%", "end 50%"],
-  });
+  const handleResourcesInView = useCallback(
+    (inView: boolean) => setInViewResources(inView),
+    []
+  );
 
   return (
     <main className="relative z-50 bg-white text-blackCustom">
@@ -71,23 +46,23 @@ export default function Home() {
         inViewWorks={inViewWorks}
         inViewResources={inViewResources}
         inViewAbout={inViewAbout}
-        scrollHero={scrollHero}
-        scrollWorks={scrollWorks}
-        scrollResources={scrollResources}
-        scrollAbout={scrollAbout}
-        scrollContact={scrollContact}
+        scrollHero={scrollValues.scrollHero}
+        scrollWorks={scrollValues.scrollWorks}
+        scrollResources={scrollValues.scrollResources}
+        scrollAbout={scrollValues.scrollAbout}
+        scrollContact={scrollValues.scrollContact}
       />
 
-      <Hero heroRef={heroRef} scrollHero={scrollHero} />
+      <Hero heroRef={refs.heroRef} scrollHero={scrollValues.scrollHero} />
 
-      <Works onInViewChange={setInViewWorks} worksRef={worksRef} />
+      <Works onInViewChange={handleWorksInView} worksRef={refs.worksRef} />
 
       <Resources
-        onInViewChange={setInViewResources}
-        resourcesRef={resourcesRef}
+        onInViewChange={handleResourcesInView}
+        resourcesRef={refs.resourcesRef}
       />
 
-      <About scrollHero={scrollHero} ref={aboutRef} />
+      <About scrollHero={scrollValues.scrollHero} ref={refs.aboutRef} />
     </main>
   );
 }

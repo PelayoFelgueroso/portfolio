@@ -1,8 +1,9 @@
+import React from "react"
 import Link from "next/link"
 import { Home } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-export function LoginHeader() {
+export const LoginHeader = React.memo(() => {
   return (
     <div className="text-center mb-8">
       <div className="flex justify-center mb-4">
@@ -33,4 +34,6 @@ export function LoginHeader() {
       </p>
     </div>
   )
-}
+});
+
+LoginHeader.displayName = "LoginHeader";

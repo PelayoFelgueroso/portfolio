@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   icon: ReactNode;
@@ -6,7 +6,7 @@ interface Props {
   content: string;
 }
 
-export const EmptyState = ({ icon, heading, content }: Props) => {
+export const EmptyState = React.memo(({ icon, heading, content }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       <div className="rounded-full bg-[#e1e1e1] p-3 mb-4">{icon}</div>
@@ -14,4 +14,6 @@ export const EmptyState = ({ icon, heading, content }: Props) => {
       <p className="text100 text-[#949596] max-w-md">{content}</p>
     </div>
   );
-};
+});
+
+EmptyState.displayName = "EmptyState";

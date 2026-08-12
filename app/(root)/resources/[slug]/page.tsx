@@ -23,7 +23,7 @@ export default async function ResourcePage({ params }: Props) {
   const slug = (await params).slug;
 
   return (
-    <main className="relative z-10 bg-whiteCustom flex flex-col items-center">
+    <main className="relative z-10 bg-whiteCustom flex flex-col items-center min-h-screen">
       <ResourcesArticlePage slug={slug} />
     </main>
   );

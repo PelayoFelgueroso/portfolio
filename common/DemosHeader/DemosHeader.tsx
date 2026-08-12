@@ -16,6 +16,8 @@ export const DemosHeader = () => {
     [resources, slug]
   );
 
+  console.log(resources)
+
   return (
     <header className="relative z-10 grid grid-cols-3 items-center h-[70px] bg-darkGrayCustom px-8">
       <div className="text-whiteCustom">

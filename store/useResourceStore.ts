@@ -5,28 +5,40 @@ import { create } from "zustand";
 export interface useResourceType {
   resources: Resource[];
   categories: FormattedCategory[];
-  fetchResources: () => void;
+  fetchResources: () => Promise<void>;
   loading: boolean;
   error: Error | null;
 }
 
-const useResourceStore = create((set) => ({
+const useResourceStore = create<useResourceType>((set) => ({
   resources: [],
   categories: [],
   loading: true,
   error: null,
   fetchResources: async () => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const resResources = await fetch(
         "/api/admin/resources/posts"
       );
+
+      if (!resResources.ok) {
+        throw new Error(`Failed to fetch resources: ${resResources.status}`);
+      }
+
       const dataResources = await resResources.json();
+      console.log("Resources fetched:", dataResources);
 
       const resCategories = await fetch(
         "/api/admin/resources/categories"
       );
+
+      if (!resCategories.ok) {
+        throw new Error(`Failed to fetch categories: ${resCategories.status}`);
+      }
+
       const dataCategories = await resCategories.json();
+      console.log("Categories fetched:", dataCategories);
 
       set({
         resources: dataResources,
@@ -34,7 +46,9 @@ const useResourceStore = create((set) => ({
         loading: false,
       });
     } catch (error) {
-      set({ error, loading: false });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching resources:", errorMessage);
+      set({ error: error as Error, loading: false });
     }
   },
 }));
